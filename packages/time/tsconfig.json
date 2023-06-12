@@ -1,21 +1,7 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "./dist",
-    "declaration": true,
-    "target": "esnext",
-    "module": "NodeNext",
-    "types": [
-      "node",
-    ],
-    "moduleResolution": "nodenext",
-    "sourceMap": true,
-    "esModuleInterop": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "resolveJsonModule": true,
-    "strictNullChecks": true,
-    "skipLibCheck": true
+    "outDir": "./dist"
   },
   "include": [
     "./index.ts",

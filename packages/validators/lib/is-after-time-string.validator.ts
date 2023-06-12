@@ -5,7 +5,7 @@ import {
   ValidatorConstraint,
   ValidatorConstraintInterface
 } from 'class-validator'
-import { Time } from '../time/time.js'
+import { Time } from '@node-core/time'
 
 export function IsAfterTimeString (
   timeCallback: (argObject: object) => string | null,

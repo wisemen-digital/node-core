@@ -1,7 +1,8 @@
 import {
   ValidationOptions,
-  ValidatorConstraintInterface, ValidationArguments, registerDecorator
-  ,
+  ValidatorConstraintInterface,
+  ValidationArguments,
+  registerDecorator,
   ValidatorConstraint
 } from 'class-validator'
 import moment from 'moment'
