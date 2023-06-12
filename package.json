@@ -1,0 +1,21 @@
+{
+  "name": "wisemen-node",
+  "version": "0.0.0",
+  "description": "Node Core",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run test -ws --if-present",
+    "build": "tsc"
+  },
+  "author": "Joren Vandeweyer",
+  "license": "ISC",
+  "workspaces": [
+    "./packages/*"
+  ],
+  "dependencies": {
+    "@node-core/validators": "*"
+  },
+  "devDependencies": {
+    "typescript": "^5.1.3"
+  }
+}
