@@ -1,6 +1,6 @@
 {
-  "name": "wisemen-node",
-  "version": "0.0.0",
+  "name": "appwise",
+  "version": "0.0.1",
   "description": "Node Core",
   "main": "index.js",
   "scripts": {
@@ -14,10 +14,11 @@
     "./packages/*"
   ],
   "dependencies": {
-    "@node-core/validators": "*",
-    "@node-core/time": "*"
+    "@node-core/time": "*",
+    "@node-core/validators": "*"
   },
   "devDependencies": {
+    "release-it": "^15.11.0",
     "typescript": "^5.1.3"
   }
 }

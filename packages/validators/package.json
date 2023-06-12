@@ -1,6 +1,6 @@
 {
-  "name": "@node-core/validators",
-  "description": "0.0.1",
+  "name": "@appwise/validators",
+  "version": "0.0.1",
   "main": "./dist/index.js",
   "types": "/dist/index.d.ts",
   "type": "module",
@@ -16,13 +16,14 @@
     "test": "node --test"
   },
   "dependencies": {
-    "class-validator": "^0.14.0",
     "@appwise/express-dto-router": "^1.0.2",
+    "@node-core/time": "*",
+    "class-validator": "^0.14.0",
     "moment": "^2.29.4",
-    "typeorm": "^0.3.16",
-    "@node-core/time": "*"
+    "typeorm": "^0.3.16"
   },
   "devDependencies": {
+    "release-it": "^15.11.0",
     "typescript": "^5.0.4"
   },
   "author": "Joren Vandeweyer",
