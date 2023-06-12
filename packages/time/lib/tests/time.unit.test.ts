@@ -1,7 +1,12 @@
 import { describe, it } from 'node:test'
+import { expect } from 'expect'
 import { Time } from '../time.js'
-import { InvalidHours, InvalidMinutes, InvalidSeconds, InvalidTimeString } from '../time-error.js'
-import { expect } from "expect";
+import {
+  InvalidHours,
+  InvalidMinutes,
+  InvalidSeconds,
+  InvalidTimeString
+} from '../time-error.js'
 
 describe('Time class', () => {
   describe('isValidTimeString', () => {
@@ -127,9 +132,9 @@ describe('Time class', () => {
     it('When sending an invalid string, it throws an error', () => {
       expect(() => Time.fromString('')).toThrow(InvalidTimeString)
       expect(() => Time.fromString('not_a_time')).toThrow(InvalidTimeString)
-      expect(() => Time.fromString('24:00:00')).toThrow(InvalidHours)
-      expect(() => Time.fromString('00:60:00')).toThrow(InvalidMinutes)
-      expect(() => Time.fromString('00:00:60')).toThrow(InvalidSeconds)
+      expect(() => Time.fromString('24:00:00')).toThrow(InvalidTimeString)
+      expect(() => Time.fromString('00:60:00')).toThrow(InvalidTimeString)
+      expect(() => Time.fromString('00:00:60')).toThrow(InvalidTimeString)
       expect(() => Time.fromString('0:0:0')).toThrow(InvalidTimeString)
     })
 
@@ -234,4 +239,30 @@ describe('Time class', () => {
       expect(otherTime.equals(time)).toBe(false)
     })
   })
+
+  // describe('fromDto', () => {
+  //   it.each([
+  //     { invalidDto: new TimeDto() },
+  //     { invalidDto: plainToInstance(TimeDto, { hours: -1, minutes: 0, seconds: 0 }) },
+  //     { invalidDto: plainToInstance(TimeDto, { hours: 0, minutes: -1, seconds: 0 }) },
+  //     { invalidDto: plainToInstance(TimeDto, { hours: 0, minutes: 0, seconds: -1 }) },
+  //     { invalidDto: plainToInstance(TimeDto, { hours: 24, minutes: 0, seconds: 0 }) },
+  //     { invalidDto: plainToInstance(TimeDto, { hours: 0, minutes: 60, seconds: 0 }) },
+  //     { invalidDto: plainToInstance(TimeDto, { hours: 0, minutes: 0, seconds: 60 }) }
+  //   ])('Throws an error when an invalid dto is given', ({ invalidDto }) => {
+  //     expect(() => Time.fromDto(invalidDto)).toThrow(TimeError)
+  //   })
+  //
+  //   it.each([
+  //     { invalidDto: plainToInstance(TimeDto, { hours: 0, minutes: 0, seconds: 0 }) },
+  //     { invalidDto: plainToInstance(TimeDto, { hours: 23, minutes: 0, seconds: 0 }) },
+  //     { invalidDto: plainToInstance(TimeDto, { hours: 0, minutes: 59, seconds: 0 }) },
+  //     { invalidDto: plainToInstance(TimeDto, { hours: 0, minutes: 0, seconds: 59 }) },
+  //     { invalidDto: plainToInstance(TimeDto, { hours: 23, minutes: 59, seconds: 59 }) },
+  //     { invalidDto: plainToInstance(TimeDto, { hours: 1, minutes: 1, seconds: 1 }) },
+  //     { invalidDto: plainToInstance(TimeDto, { hours: 12, minutes: 40, seconds: 20 }) }
+  //   ])('Creates a time object from a valid time DTO', ({ invalidDto }) => {
+  //     expect(() => Time.fromDto(invalidDto)).not.toThrow()
+  //   })
+  // })
 })

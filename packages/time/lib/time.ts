@@ -14,9 +14,13 @@ export class Time {
     if (!Time.isValidTimeString(timeString)) {
       throw new InvalidTimeString(timeString)
     }
-    const [hours, minutes, seconds] = timeString.split(':').map(parseInt)
+    const [hours, minutes, seconds] = timeString.split(':').map(v => parseInt(v))
     return new Time(hours, minutes, seconds)
   }
+
+  // public static fromDto (timeDto: TimeDto): Time {
+  //   return new Time(timeDto.hours, timeDto.minutes, timeDto.seconds)
+  // }
 
   public static isValidTimeString (timeString?: string | null): boolean {
     if (timeString == null) return false

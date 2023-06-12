@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "npm run test -ws --if-present",
-    "build": "tsc"
+    "build": "tsc",
+    "lint": "npm run lint -ws --if-present"
   },
   "author": "Joren Vandeweyer",
   "license": "ISC",
@@ -13,7 +14,8 @@
     "./packages/*"
   ],
   "dependencies": {
-    "@node-core/validators": "*"
+    "@node-core/validators": "*",
+    "@node-core/time": "*"
   },
   "devDependencies": {
     "typescript": "^5.1.3"

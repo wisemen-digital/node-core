@@ -1,15 +1,19 @@
 {
-    "root": true,
-    "parser": "@typescript-eslint/parser",
-    "plugins": [
-      "@typescript-eslint"
-    ],
-    "extends": [
-      "eslint:recommended",
-      "plugin:@typescript-eslint/eslint-recommended",
-      "plugin:@typescript-eslint/recommended"
-    ],
-    "rules": {
-      "semi": [2, "always"]
-    }
-  }
+  "env": {
+    "es2021": true,
+    "node": true,
+    "commonjs": true
+  },
+  "extends": [
+    "appwise"
+  ],
+  "parserOptions": {
+    "project": "tsconfig.json"
+  },
+  "plugins": [],
+  "rules": {
+    "@typescript-eslint/strict-boolean-expressions": "error",
+    "import/no-unresolved": "off"
+  },
+  "ignorePatterns": []
+}
