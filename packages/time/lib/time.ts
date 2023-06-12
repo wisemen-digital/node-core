@@ -1,5 +1,6 @@
 import { SECONDS_PER_HOUR, SECONDS_PER_MINUTE } from './constants.js'
 import { InvalidBounds, InvalidHours, InvalidMinutes, InvalidSeconds, InvalidTimeString } from './time-error.js'
+import {TimeDto} from "./dto/time.dto.js";
 
 export class Time {
   public static STRING_FORMAT = 'hh:mm:ss'
@@ -18,9 +19,9 @@ export class Time {
     return new Time(hours, minutes, seconds)
   }
 
-  // public static fromDto (timeDto: TimeDto): Time {
-  //   return new Time(timeDto.hours, timeDto.minutes, timeDto.seconds)
-  // }
+  public static fromDto (timeDto: TimeDto): Time {
+    return new Time(timeDto.hours, timeDto.minutes, timeDto.seconds)
+  }
 
   public static isValidTimeString (timeString?: string | null): boolean {
     if (timeString == null) return false
