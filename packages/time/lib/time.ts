@@ -1,6 +1,5 @@
 import { SECONDS_PER_HOUR, SECONDS_PER_MINUTE } from './constants.js'
 import { InvalidBounds, InvalidHours, InvalidMinutes, InvalidSeconds, InvalidTimeString } from './time-error.js'
-import {TimeDto} from "./dto/time.dto.js";
 
 export class Time {
   public static STRING_FORMAT = 'hh:mm:ss'
@@ -17,10 +16,6 @@ export class Time {
     }
     const [hours, minutes, seconds] = timeString.split(':').map(v => parseInt(v))
     return new Time(hours, minutes, seconds)
-  }
-
-  public static fromDto (timeDto: TimeDto): Time {
-    return new Time(timeDto.hours, timeDto.minutes, timeDto.seconds)
   }
 
   public static isValidTimeString (timeString?: string | null): boolean {
@@ -56,7 +51,7 @@ export class Time {
    */
   public static secondsBetween (first: string, second: string): number
   public static secondsBetween (first: Time, second: Time): number
-  public static secondsBetween (first: Time | string, second: Time | string)
+  public static secondsBetween (first: Time | string, second: Time | string): number
   public static secondsBetween (first: Time | string, second: Time | string): number {
     if (typeof first === 'string') {
       first = Time.fromString(first)

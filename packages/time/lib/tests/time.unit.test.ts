@@ -239,30 +239,4 @@ describe('Time class', () => {
       expect(otherTime.equals(time)).toBe(false)
     })
   })
-
-  // describe('fromDto', () => {
-  //   it.each([
-  //     { invalidDto: new TimeDto() },
-  //     { invalidDto: plainToInstance(TimeDto, { hours: -1, minutes: 0, seconds: 0 }) },
-  //     { invalidDto: plainToInstance(TimeDto, { hours: 0, minutes: -1, seconds: 0 }) },
-  //     { invalidDto: plainToInstance(TimeDto, { hours: 0, minutes: 0, seconds: -1 }) },
-  //     { invalidDto: plainToInstance(TimeDto, { hours: 24, minutes: 0, seconds: 0 }) },
-  //     { invalidDto: plainToInstance(TimeDto, { hours: 0, minutes: 60, seconds: 0 }) },
-  //     { invalidDto: plainToInstance(TimeDto, { hours: 0, minutes: 0, seconds: 60 }) }
-  //   ])('Throws an error when an invalid dto is given', ({ invalidDto }) => {
-  //     expect(() => Time.fromDto(invalidDto)).toThrow(TimeError)
-  //   })
-  //
-  //   it.each([
-  //     { invalidDto: plainToInstance(TimeDto, { hours: 0, minutes: 0, seconds: 0 }) },
-  //     { invalidDto: plainToInstance(TimeDto, { hours: 23, minutes: 0, seconds: 0 }) },
-  //     { invalidDto: plainToInstance(TimeDto, { hours: 0, minutes: 59, seconds: 0 }) },
-  //     { invalidDto: plainToInstance(TimeDto, { hours: 0, minutes: 0, seconds: 59 }) },
-  //     { invalidDto: plainToInstance(TimeDto, { hours: 23, minutes: 59, seconds: 59 }) },
-  //     { invalidDto: plainToInstance(TimeDto, { hours: 1, minutes: 1, seconds: 1 }) },
-  //     { invalidDto: plainToInstance(TimeDto, { hours: 12, minutes: 40, seconds: 20 }) }
-  //   ])('Creates a time object from a valid time DTO', ({ invalidDto }) => {
-  //     expect(() => Time.fromDto(invalidDto)).not.toThrow()
-  //   })
-  // })
 })
