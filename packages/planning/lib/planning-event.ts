@@ -1,7 +1,7 @@
 import { Time } from '@appwise/time'
 import {PlanningException} from './planning-exceptions.js'
 
-export interface PlanningEvent {
+export class PlanningEvent {
   weeksPeriod: number | null
   isRecurring: boolean
   startDate: string
