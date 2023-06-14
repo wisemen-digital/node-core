@@ -165,14 +165,14 @@ export class Time {
   }
 
   private isValidHours (hours: number): boolean {
-    return hours >= Time.MIN_HOURS && hours <= Time.MAX_HOURS
+    return Time.MIN_HOURS <= hours && hours <= Time.MAX_HOURS
   }
 
   private isValidMinutes (minutes: number): boolean {
-    return minutes >= Time.MIN_MINUTES && minutes <= Time.MAX_MINUTES
+    return Time.MIN_MINUTES <= minutes && minutes <= Time.MAX_MINUTES
   }
 
   private isValidSeconds (seconds: number): boolean {
-    return seconds >= Time.MIN_SECONDS && seconds <= Time.MAX_SECONDS
+    return Time.MIN_SECONDS <= seconds && seconds <= Time.MAX_SECONDS
   }
 }
