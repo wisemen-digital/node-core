@@ -3,6 +3,7 @@
   "version": "0.0.2",
   "description": "Node Core",
   "main": "index.js",
+  "types": "index.d.ts",
   "scripts": {
     "test": "npm run test -ws --if-present",
     "build": "tsc",

@@ -2,7 +2,7 @@
   "name": "@appwise/validators",
   "version": "0.0.1",
   "main": "./dist/index.js",
-  "types": "/dist/index.d.ts",
+  "types": "./dist/index.d.ts",
   "type": "module",
   "files": [
     "dist/"
