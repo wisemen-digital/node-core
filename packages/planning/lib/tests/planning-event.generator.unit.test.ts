@@ -1,8 +1,8 @@
-import { describe, it, before, after } from 'node:test'
+import { describe, it } from 'node:test'
 import moment from 'moment'
 import { expect } from 'expect'
 import { PlanningEventGenerator } from '../planning-event-generator.js'
-import { createRecurringEvent } from './recurring-event.sample.js'
+import { createRecurringEvent } from './utils/recurring-event.sample.js'
 
 describe('PlanningEventGenerator', () => {
   describe('generateFor', () => {
