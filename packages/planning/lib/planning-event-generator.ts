@@ -4,15 +4,15 @@ import { RecurringEvent } from "./recurring-event.js"
 import { PlanningEvent } from "./planning-event.js"
 import { YYYY_MM_DD } from "./constants.js"
 
-export class PlanningEventGenerator {
-  public generateFor (
-    recurringEvents: RecurringEvent[],
+export class PlanningEventGenerator<ExtendedRecurringEvent extends RecurringEvent> {
+  public generateFor(
+    recurringEvents: ExtendedRecurringEvent[],
     from: Moment,
     until: Moment
-  ): PlanningEvent[] {
+  ): ExtendedRecurringEvent[] {
     if (from.isAfter(until)) throw new Error('invalid_parameters')
 
-    const generatedEvents: PlanningEvent[] = []
+    const generatedEvents: ExtendedRecurringEvent[] = []
     for (const recurringEvent of recurringEvents) {
       const eventDates = this.generateEventDatesFor(recurringEvent, from, until)
       const events = this.generateEventsOn(eventDates, recurringEvent)
@@ -31,11 +31,16 @@ export class PlanningEventGenerator {
     return this.generateEventDatesBetweenWithPeriod(start, end, recurringEvent.weeksPeriod)
   }
 
-  private generateEventsOn (eventDates: string[], event: RecurringEvent): PlanningEvent[] {
+  private generateEventsOn (
+    eventDates: string[],
+    event: ExtendedRecurringEvent
+  ): ExtendedRecurringEvent[] {
     return eventDates.map(eventDate => this.createCopyOfEventOnDate(event,eventDate))
   }
 
-  private createCopyOfEventOnDate(event: RecurringEvent, eventDate: string) {
+  private createCopyOfEventOnDate(
+    event: ExtendedRecurringEvent, eventDate: string
+  ): ExtendedRecurringEvent {
     const generatedEvent = structuredClone(event)
     generatedEvent.startDate = eventDate
     generatedEvent.endDate = eventDate
