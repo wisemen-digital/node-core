@@ -10,10 +10,12 @@
   "scripts": {
     "lint": "eslint lib",
     "prebuild": "rm -rf ./dist",
-    "clean": "rm -r ./dist",
+    "clean": "rm -rf ./dist",
     "build": "tsc",
     "pretest": "npm run clean && npm run build",
-    "test": "node --test"
+    "test": "node --test",
+    "prerelease": "npm run build",
+    "release": "release-it"
   },
   "dependencies": {
     "@appwise/express-dto-router": "^1.0.2",
