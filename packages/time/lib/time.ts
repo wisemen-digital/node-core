@@ -1,5 +1,6 @@
 import { SECONDS_PER_HOUR, SECONDS_PER_MINUTE } from './constants.js'
 import { InvalidBounds, InvalidHours, InvalidMinutes, InvalidSeconds, InvalidTimeString } from './time-error.js'
+import {PlainTimeObject} from "./plain-time-object.type.js";
 
 export class Time {
   public static STRING_FORMAT = 'hh:mm:ss'
@@ -134,6 +135,14 @@ export class Time {
 
   public getSeconds (): number {
     return this.seconds
+  }
+
+  public toPlainObject (): PlainTimeObject {
+    return {
+      hours: this.getHours(),
+      minutes: this.getMinutes(),
+      seconds: this.getSeconds()
+    }
   }
 
   private setHours (hours: number): void {
