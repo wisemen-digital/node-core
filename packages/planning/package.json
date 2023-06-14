@@ -18,7 +18,9 @@
   "dependencies": {
     "@appwise/express-dto-router": "^1.0.2",
     "class-validator": "^0.14.0",
-    "moment": "^2.29.4"
+    "moment": "^2.29.4",
+    "mathjs": "^11.8.0",
+    "@appwise/time": "*"
   },
   "devDependencies": {
     "@types/node": "^20.2.5",
