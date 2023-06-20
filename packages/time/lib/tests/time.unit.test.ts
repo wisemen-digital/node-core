@@ -239,4 +239,13 @@ describe('Time class', () => {
       expect(otherTime.equals(time)).toBe(false)
     })
   })
+
+  describe('copy', () => {
+    it('Creates a new copy of a time object', () => {
+      const time = Time.fromString('10:10:10')
+      const copy = time.copy()
+      expect(time).not.toBe(copy)
+      expect(time.equals(copy)).toBe(true)
+    })
+  })
 })

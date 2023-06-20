@@ -145,6 +145,10 @@ export class Time {
     }
   }
 
+  public copy(): Time {
+    return new Time(this.hours, this.minutes, this.seconds)
+  }
+
   private setHours (hours: number): void {
     if (!this.isValidHours(hours)) {
       throw new InvalidHours(hours)
