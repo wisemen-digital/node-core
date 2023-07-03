@@ -16,7 +16,9 @@
   ],
   "dependencies": {
     "@node-core/time": "*",
-    "@node-core/validators": "*"
+    "@node-core/validators": "*",
+    "@node-core/planning": "*",
+    "@node-core/decorators": "*"
   },
   "devDependencies": {
     "release-it": "^15.11.0",
