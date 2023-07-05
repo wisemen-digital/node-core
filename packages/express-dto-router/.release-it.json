@@ -1,6 +1,6 @@
 {
   "git": {
-    "tagName": "validators@${version}",
+    "tagName": "express-dto-router@${version}",
     "commitMessage": "Release ${tagName}",
     "tagAnnotation": "Release ${tagName}"
   },

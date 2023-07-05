@@ -1,4 +1,4 @@
-export abstract class Transformer <T, S, V = unknown[]> {
+export abstract class Transformer <T, S, V = unknown> {
   item (entity: null, ...options: V[]): null
   item (entity: undefined, ...options: V[]): undefined
   item (entity: T, ...options: V[]): S
