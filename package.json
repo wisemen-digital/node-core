@@ -15,10 +15,11 @@
     "./packages/*"
   ],
   "dependencies": {
-    "@node-core/time": "*",
-    "@node-core/validators": "*",
-    "@node-core/planning": "*",
-    "@node-core/decorators": "*"
+    "@appwise/time": "*",
+    "@appwise/validators": "*",
+    "@appwise/planning": "*",
+    "@appwise/decorators": "*",
+    "@appwise/transformer": "*"
   },
   "devDependencies": {
     "release-it": "^15.11.0",
