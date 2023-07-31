@@ -1,6 +1,7 @@
 import {WiseDate} from "./date";
 import {InvalidBounds, NoOverlap} from "./date-range-errors";
-import {DateRangeBound} from "./date-range-bound";
+import {DateRangeBound, intersect, isInclusive} from "./date-range-bound";
+import {BoundedDate} from "./bounded-date";
 
 export class DateRange {
   private readonly _lowerBound: WiseDate
@@ -22,7 +23,7 @@ export class DateRange {
     upperBound: WiseDate,
     lowerBoundMode: DateRangeBound,
     upperBoundMode: DateRangeBound
-    )
+  )
   constructor(
     lowerBound: WiseDate,
     upperBound: WiseDate,
@@ -67,78 +68,52 @@ export class DateRange {
     return  this.upperBound.diff(this.lowerBound, 'days')
   }
 
-  public contains(date: WiseDate,): boolean {
-    let isAfterLowerBound: boolean
-    if(this.lowerBoundMode === DateRangeBound.INCLUSIVE) {
-      isAfterLowerBound =  date.isSameOrAfter(this._lowerBound)
-    } else {
-      isAfterLowerBound = date.isAfter(this._lowerBound)
-    }
-
-    let isBeforeUpperBound: boolean
-    if(this.upperBoundMode === DateRangeBound.INCLUSIVE) {
-      isBeforeUpperBound =  date.isSameOrBefore(this._upperBound)
-    } else {
-      isBeforeUpperBound =  date.isBefore(this._upperBound)
-    }
-
-    return isAfterLowerBound && isBeforeUpperBound
+  public contains(date: WiseDate): boolean {
+    return this.isSameOrAfterLowerBound(date) && this.isSameOrBeforeUpperBound(date)
   }
 
+
   public overlaps(otherRange: DateRange) {
-    let lowerBoundIsBeforeOtherUpperBound: boolean
-    if(this.lowerBoundMode === DateRangeBound.INCLUSIVE &&
-      otherRange.upperBoundMode === DateRangeBound.INCLUSIVE) {
-      lowerBoundIsBeforeOtherUpperBound = this._lowerBound.isSameOrBefore(otherRange._upperBound)
-    } else {
-      lowerBoundIsBeforeOtherUpperBound = this._lowerBound.isBefore(otherRange._upperBound)
-    }
+    const thisLowerBound = new BoundedDate(this._lowerBound, this.lowerBoundMode)
+    const thisUpperBound = new BoundedDate(this._upperBound, this.upperBoundMode)
+    const otherLowerBound = new BoundedDate(otherRange._lowerBound, otherRange.lowerBoundMode)
+    const otherUpperBound = new BoundedDate(otherRange._upperBound, otherRange.upperBoundMode)
 
-    let upperBoundIsAfterOtherLowerBound: boolean
-    if(this.upperBoundMode === DateRangeBound.INCLUSIVE &&
-      otherRange.lowerBoundMode === DateRangeBound.INCLUSIVE) {
-      upperBoundIsAfterOtherLowerBound = this._upperBound.isSameOrAfter(otherRange._lowerBound)
-    } else {
-      upperBoundIsAfterOtherLowerBound = this._upperBound.isSame(otherRange._lowerBound)
-    }
-
-    return lowerBoundIsBeforeOtherUpperBound && upperBoundIsAfterOtherLowerBound
+    return thisLowerBound.isSameOrBefore(otherUpperBound) &&
+      thisUpperBound.isSameOrAfter(otherLowerBound)
   }
 
   public overlap(otherRange: DateRange): DateRange {
     if(!this.overlaps(otherRange)) throw new NoOverlap(this, otherRange)
 
-    let lowerBoundMode: DateRangeBound
-    let lowerBound: WiseDate
-    if(this._lowerBound.isSame(otherRange._lowerBound)) {
-      lowerBoundMode = (this.lowerBoundMode === DateRangeBound.EXCLUSIVE ||
-        otherRange.lowerBoundMode === DateRangeBound.EXCLUSIVE)
-      ? DateRangeBound.EXCLUSIVE : DateRangeBound.INCLUSIVE
-      lowerBound = this._lowerBound.clone()
-    } else if(this._lowerBound.isBefore(otherRange._lowerBound)) {
-      lowerBoundMode = otherRange.lowerBoundMode
-      lowerBound = otherRange._lowerBound.clone()
-    } else {
-      lowerBoundMode = this.lowerBoundMode
-      lowerBound = this._lowerBound.clone()
-    }
+    const thisLowerBound = new BoundedDate(this._lowerBound, this.lowerBoundMode)
+    const thisUpperBound = new BoundedDate(this._upperBound, this.upperBoundMode)
+    const otherLowerBound = new BoundedDate(otherRange._lowerBound, otherRange.lowerBoundMode)
+    const otherUpperBound = new BoundedDate(otherRange._upperBound, otherRange.upperBoundMode)
 
+    const overlapLowerBound = BoundedDate.max(thisLowerBound, otherLowerBound)
+    const overlapUpperBound = BoundedDate.min(thisUpperBound, otherUpperBound)
 
-    let upperBoundMode: DateRangeBound
-    let upperBound: WiseDate
-    if(this._upperBound.isSame(otherRange._upperBound)) {
-      upperBoundMode = (this.upperBoundMode === DateRangeBound.EXCLUSIVE ||
-        otherRange.upperBoundMode === DateRangeBound.EXCLUSIVE)
-        ? DateRangeBound.EXCLUSIVE : DateRangeBound.INCLUSIVE
-      upperBound = this._lowerBound.clone()
-    } else if(this._upperBound.isBefore(otherRange._upperBound)) {
-      upperBoundMode = this.upperBoundMode
-      upperBound = this._upperBound.clone()
-    } else {
-      upperBoundMode = otherRange.upperBoundMode
-      upperBound = otherRange._upperBound.clone()
-    }
-
-    return new DateRange(lowerBound, upperBound, lowerBoundMode, upperBoundMode)
+    return new DateRange(overlapLowerBound.date, overlapUpperBound.date,
+      overlapLowerBound.bound, overlapUpperBound.bound)
   }
+
+  private isSameOrBeforeUpperBound(date: WiseDate) {
+    let isBeforeUpperBound: boolean
+    if (this.upperBoundMode === DateRangeBound.INCLUSIVE) {
+      return date.isSameOrBefore(this._upperBound)
+    } else {
+      return date.isBefore(this._upperBound)
+    }
+  }
+
+  private isSameOrAfterLowerBound(date: WiseDate) {
+    let isAfterLowerBound: boolean
+    if (this.lowerBoundMode === DateRangeBound.INCLUSIVE) {
+      return date.isSameOrAfter(this._lowerBound)
+    } else {
+      return date.isAfter(this._lowerBound)
+    }
+  }
+
 }
