@@ -44,6 +44,8 @@ export class PlanningEventGenerator<ExtendedRecurringEvent extends RecurringEven
     const generatedEvent = structuredClone(event)
     generatedEvent.startDate = eventDate
     generatedEvent.endDate = eventDate
+    generatedEvent.startTime = event.startTime.copy()
+    generatedEvent.endTime = event.endTime.copy()
     return generatedEvent;
   }
 
