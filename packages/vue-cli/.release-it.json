@@ -1,6 +1,6 @@
 {
   "git": {
-    "tagName": "validators@${version}",
+    "tagName": "vue-cli@${version}",
     "commitMessage": "Release ${tagName}",
     "tagAnnotation": "Release ${tagName}"
   },
