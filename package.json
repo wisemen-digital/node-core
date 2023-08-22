@@ -1,5 +1,5 @@
 {
-  "name": "appwise",
+  "name": "wisemen",
   "version": "0.0.2",
   "description": "Node Core",
   "main": "index.js",
@@ -15,11 +15,12 @@
     "./packages/*"
   ],
   "dependencies": {
-    "@appwise/time": "*",
-    "@appwise/validators": "*",
-    "@appwise/planning": "*",
-    "@appwise/decorators": "*",
-    "@appwise/transformer": "*"
+    "@wisemen/time": "*",
+    "@wisemen/validators": "*",
+    "@wisemen/planning": "*",
+    "@wisemen/decorators": "*",
+    "@wisemen/transformer": "*",
+    "@wisemen/vue-cli": "*"
   },
   "devDependencies": {
     "release-it": "^15.11.0",
