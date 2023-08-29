@@ -19,7 +19,8 @@
     "@appwise/validators": "*",
     "@appwise/planning": "*",
     "@appwise/decorators": "*",
-    "@appwise/transformer": "*"
+    "@appwise/transformer": "*",
+    "@wisemen/vue-cli": "*"
   },
   "devDependencies": {
     "release-it": "^15.11.0",
