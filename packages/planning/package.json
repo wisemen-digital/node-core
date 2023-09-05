@@ -17,7 +17,6 @@
   },
   "dependencies": {
     "moment": "^2.29.4",
-    "mathjs": "^11.8.0",
     "@appwise/time": "*"
   },
   "devDependencies": {

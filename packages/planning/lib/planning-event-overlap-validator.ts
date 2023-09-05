@@ -1,10 +1,11 @@
 import assert from 'assert'
 import moment, { Moment } from 'moment'
-import { abs, floor, gcd, lcm, max, xgcd } from 'mathjs'
 import { YYYY_MM_DD } from './constants.js'
 import { parseNullableDate } from './util/parse-nullable-date.js'
 import { PlanningEvent } from './planning-event.js'
 import {PlanningException} from "./planning-exceptions.js";
+import { gcd, lcm } from './util/lcm.js'
+import { xgcd } from './util/xgcd.js'
 
 export class PlanningEventOverlapValidator {
   /**
@@ -57,7 +58,7 @@ export class PlanningEventOverlapValidator {
       (this.candidateEnd === null || (this.candidateEnd.isSameOrAfter(this.eventStart)))
     if (!haveOverlappingPeriods) return false
 
-    const weeksBetweenStarts = abs(this.eventStart.diff(this.candidateStart, 'weeks'))
+    const weeksBetweenStarts = Math.abs(this.eventStart.diff(this.candidateStart, 'weeks'))
     const samePeriods = this.eventPeriod === 0 && this.candidatePeriod === 0
     const periodsOverlap = weeksBetweenStarts % gcd(this.eventPeriod, this.candidatePeriod) === 0
     return samePeriods || periodsOverlap
@@ -235,7 +236,7 @@ export class PlanningEventOverlapValidator {
     const { g, u, v } = this.extendedGcd(-d, D)
 
     // And with 𝑡 = max{⌊−𝑐𝑢/𝐷⌋ + 1, ⌊−𝑐𝑣/𝑑⌋ + 1} (solved for the first positive solution for (𝑋,𝑌))
-    const t = max(floor(-c * u / D) + 1, floor(-c * v / d) + 1)
+    const t = Math.max(Math.floor(-c * u / D) + 1, Math.floor(-c * v / d) + 1)
 
     // Then 𝑋 = 𝑐𝑢/𝑔 + 𝑡𝐷/𝑔
     const X = (c * u / g) + (t * D / g)
@@ -248,7 +249,7 @@ export class PlanningEventOverlapValidator {
     const secondSolution = B1 + (Y - 1) * D
 
     assert(firstSolution === secondSolution)
-    return floor(firstSolution)
+    return Math.floor(firstSolution)
   }
 
   /**
