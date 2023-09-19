@@ -1,9 +1,9 @@
 /* eslint-disable no-console */
 
 import { type Server, type ServerResponse } from 'http'
-import { EventEmitter } from 'stream'
 import express, { type Express } from 'express'
 import { register } from '../metrics.js'
+import EventEmitter from 'events'
 
 export declare interface DefaultContainer {
   on: (event: 'mounted', listener: (server: Server) => void) => this
