@@ -36,7 +36,11 @@ export const defaultErrors = {
     status: 403
   },
   unauthorized: {
-    detail: 'The user is not authorized to perform this action',
+    detail: 'The user needs to be authorized to perform this action',
+    status: 401
+  },
+  forbidden: {
+    detail: 'The user is not allowed to perform this action',
     status: 403
   },
   invalid_parameters: {
