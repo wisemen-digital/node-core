@@ -93,9 +93,10 @@ export abstract class DefaultContainer extends EventEmitter {
         res.writeHead(200, { 'Content-Type': 'text/plain' })
         res.write(string)
       })
-      .catch(() => {
-        res.writeHead(500, { 'Content-Type': 'text/plain' })
-        res.write('not OK')
+      .catch((e) => {
+        console.log(e)
+        res.writeHead(500, { 'Content-Type': 'application/json' })
+        res.write(e)
       })
       .finally(() => {
         res.end()
