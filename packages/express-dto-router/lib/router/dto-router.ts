@@ -52,7 +52,7 @@ export class DtoRouter {
     })
 
     if (result instanceof ApiResponse) {
-      result.execute(res)
+      await result.execute(res)
     } else {
       res.json(result)
     }

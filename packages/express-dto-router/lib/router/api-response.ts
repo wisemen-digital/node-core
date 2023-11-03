@@ -2,10 +2,10 @@ import {Response} from "express";
 
 export class ApiResponse {
   constructor (
-    private fn: (res: Response) => void
+    private fn: (res: Response) => Promise<void>
   ) {}
 
-  public execute (res: Response): void {
-    this.fn(res)
+  public async execute (res: Response): Promise<void> {
+    await this.fn(res)
   }
 }
