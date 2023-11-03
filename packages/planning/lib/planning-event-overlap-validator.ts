@@ -257,11 +257,8 @@ export class PlanningEventOverlapValidator {
    * the output to the expected results.
    */
   private extendedGcd (d: number, D: number): { g: number, u: number, v: number } {
-    const [gRaw, uRaw, vRaw] = xgcd(d, D) as unknown as Array<{ value: number }>
+    const [g, u, v] = xgcd(d, D)
 
-    const g = gRaw.value
-    const u = uRaw.value
-    const v = vRaw.value
     return { g, u, v }
   }
 
