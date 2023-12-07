@@ -3,11 +3,11 @@ import { CustomError , defaultErrors } from '../lib/index.js'
 const list = {
   ...defaultErrors,
   validation_error: {
-    description: 'Validation error',
+    detail: 'Validation error',
     status: 400
   },
   not_found: {
-    description: 'Not found',
+    detail: 'Not found',
     status: 404
   },
 }
