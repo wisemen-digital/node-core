@@ -9,7 +9,7 @@ interface ControllerMetaOptions {
 }
 
 export interface ControllerOptions <
-  Options extends ControllerMetaOptions = { query: undefined, body: undefined }
+  Options extends ControllerMetaOptions = {}
 > {
   req: Request
   query: Options['query']
