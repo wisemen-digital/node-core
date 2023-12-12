@@ -2,7 +2,7 @@ import { NextFunction, Request, RequestHandler, RequestParamHandler, Response, R
 import { CustomError } from '../errors/custom-error.js'
 import { validateUuid } from '../middleware/validate-uuid.middleware.js'
 import { ApiResponse } from './api-response.js'
-import { Dto } from './dto.js'
+import { Dto, validateDto } from './dto.js'
 import { HandleOptions, MiddlewareHandler, RouteOptions } from './types.js'
 import { captureException } from '@sentry/node'
 
@@ -36,14 +36,11 @@ export class DtoRouter {
     }
   }
 
-  private async handle <BodyDto extends Dto | undefined, QueryDto extends Dto | undefined> (options: HandleOptions<BodyDto, QueryDto>): Promise<void> {
+  private async handle <BodyDto extends Dto, QueryDto extends Dto> (options: HandleOptions<BodyDto, QueryDto>): Promise<void> {
     const { req, res, dtos } = options
 
-    const BodyDto = dtos?.body
-    const QueryDto = dtos?.query
-
-    const body = BodyDto == null ? undefined : await new BodyDto().validate(req.body, dtos?.groups) as BodyDto
-    const query = QueryDto == null ? undefined : await new QueryDto().validate(req.query, dtos?.groups) as QueryDto
+    const body = await validateDto(req.body, dtos?.body, dtos?.groups)
+    const query = await validateDto(req.query, dtos?.query, dtos?.groups)
 
     const result = await options.controller({
       req,
@@ -58,7 +55,7 @@ export class DtoRouter {
     }
   }
 
-  get <BodyDto extends Dto | undefined, QueryDto extends Dto | undefined> (options: RouteOptions<BodyDto, QueryDto>): void {
+  get <BodyDto extends Dto, QueryDto extends Dto> (options: RouteOptions<BodyDto, QueryDto>): void {
     const { path, middleware, ...handleOptions } = options
 
     this.router.get(path, ...middleware ?? [], (req: Request, res: Response, next: NextFunction) => {
@@ -70,7 +67,7 @@ export class DtoRouter {
     })
   }
 
-  post <BodyDto extends Dto | undefined, QueryDto extends Dto | undefined> (options: RouteOptions<BodyDto, QueryDto>): void {
+  post <BodyDto extends Dto, QueryDto extends Dto> (options: RouteOptions<BodyDto, QueryDto>): void {
     const { path, middleware, ...handleOptions } = options
 
     this.router.post(path, ...middleware ?? [], (req: Request, res: Response, next: NextFunction) => {
@@ -82,7 +79,7 @@ export class DtoRouter {
     })
   }
 
-  delete <BodyDto extends Dto | undefined, QueryDto extends Dto | undefined> (options: RouteOptions<BodyDto, QueryDto>): void {
+  delete <BodyDto extends Dto, QueryDto extends Dto> (options: RouteOptions<BodyDto, QueryDto>): void {
     const { path, middleware, ...handleOptions } = options
 
     this.router.delete(path, ...middleware ?? [], (req: Request, res: Response, next: NextFunction) => {
