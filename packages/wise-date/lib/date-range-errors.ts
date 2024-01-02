@@ -1,4 +1,4 @@
-import {DateRange} from "./date-range";
+import {DateRange} from "./date-range.js";
 
 export class InvalidBounds extends Error {
   constructor(

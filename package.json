@@ -16,6 +16,7 @@
   ],
   "dependencies": {
     "@node-core/time": "*",
+    "@node-core/wise-date": "*",
     "@node-core/validators": "*",
     "@node-core/planning": "*",
     "@node-core/decorators": "*"

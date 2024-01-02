@@ -1,5 +1,5 @@
 {
-  "name": "@appwise/date",
+  "name": "@appwise/wise-date",
   "version": "0.0.1",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -18,8 +18,7 @@
     "release": "release-it"
   },
   "dependencies": {
-    "dayjs": "^1.11.9",
-    dayjs/plugin/objectSupport
+    "dayjs": "^1.11.9"
   },
   "devDependencies": {
     "@types/node": "^20.2.5",

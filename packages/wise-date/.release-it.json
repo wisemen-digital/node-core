@@ -1,6 +1,6 @@
 {
   "git": {
-    "tagName": "date@${version}",
+    "tagName": "wise-date@${version}",
     "commitMessage": "Release ${tagName}",
     "tagAnnotation": "Release ${tagName}"
   },

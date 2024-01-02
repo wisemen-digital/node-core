@@ -1,32 +1,32 @@
-import {WiseDate} from "./date";
+import {WiseDate} from "./wise-date.js";
 import dayjs, {Dayjs} from "dayjs";
-import {DateUnit, DiffDateUnit, ReachableDateUnit} from "./units";
-import {PlainDateObject} from "./plain-date-object";
+import {DateUnit, DiffDateUnit, ReachableDateUnit} from "./units.js";
+import {PlainDateObject} from "./plain-date-object.js";
 
-export class FutureInfinityDate extends WiseDate {
+export class PastInfinityDate extends WiseDate {
   constructor() {
-    super(dayjs(new Date(8640000000000000)));
+    super(dayjs(-8.64e14))
   }
 
 
   isSame(otherDate: WiseDate, _unit?: DateUnit): boolean {
-    return otherDate instanceof FutureInfinityDate
+    return otherDate instanceof PastInfinityDate
   }
 
   isAfter(_otherDate: WiseDate, _unit?: DateUnit): boolean {
-    return true
-  }
-
-  isSameOrAfter(_otherDate: WiseDate, _unit?: DateUnit): boolean {
-    return true
-  }
-
-  isBefore(_otherDate: WiseDate, _unit?: DateUnit): boolean {
     return false
   }
 
+  isSameOrAfter(_otherDate: WiseDate, _unit?: DateUnit): boolean {
+    return this.isSame(_otherDate,_unit)
+  }
+
+  isBefore(_otherDate: WiseDate, _unit?: DateUnit): boolean {
+    return true
+  }
+
   isSameOrBefore(otherDate: WiseDate, unit?: DateUnit): boolean {
-    return this.isSame(otherDate, unit)
+    return true
   }
 
   startOf(_unit: ReachableDateUnit): WiseDate {
@@ -38,27 +38,27 @@ export class FutureInfinityDate extends WiseDate {
   }
 
   get year(): number {
-    return Infinity;
+    return -Infinity;
   }
 
   get month(): number {
-    return Infinity;
+    return -Infinity;
   }
 
   get dayOfMonth(): number {
-    return Infinity;
+    return -Infinity;
   }
 
   get day(): number {
-    return Infinity;
+    return -Infinity;
   }
 
   get weekOfYear(): number {
-    return Infinity;
+    return -Infinity;
   }
 
   get dayOfYear(): number {
-    return Infinity;
+    return -Infinity;
   }
 
   isToday(): boolean {
@@ -86,7 +86,7 @@ export class FutureInfinityDate extends WiseDate {
   }
 
   format(template: string): string {
-    return 'future infinity';
+    return 'past infinity';
   }
 
   clone(): WiseDate {
@@ -95,21 +95,21 @@ export class FutureInfinityDate extends WiseDate {
 
   toPlainObject(): PlainDateObject {
     return {
-      year: Infinity,
-      month: Infinity,
-      day: Infinity
+      year: -Infinity,
+      month: -Infinity,
+      day: -Infinity
     }
   }
 
   toString(): String {
-    return 'future infinity';
+    return 'past infinity';
   }
 
   isFutureInfinity(): boolean {
-    return true;
+    return false;
   }
 
   isPastInfinity(): boolean {
-    return false;
+    return true;
   }
 }

@@ -8,7 +8,7 @@ export enum Month {
   JULY = 7,
   AUGUST = 8,
   SEPTEMBER = 9,
-  OKTOBER = 10,
+  OCTOBER = 10,
   NOVEMBER = 11,
   DECEMBER = 12
 }

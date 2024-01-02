@@ -1,7 +1,7 @@
-import {WiseDate} from "./date";
-import {InvalidBounds, NoOverlap} from "./date-range-errors";
-import {DateRangeBound, intersect, isInclusive} from "./date-range-bound";
-import {BoundedDate} from "./bounded-date";
+import {WiseDate} from "./wise-date.js";
+import {InvalidBounds, NoOverlap} from "./date-range-errors.js";
+import {DateRangeBound, intersect, isInclusive} from "./date-range-bound.js";
+import {BoundedDate} from "./bounded-date.js";
 
 export class DateRange {
   private readonly _lowerBound: WiseDate
@@ -115,5 +115,4 @@ export class DateRange {
       return date.isAfter(this._lowerBound)
     }
   }
-
 }

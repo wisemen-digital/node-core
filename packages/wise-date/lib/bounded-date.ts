@@ -1,5 +1,5 @@
-import {WiseDate} from "./date";
-import {DateRangeBound, intersect, isInclusive} from "./date-range-bound";
+import {WiseDate} from "./wise-date.js";
+import {DateRangeBound, intersect, isInclusive} from "./date-range-bound.js";
 
 export class BoundedDate {
 

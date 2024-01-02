@@ -1,63 +1,52 @@
-import dayjs, {Dayjs} from "dayjs";
-import {InvalidDate} from "./invalid-date";
-import {DateUnit, DiffDateUnit, GetDateUnit, ReachableDateUnit} from "./units";
-import {PlainDateObject} from "./plain-date-object";
-import {Month} from "./month";
-import {FutureInfinityDate} from "./future-infinity-date";
-import {PastInfinityDate} from "./past-infinity-date";
-
+import dayjs from "dayjs";
+import {InvalidDate} from "./invalid-date.js";
+import {DateUnit, DiffDateUnit, GetDateUnit, ReachableDateUnit} from "./units.js";
+import {PlainDateObject} from "./plain-date-object.js";
+import {Month} from "./month.js";
+import customParseFormat from "dayjs/plugin/customParseFormat.js";
+dayjs.extend(customParseFormat)
 
 export class WiseDate {
-  private static _futureInfinity = new FutureInfinityDate()
-  private static _pastInfinity = new PastInfinityDate()
-
   public static today(): WiseDate {
-    return new WiseDate(dayjs())
+    return new WiseDate(dayjs().startOf('day'))
   }
 
   public static tomorrow(): WiseDate {
-    return new WiseDate(dayjs().add(1,'day'))
+    return new WiseDate(dayjs().add(1,'day').startOf('day'))
   }
 
   public static yesterday(): WiseDate {
-    return new WiseDate(dayjs().subtract(1,'day'))
+    return new WiseDate(dayjs().subtract(1,'day').startOf('day'))
   }
 
-  public static futureInfinity(): WiseDate {
-    return this._futureInfinity
-  }
 
-  public static pastInfinity(): WiseDate {
-    return this._pastInfinity
-  }
+  private date: dayjs.Dayjs
 
-  public static fromString(stringDate: string, format: string): WiseDate {
-    return new WiseDate(dayjs(stringDate, format, true))
-  }
-
-  public static fromPlainObject(date: PlainDateObject): WiseDate {
-    const {year, month, day} = date
-    return new WiseDate(year,month,day)
-  }
-
-  public static create(year: number, month: number, day: number): WiseDate {
-    return new WiseDate(year,month,day)
-  }
-
-  private date: Dayjs
-
-  protected constructor(dayjs: Dayjs)
-  protected constructor(year: number, month: number, day: number)
-  protected constructor(dayjsOrYear: Dayjs | number, month?: number | Month, day?: number) {
-    if(dayjsOrYear instanceof Dayjs) {
-      this.date = dayjsOrYear.startOf('day')
+  public constructor()
+  public constructor(dateString: string, format?: string)
+  public constructor(dayjs: dayjs.Dayjs)
+  public constructor(dayjs: Date)
+  public constructor(plainTimeObject: PlainDateObject)
+  public constructor(
+    input?: dayjs.Dayjs | string | Date | PlainDateObject,
+    format: string = 'YYYY-MM-DD',
+  ) {
+    if(input === undefined) {
+      this.date = dayjs()
+    } else if(input instanceof Date) {
+      this.date = dayjs(input)
+    } else if(dayjs.isDayjs(input)) {
+      this.date = input
+    } else if (typeof input === 'string'){
+      this.date = dayjs(input, format, true)
     } else {
-      this.date = dayjs({year: dayjsOrYear, month: (month as number | Month) - 1, day})
+      this.date = dayjs(`${input.year}-${input.month}-${input.day}`, 'YYYY-M-D', true)
     }
 
     if(!this.date.isValid()) {
       throw new InvalidDate(this)
     }
+    this.date = this.date.startOf('day')
   }
 
   public isSame(otherDate: WiseDate, unit?: DateUnit): boolean {
@@ -96,7 +85,7 @@ export class WiseDate {
     return this.date.get('year')
   }
 
-  public get month(): number {
+  public get month(): Month {
     return this.date.get('month') + 1
   }
 
