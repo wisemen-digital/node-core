@@ -11,6 +11,9 @@ export class PlanningEventGenerator<ExtendedRecurringEvent extends RecurringEven
     until: Moment
   ): ExtendedRecurringEvent[] {
     if (from.isAfter(until)) throw new Error('invalid_parameters')
+    if(recurringEvents.some(event => Number(event.weeksPeriod) <= 0)) {
+      throw new Error('weeksPeriod on events must be >= 0')
+    }
 
     const generatedEvents: ExtendedRecurringEvent[] = []
     for (const recurringEvent of recurringEvents) {
