@@ -10,7 +10,7 @@ export abstract class JobContainer extends DefaultContainer {
   abstract run (): Promise<void>
 
   protected async initialize (): Promise<void> {
-    super.initialize()
+    await super.initialize()
 
     await this.run()
     await this.destroy()

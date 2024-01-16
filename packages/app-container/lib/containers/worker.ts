@@ -9,7 +9,7 @@ export abstract class WorkerContainer extends DefaultContainer {
   abstract run (): Promise<void>
 
   protected async initialize (): Promise<void> {
-    super.initialize()
+    await super.initialize()
 
     await this.run()
   }
