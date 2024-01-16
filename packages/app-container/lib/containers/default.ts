@@ -14,7 +14,7 @@ export abstract class DefaultContainer extends EventEmitter {
   protected server?: Server
   private state: 'starting' | 'ready' | 'shutdown' | 'unknown'
 
-  constructor (type: 'job' | 'worker' | 'api', gracefully = true) {
+  constructor (type: 'job' | 'worker' | 'api', gracefully = true, initialize = true) {
     super()
 
     console.log(`starting ${type}`)
@@ -26,6 +26,10 @@ export abstract class DefaultContainer extends EventEmitter {
       process.on('SIGINT', () => { void this.destroy() })
       process.on('SIGUSR2', () => { void this.destroy() })
       process.on('SIGHUP', () => { void this.destroy() })
+    }
+
+    if (initialize) {
+      void this.initialize()
     }
   }
 
