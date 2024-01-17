@@ -32,9 +32,7 @@ export abstract class DefaultContainer extends EventEmitter {
   abstract up (): Promise<void>
   abstract down (): Promise<void>
 
-  protected async initialize (): Promise<void> {
-    await this.up()
-
+  protected initialize (): void {
     this.app.get('/', (_, res) => { this.version(res) })
     this.app.get('/health', (_, res) => { this.liveness(res) })
     this.app.get('/ready', (_, res) => { this.readiness(res) })
