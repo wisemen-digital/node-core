@@ -12,6 +12,6 @@ export abstract class ApiContainer extends DefaultContainer {
   protected async initialize (): Promise<void> {
     this.populate(this.app)
 
-    await super.initialize()
+    super.initialize()
   }
 }
