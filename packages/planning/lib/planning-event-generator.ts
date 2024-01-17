@@ -1,7 +1,6 @@
 import type { Moment } from 'moment'
 import moment from 'moment/moment.js'
 import { RecurringEvent } from "./recurring-event.js"
-import { PlanningEvent } from "./planning-event.js"
 import { YYYY_MM_DD } from "./constants.js"
 
 export class PlanningEventGenerator<ExtendedRecurringEvent extends RecurringEvent> {
@@ -12,7 +11,7 @@ export class PlanningEventGenerator<ExtendedRecurringEvent extends RecurringEven
   ): ExtendedRecurringEvent[] {
     if (from.isAfter(until)) throw new Error('invalid_parameters')
     if(recurringEvents.some(event => Number(event.weeksPeriod) <= 0)) {
-      throw new Error('weeksPeriod on events must be >= 0')
+      throw new Error('weeksPeriod on events must be > 0')
     }
 
     const generatedEvents: ExtendedRecurringEvent[] = []
