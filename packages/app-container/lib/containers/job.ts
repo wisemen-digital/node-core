@@ -3,8 +3,8 @@
 import { DefaultContainer } from './default.js'
 
 export abstract class JobContainer extends DefaultContainer {
-  constructor (gracefully = true, initialize = true) {
-    super('job', gracefully, initialize)
+  constructor (gracefully = true) {
+    super('job', gracefully)
   }
 
   abstract run (): Promise<void>

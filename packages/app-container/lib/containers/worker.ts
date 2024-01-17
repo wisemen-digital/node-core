@@ -2,8 +2,8 @@
 import { DefaultContainer } from './default.js'
 
 export abstract class WorkerContainer extends DefaultContainer {
-  constructor (gracefully = true, initialize = true) {
-    super('worker', gracefully, initialize)
+  constructor (gracefully = true) {
+    super('worker', gracefully)
   }
 
   abstract run (): Promise<void>
