@@ -18,14 +18,14 @@ export class PlanningEventOverlapValidator {
    * Get the first date when the two events overlap
    * @return the first date when the two events overlap, or null if they don't overlap
    */
-    public static getFirstOverlapDate (event: PlanningEvent, candidate: PlanningEvent): Moment | null {
-      const validator = new PlanningEventOverlapValidator(event, candidate)
-  
-      if (!validator.areOnTheSameWeekday()) return null
-      if (!validator.haveOverlappingTimePeriods()) return null
-  
-      return validator.getFirstOverlappingDate() ?? null
-    }
+  public static getFirstOverlapDate (event: PlanningEvent, candidate: PlanningEvent): Moment | null {
+    const validator = new PlanningEventOverlapValidator(event, candidate)
+
+    if (!validator.areOnTheSameWeekday()) return null
+    if (!validator.haveOverlappingTimePeriods()) return null
+
+    return validator.getFirstOverlappingDate() ?? null
+  }
 
   private readonly event: PlanningEvent
   private readonly eventStart: Moment
@@ -59,7 +59,7 @@ export class PlanningEventOverlapValidator {
   }
 
   /**
-   * Get the first date when the two events overlap 
+   * Get the first date when the two events overlap
    */
   private getFirstOverlappingDate (): Moment | undefined {
     const gen = this.getOverlappingDates()
@@ -145,7 +145,7 @@ export class PlanningEventOverlapValidator {
     const secondSolution = B1 + (Y - 1) * D
 
     assert(firstSolution === secondSolution)
-    
+
     let offset = firstSolution
     while (true) {
       yield offset
