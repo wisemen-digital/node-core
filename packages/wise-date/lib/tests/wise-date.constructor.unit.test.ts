@@ -1,6 +1,6 @@
 import {describe, it} from "node:test";
 import {expect} from "expect";
-import {WiseDate} from "../wise-date.js";
+import {WiseDate}  from "../index.js";
 import dayjs from "dayjs";
 
 describe('WiseDate', () => {

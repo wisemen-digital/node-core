@@ -1,9 +1,8 @@
 import {describe, it} from "node:test";
 import {expect} from "expect";
-import {WiseDate} from "../wise-date.js";
-import {FutureInfinityDate} from "../future-infinity-date.js";
-import {PastInfinityDate} from "../past-infinity-date.js";
-import dayjs from "dayjs";
+import {WiseDate}  from "../index.js";
+import {FutureInfinityDate} from "../index.js";
+import {PastInfinityDate} from "../index.js";
 
 describe('WiseDate', () => {
   describe('relative order of dates', () => {
