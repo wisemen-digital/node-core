@@ -48,10 +48,6 @@ export class FutureInfinityDate extends WiseDate {
     return Infinity;
   }
 
-  get day(): number {
-    return Infinity;
-  }
-
   get weekOfYear(): number {
     return Infinity;
   }
@@ -80,7 +76,7 @@ export class FutureInfinityDate extends WiseDate {
     return this
   }
 
-  diff(withOther: WiseDate, unit: DiffDateUnit, asFloat: boolean = false): number {
+  diff(withOther: WiseDate, unit: DiffDateUnit, precise = false): number {
     return Infinity;
   }
 
@@ -110,5 +106,9 @@ export class FutureInfinityDate extends WiseDate {
 
   isPastInfinity(): boolean {
     return false;
+  }
+
+  isInfinity(): boolean {
+    return true;
   }
 }

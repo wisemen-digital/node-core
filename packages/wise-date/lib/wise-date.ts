@@ -8,21 +8,26 @@ dayjs.extend(customParseFormat)
 
 export class WiseDate {
   public static today(): WiseDate {
-    return new WiseDate(dayjs().startOf('day'))
+    return new WiseDate()
   }
 
   public static tomorrow(): WiseDate {
-    return new WiseDate(dayjs().add(1,'day').startOf('day'))
+    return new WiseDate(dayjs().add(1,'day'))
   }
 
   public static yesterday(): WiseDate {
-    return new WiseDate(dayjs().subtract(1,'day').startOf('day'))
+    return new WiseDate(dayjs().subtract(1,'day'))
   }
 
 
   private date: dayjs.Dayjs
 
+  /** Defaults to today */
   public constructor()
+  /**
+   *  Parse a date from a string
+   *  @see https://day.js.org/docs/en/display/format
+   */
   public constructor(dateString: string, format?: string)
   public constructor(dayjs: dayjs.Dayjs)
   public constructor(dayjs: Date)
@@ -36,7 +41,7 @@ export class WiseDate {
     } else if(input instanceof Date) {
       this.date = dayjs(input)
     } else if(dayjs.isDayjs(input)) {
-      this.date = input
+      this.date = input.clone()
     } else if (typeof input === 'string'){
       this.date = dayjs(input, format, true)
     } else {
@@ -54,9 +59,13 @@ export class WiseDate {
   }
 
   public isAfter(otherDate: WiseDate, unit?: DateUnit): boolean {
-    if(otherDate.isFutureInfinity()) return false
-    else if (otherDate.isPastInfinity()) return true
-    return this.date.isAfter(otherDate.date, unit)
+    if(otherDate.isFutureInfinity()){
+      return false
+    } else if (otherDate.isPastInfinity()) {
+      return true
+    } else {
+      return this.date.isAfter(otherDate.date, unit)
+    }
   }
 
   public isSameOrAfter(otherDate: WiseDate, unit?: DateUnit): boolean {
@@ -64,9 +73,13 @@ export class WiseDate {
   }
 
   public isBefore(otherDate: WiseDate, unit?: DateUnit): boolean {
-    if(otherDate.isPastInfinity()) return false
-    else if (otherDate.isFutureInfinity()) return true
-    return this.date.isBefore(otherDate.date, unit)
+    if(otherDate.isPastInfinity()) {
+      return false
+    } else if (otherDate.isFutureInfinity()) {
+      return true
+    } else {
+       return this.date.isBefore(otherDate.date, unit)
+    }
   }
 
   public isSameOrBefore(otherDate: WiseDate, unit?: DateUnit): boolean {
@@ -91,10 +104,6 @@ export class WiseDate {
 
   public get dayOfMonth(): number {
     return this.date.get('day')
-  }
-
-  public get day(): number {
-    return this.dayOfMonth
   }
 
   public get weekOfYear(): number {
@@ -125,32 +134,35 @@ export class WiseDate {
     return new WiseDate(this.date.subtract(amount,unit))
   }
 
-  public diff(withOther: WiseDate, unit: DiffDateUnit, asFloat: boolean = false): number {
+  public diff(withOther: WiseDate, unit: DiffDateUnit, precise = false): number {
     if(withOther.isFutureInfinity() || withOther.isPastInfinity()) {
       return Infinity
     } else {
-      return this.date.diff(withOther.date,unit, asFloat)
+      return this.date.diff(withOther.date,unit, precise)
     }
   }
 
+  /**
+   * @see https://day.js.org/docs/en/display/format
+   */
   public format(template: string): string {
     return this.date.format(template)
   }
 
   public clone(): WiseDate {
-    return new WiseDate(this.date.clone())
+    return new WiseDate(this.date)
   }
 
   public toPlainObject(): PlainDateObject {
     return {
       year: this.year,
-      month: this.month + 1,
-      day: this.day
+      month: this.month,
+      day: this.dayOfMonth
     }
   }
 
   public toDate(): Date {
-    return new Date(this.date.valueOf())
+    return this.date.toDate()
   }
 
   public toString(): String {
@@ -166,6 +178,6 @@ export class WiseDate {
   }
 
   public isInfinity(): boolean {
-    return this.isPastInfinity() || this.isFutureInfinity()
+    return this.isFutureInfinity() || this.isPastInfinity()
   }
 }
