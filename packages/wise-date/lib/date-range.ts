@@ -103,17 +103,7 @@ export class DateRange {
 
   public diff(otherRange: DateRange): DateRange[] {
     if(!this.overlaps(otherRange)) return []
-
-    const thisLowerBound = new BoundedDate(this._lowerBound, this.lowerBoundMode)
-    const thisUpperBound = new BoundedDate(this._upperBound, this.upperBoundMode)
-    const otherLowerBound = new BoundedDate(otherRange._lowerBound, otherRange.lowerBoundMode)
-    const otherUpperBound = new BoundedDate(otherRange._upperBound, otherRange.upperBoundMode)
-
-    const overlapLowerBound = BoundedDate.max(thisLowerBound, otherLowerBound)
-    const overlapUpperBound = BoundedDate.min(thisUpperBound, otherUpperBound)
-
-    return new DateRange(overlapLowerBound.date, overlapUpperBound.date,
-      overlapLowerBound.bound, overlapUpperBound.bound)
+    return []
   }
 
   private isSameOrBeforeUpperBound(date: WiseDate) {
