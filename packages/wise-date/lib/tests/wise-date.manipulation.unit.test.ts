@@ -5,6 +5,7 @@ import {FutureInfinityDate} from "../index.js";
 import {PastInfinityDate} from "../index.js";
 import dayjs from "dayjs";
 import {Month} from "../month.js";
+import {Duration} from "../duration.js";
 
 describe('WiseDate manipulation of date value', () => {
   describe('Future infinity', () => {
@@ -13,6 +14,7 @@ describe('WiseDate manipulation of date value', () => {
       expect(new FutureInfinityDate().add(1,'week').isSame(new FutureInfinityDate())).toBe(true)
       expect(new FutureInfinityDate().add(1,'month').isSame(new FutureInfinityDate())).toBe(true)
       expect(new FutureInfinityDate().add(1,'year').isSame(new FutureInfinityDate())).toBe(true)
+      expect(new FutureInfinityDate().add(new Duration(1,'day')).isSame(new FutureInfinityDate())).toBe(true)
     });
 
     it('Future infinity remains infinity when decreasing the date', () => {
@@ -20,6 +22,7 @@ describe('WiseDate manipulation of date value', () => {
       expect(new FutureInfinityDate().subtract(1,'week').isSame(new FutureInfinityDate())).toBe(true)
       expect(new FutureInfinityDate().subtract(1,'year').isSame(new FutureInfinityDate())).toBe(true)
       expect(new FutureInfinityDate().subtract(1,'month').isSame(new FutureInfinityDate())).toBe(true)
+      expect(new FutureInfinityDate().subtract(new Duration(1,'day')).isSame(new FutureInfinityDate())).toBe(true)
     });
   })
 
@@ -29,6 +32,7 @@ describe('WiseDate manipulation of date value', () => {
       expect(new PastInfinityDate().add(1,'week').isSame(new PastInfinityDate())).toBe(true)
       expect(new PastInfinityDate().add(1,'month').isSame(new PastInfinityDate())).toBe(true)
       expect(new PastInfinityDate().add(1,'year').isSame(new PastInfinityDate())).toBe(true)
+      expect(new PastInfinityDate().add(new Duration(1,'day')).isSame(new PastInfinityDate())).toBe(true)
     });
 
     it('Past infinity remains infinity when decreasing the date', () => {
@@ -36,6 +40,7 @@ describe('WiseDate manipulation of date value', () => {
       expect(new PastInfinityDate().subtract(1,'week').isSame(new PastInfinityDate())).toBe(true)
       expect(new PastInfinityDate().subtract(1,'year').isSame(new PastInfinityDate())).toBe(true)
       expect(new PastInfinityDate().subtract(1,'month').isSame(new PastInfinityDate())).toBe(true)
+      expect(new PastInfinityDate().subtract(new Duration(1,'day')).isSame(new PastInfinityDate())).toBe(true)
     });
   })
 
@@ -46,6 +51,7 @@ describe('WiseDate manipulation of date value', () => {
       expect(new WiseDate().add(1,'day').dayOfYear).not.toBe(new WiseDate().dayOfYear)
       expect(new WiseDate('2024-01-01').add(1,'day').isSame(new WiseDate('2024-01-02'))).toBe(true)
       expect(new WiseDate(dayjs().endOf('day')).add(1,'day').isTomorrow()).toBe(true)
+      expect(new WiseDate().add(new Duration(1,'day')).isSame(WiseDate.tomorrow())).toBe(true)
     });
 
     it('Increasing the day by one at the end of a week changes the week of the year', () => {
@@ -64,6 +70,7 @@ describe('WiseDate manipulation of date value', () => {
       expect(new WiseDate().add(1,'week').isSame(new WiseDate(dayjs().add(1,'week')))).toBe(true)
       expect(new WiseDate().add(1,'week').isSame(new WiseDate())).toBe(false)
       expect(new WiseDate('2024-01-01').add(1,'week').isSame(new WiseDate('2024-01-08'))).toBe(true)
+      expect(new WiseDate('2024-01-01').add(new Duration(1,'week')).isSame(new WiseDate('2024-01-08'))).toBe(true)
     });
 
     it('Increasing the week overflows to the next month', () => {
@@ -84,6 +91,7 @@ describe('WiseDate manipulation of date value', () => {
       expect(new WiseDate().add(1,'month').isSame(new WiseDate(dayjs().add(1,'month')))).toBe(true)
       expect(new WiseDate().add(1,'month').month).not.toBe(new WiseDate().month)
       expect(new WiseDate(dayjs().startOf('year')).add(1,'month').month).toBe(Month.FEBRUARY)
+      expect(new WiseDate(dayjs().startOf('year')).add(new Duration(1,'month')).month).toBe(Month.FEBRUARY)
     });
 
     it('Increasing the month overflows to the next year', () => {
@@ -97,6 +105,7 @@ describe('WiseDate manipulation of date value', () => {
       expect(new WiseDate().add(1,'year').isSame(new WiseDate(dayjs().add(1,'year')))).toBe(true)
       expect(new WiseDate().add(1,'year').year).not.toBe(new WiseDate().year)
       expect(new WiseDate('2024-01-01').add(1,'year').isSame(new WiseDate('2025-01-01'))).toBe(true)
+      expect(new WiseDate('2024-01-01').add(new Duration(1,'year')).isSame(new WiseDate('2025-01-01'))).toBe(true)
     });
   })
 })

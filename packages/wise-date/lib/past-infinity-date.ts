@@ -2,6 +2,7 @@ import {WiseDate} from "./wise-date.js";
 import dayjs, {Dayjs} from "dayjs";
 import {DateUnit, DiffDateUnit, ReachableDateUnit} from "./units.js";
 import {PlainDateObject} from "./plain-date-object.js";
+import {Duration} from "./duration.js";
 
 export class PastInfinityDate extends WiseDate {
   constructor() {
@@ -69,11 +70,16 @@ export class PastInfinityDate extends WiseDate {
     return false;
   }
 
-  add(amount: number, unit: DateUnit): WiseDate {
+
+  public add(duration: Duration)
+  public add(amount: number, unit: DateUnit)
+  public add(input: Duration | number, unit?: DateUnit): WiseDate {
     return this
   }
 
-  subtract(amount: number, unit: DateUnit): WiseDate {
+  public subtract(duration: Duration)
+  public subtract(amount: number, unit: DateUnit)
+  public subtract(input: Duration | number, unit?: DateUnit): WiseDate {
     return this
   }
 

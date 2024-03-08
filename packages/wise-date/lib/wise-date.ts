@@ -4,6 +4,7 @@ import {DateUnit, DiffDateUnit, GetDateUnit, ReachableDateUnit} from "./units.js
 import {PlainDateObject} from "./plain-date-object.js";
 import {Month} from "./month.js";
 import customParseFormat from "dayjs/plugin/customParseFormat.js";
+import {Duration} from "./duration.js";
 dayjs.extend(customParseFormat)
 
 export class WiseDate {
@@ -126,12 +127,24 @@ export class WiseDate {
     return this.date.isYesterday()
   }
 
-  public add(amount: number, unit: DateUnit): WiseDate {
-    return new WiseDate(this.date.add(amount,unit))
+  public add(duration: Duration)
+  public add(amount: number, unit: DateUnit)
+  public add(input: Duration | number, unit?: DateUnit): WiseDate {
+    if(input instanceof Duration) {
+      return new WiseDate(this.date.add(input.toDayjsDuration()))
+    } else {
+      return new WiseDate(this.date.add(input,unit))
+    }
   }
 
-  public subtract(amount: number, unit: DateUnit): WiseDate {
-    return new WiseDate(this.date.subtract(amount,unit))
+  public subtract(duration: Duration)
+  public subtract(amount: number, unit: DateUnit)
+  public subtract(input: Duration | number, unit?: DateUnit): WiseDate {
+    if(input instanceof Duration) {
+      return new WiseDate(this.date.subtract(input.toDayjsDuration()))
+    } else {
+      return new WiseDate(this.date.subtract(input,unit))
+    }
   }
 
   public diff(withOther: WiseDate, unit: DiffDateUnit, precise = false): number {
@@ -140,6 +153,10 @@ export class WiseDate {
     } else {
       return this.date.diff(withOther.date,unit, precise)
     }
+  }
+
+  public duration(betweenOther: WiseDate): Duration {
+    return new Duration(dayjs.duration(this.date.diff(betweenOther.date)))
   }
 
   /**
