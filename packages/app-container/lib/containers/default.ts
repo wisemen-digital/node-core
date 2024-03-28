@@ -30,8 +30,8 @@ export abstract class DefaultContainer extends EventEmitter {
 
     process.nextTick(() => {
       this.initialize()
-        .catch(e => {
-          this.destroy()
+        .catch(async e => {
+          await this.destroy()
 
           this.emit('error', e)
         })

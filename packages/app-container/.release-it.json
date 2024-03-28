@@ -1,6 +1,6 @@
 {
   "git": {
-    "tagName": "express-dto-router@${version}",
+    "tagName": "app-container@${version}",
     "commitMessage": "Release ${tagName}",
     "tagAnnotation": "Release ${tagName}"
   },
