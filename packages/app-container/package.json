@@ -1,6 +1,6 @@
 {
   "name": "@appwise/app-container",
-  "version": "1.1.0",
+  "version": "1.1.4",
   "description": "A package for an app container in kubernetes",
   "directories": {
     "example": "examples"
