@@ -14,7 +14,7 @@ export abstract class DefaultContainer extends EventEmitter {
   protected server?: Server
   private state: 'starting' | 'ready' | 'shutdown' | 'unknown'
 
-  constructor (type: 'job' | 'worker' | 'api', gracefully = true, initialize = true) {
+  constructor (type: 'job' | 'worker' | 'api', gracefully = true) {
     super()
 
     console.log(`starting ${type}`)
@@ -28,17 +28,18 @@ export abstract class DefaultContainer extends EventEmitter {
       process.on('SIGHUP', () => { void this.destroy() })
     }
 
-    if (initialize) {
-      void this.initialize()
-    }
+    process.nextTick(() => {
+      this.initialize()
+        .catch(_ => {
+          this.destroy()
+        })
+    })
   }
 
   abstract up (): Promise<void>
   abstract down (): Promise<void>
 
   protected async initialize (): Promise<void> {
-    await this.up()
-
     this.app.get('/', (_, res) => { this.version(res) })
     this.app.get('/health', (_, res) => { this.liveness(res) })
     this.app.get('/ready', (_, res) => { this.readiness(res) })
@@ -46,9 +47,11 @@ export abstract class DefaultContainer extends EventEmitter {
 
     this.server = this.app.listen(process.env.PORT ?? 3000, () => {
       console.log('server started')
-
-      this.state = 'ready'
     })
+
+    await this.up()
+
+    this.state = 'ready'
 
     this.emit('mounted', this.server)
   }
