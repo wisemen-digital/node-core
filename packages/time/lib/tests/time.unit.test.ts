@@ -39,107 +39,107 @@ describe('Time class', () => {
 
   describe('hoursBetween', () => {
     it('When sending times with a difference less than an hour, it should return 0', () => {
-      const midnight = Time.fromString('00:00:00')
-      const afterMidnight = Time.fromString('00:59:59')
+      const midnight = new Time('00:00:00')
+      const afterMidnight = new Time('00:59:59')
 
       expect(Time.hoursBetween(midnight, midnight)).toBe(0)
       expect(Time.hoursBetween(midnight, afterMidnight)).toBe(0)
     })
 
     it('When sending times, the order should not matter', () => {
-      const twoAM = Time.fromString('02:00:00')
-      const fourAM = Time.fromString('04:00:00')
+      const twoAM = new Time('02:00:00')
+      const fourAM = new Time('04:00:00')
 
       expect(Time.hoursBetween(twoAM, fourAM)).toBe(2)
       expect(Time.hoursBetween(fourAM, twoAM)).toBe(2)
     })
 
     it('When sending times a with a difference more than an hour, it returns the right amount of hours', () => {
-      let time1 = Time.fromString('02:59:59')
-      let time2 = Time.fromString('04:00:00')
+      let time1 = new Time('02:59:59')
+      let time2 = new Time('04:00:00')
 
       expect(Time.hoursBetween(time1, time2)).toBe(1)
 
-      time1 = Time.fromString('02:30:00')
-      time2 = Time.fromString('05:29:59')
+      time1 = new Time('02:30:00')
+      time2 = new Time('05:29:59')
       expect(Time.hoursBetween(time1, time2)).toBe(2)
     })
   })
 
   describe('minutesBetween', () => {
     it('When sending times with a difference less than a minute, it should return 0', () => {
-      const midnight = Time.fromString('00:00:59')
-      const afterMidnight = Time.fromString('00:00:00')
+      const midnight = new Time('00:00:59')
+      const afterMidnight = new Time('00:00:00')
 
       expect(Time.minutesBetween(midnight, midnight)).toBe(0)
       expect(Time.minutesBetween(midnight, afterMidnight)).toBe(0)
     })
 
     it('When sending times, the order should not matter', () => {
-      const twoAM = Time.fromString('00:34:00')
-      const fourAM = Time.fromString('00:40:00')
+      const twoAM = new Time('00:34:00')
+      const fourAM = new Time('00:40:00')
 
       expect(Time.minutesBetween(twoAM, fourAM)).toBe(6)
       expect(Time.minutesBetween(fourAM, twoAM)).toBe(6)
     })
 
     it('When sending times a with a difference more than a minute, it returns the right amount of minutes', () => {
-      let time1 = Time.fromString('03:30:59')
-      let time2 = Time.fromString('04:00:00')
+      let time1 = new Time('03:30:59')
+      let time2 = new Time('04:00:00')
 
       expect(Time.minutesBetween(time1, time2)).toBe(29)
 
-      time1 = Time.fromString('02:30:00')
-      time2 = Time.fromString('05:29:59')
+      time1 = new Time('02:30:00')
+      time2 = new Time('05:29:59')
       expect(Time.minutesBetween(time1, time2)).toBe(179)
     })
   })
 
   describe('secondsBetween', () => {
     it('When sending times with a difference less than a second, it should return 0', () => {
-      const midnight = Time.fromString('00:00:00')
-      const afterMidnight = Time.fromString('00:00:59')
+      const midnight = new Time('00:00:00')
+      const afterMidnight = new Time('00:00:59')
 
       expect(Time.secondsBetween(midnight, midnight)).toBe(0)
       expect(Time.secondsBetween(afterMidnight, afterMidnight)).toBe(0)
     })
 
     it('When sending times, the order should not matter', () => {
-      const twoAM = Time.fromString('00:00:20')
-      const fourAM = Time.fromString('00:00:40')
+      const twoAM = new Time('00:00:20')
+      const fourAM = new Time('00:00:40')
 
       expect(Time.secondsBetween(twoAM, fourAM)).toBe(20)
       expect(Time.secondsBetween(fourAM, twoAM)).toBe(20)
     })
 
     it('When sending times a with a difference more than a second, it returns the right amount of secods', () => {
-      let time1 = Time.fromString('04:00:59')
-      let time2 = Time.fromString('04:00:00')
+      let time1 = new Time('04:00:59')
+      let time2 = new Time('04:00:00')
 
       expect(Time.secondsBetween(time1, time2)).toBe(59)
 
-      time1 = Time.fromString('04:30:59')
-      time2 = Time.fromString('04:00:00')
+      time1 = new Time('04:30:59')
+      time2 = new Time('04:00:00')
       expect(Time.secondsBetween(time1, time2)).toBe(30 * 60 + 59)
 
-      time1 = Time.fromString('07:30:59')
-      time2 = Time.fromString('04:00:00')
+      time1 = new Time('07:30:59')
+      time2 = new Time('04:00:00')
       expect(Time.secondsBetween(time1, time2)).toBe(3 * 60 * 60 + 30 * 60 + 59)
     })
   })
 
   describe('fromString', () => {
     it('When sending an invalid string, it throws an error', () => {
-      expect(() => Time.fromString('')).toThrow(InvalidTimeString)
-      expect(() => Time.fromString('not_a_time')).toThrow(InvalidTimeString)
-      expect(() => Time.fromString('24:00:00')).toThrow(InvalidTimeString)
-      expect(() => Time.fromString('00:60:00')).toThrow(InvalidTimeString)
-      expect(() => Time.fromString('00:00:60')).toThrow(InvalidTimeString)
-      expect(() => Time.fromString('0:0:0')).toThrow(InvalidTimeString)
+      expect(() => new Time('')).toThrow(InvalidTimeString)
+      expect(() => new Time('not_a_time')).toThrow(InvalidTimeString)
+      expect(() => new Time('24:00:00')).toThrow(InvalidTimeString)
+      expect(() => new Time('00:60:00')).toThrow(InvalidTimeString)
+      expect(() => new Time('00:00:60')).toThrow(InvalidTimeString)
+      expect(() => new Time('0:0:0')).toThrow(InvalidTimeString)
     })
 
     it('When sending a valid string, the constructed Time object contains the right values', () => {
-      const time = Time.fromString('23:30:00')
+      const time = new Time('23:30:00')
       expect(time.getHours()).toBe(23)
       expect(time.getMinutes()).toBe(30)
       expect(time.getSeconds()).toBe(0)
@@ -164,7 +164,7 @@ describe('Time class', () => {
       expect(() => new Time(0, 0, Infinity)).toThrow(InvalidSeconds)
     })
 
-    it('When creating a time with valid values, it creates the correct time', () => {
+    it('When creating a time with valid numeric values, it creates the correct time', () => {
       const time = new Time(23, 59, 59)
       expect(time.getHours()).toBe(23)
       expect(time.getMinutes()).toBe(59)
@@ -175,20 +175,44 @@ describe('Time class', () => {
       expect(midnight.getMinutes()).toBe(0)
       expect(midnight.getSeconds()).toBe(0)
     })
+
+    it('When creating a time with a string, it creates the correct time', () => {
+      const time = new Time('23:59:59')
+      expect(time.getHours()).toBe(23)
+      expect(time.getMinutes()).toBe(59)
+      expect(time.getSeconds()).toBe(59)
+
+      const midnight = new Time('00:00:00')
+      expect(midnight.getHours()).toBe(0)
+      expect(midnight.getMinutes()).toBe(0)
+      expect(midnight.getSeconds()).toBe(0)
+    })
+
+    it('When creating a time with an object, it creates the correct time', () => {
+      const time = new Time({hours: 23, minutes: 59, seconds: 59})
+      expect(time.getHours()).toBe(23)
+      expect(time.getMinutes()).toBe(59)
+      expect(time.getSeconds()).toBe(59)
+
+      const midnight = new Time({hours: 0, minutes: 0, seconds: 0})
+      expect(midnight.getHours()).toBe(0)
+      expect(midnight.getMinutes()).toBe(0)
+      expect(midnight.getSeconds()).toBe(0)
+    })
   })
 
   describe('toString', () => {
     it('When converting a Time to a string, it should return the correct format', () => {
       expect(new Time(23, 59, 59).toString()).toBe('23:59:59')
       expect(new Time(0, 1, 2).toString()).toBe('00:01:02')
-      expect(Time.fromString('05:23:58').toString()).toBe('05:23:58')
+      expect(new Time('05:23:58').toString()).toBe('05:23:58')
     })
   })
 
   describe('isBefore', () => {
     it('When comparing times, it should determine the order correctly', () => {
-      const time = Time.fromString('10:10:10')
-      const otherTime = Time.fromString('20:20:20')
+      const time = new Time('10:10:10')
+      const otherTime = new Time('20:20:20')
 
       expect(time.isBefore(time)).toBe(false)
       expect(time.isBefore(otherTime)).toBe(true)
@@ -198,8 +222,8 @@ describe('Time class', () => {
 
   describe('isBeforeOrEqual', () => {
     it('When comparing times, it should determine the order correctly', () => {
-      const time = Time.fromString('10:10:10')
-      const otherTime = Time.fromString('20:20:20')
+      const time = new Time('10:10:10')
+      const otherTime = new Time('20:20:20')
 
       expect(time.isBeforeOrEqual(time)).toBe(true)
       expect(time.isBeforeOrEqual(otherTime)).toBe(true)
@@ -209,8 +233,8 @@ describe('Time class', () => {
 
   describe('isAfter', () => {
     it('When comparing times, it should determine the order correctly', () => {
-      const time = Time.fromString('10:10:10')
-      const otherTime = Time.fromString('20:20:20')
+      const time = new Time('10:10:10')
+      const otherTime = new Time('20:20:20')
 
       expect(time.isAfter(time)).toBe(false)
       expect(time.isAfter(otherTime)).toBe(false)
@@ -220,8 +244,8 @@ describe('Time class', () => {
 
   describe('isAfterOrEqual', () => {
     it('When comparing times, it should determine the order correctly', () => {
-      const time = Time.fromString('10:10:10')
-      const otherTime = Time.fromString('20:20:20')
+      const time = new Time('10:10:10')
+      const otherTime = new Time('20:20:20')
 
       expect(time.isAfterOrEqual(time)).toBe(true)
       expect(time.isAfterOrEqual(otherTime)).toBe(false)
@@ -231,8 +255,8 @@ describe('Time class', () => {
 
   describe('equals', () => {
     it('When comparing times, it should determine the equality correctly', () => {
-      const time = Time.fromString('10:10:10')
-      const otherTime = Time.fromString('20:20:20')
+      const time = new Time('10:10:10')
+      const otherTime = new Time('20:20:20')
 
       expect(time.equals(time)).toBe(true)
       expect(time.equals(otherTime)).toBe(false)
@@ -242,7 +266,7 @@ describe('Time class', () => {
 
   describe('copy', () => {
     it('Creates a new copy of a time object', () => {
-      const time = Time.fromString('10:10:10')
+      const time = new Time('10:10:10')
       const copy = time.copy()
       expect(time).not.toBe(copy)
       expect(time.equals(copy)).toBe(true)

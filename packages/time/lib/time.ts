@@ -11,14 +11,6 @@ export class Time {
   public static MIN_SECONDS = 0
   public static MAX_SECONDS = 59
 
-  public static fromString (timeString: string): Time {
-    if (!Time.isValidTimeString(timeString)) {
-      throw new InvalidTimeString(timeString)
-    }
-    const [hours, minutes, seconds] = timeString.split(':').map(v => parseInt(v))
-    return new Time(hours, minutes, seconds)
-  }
-
   public static isValidTimeString (timeString?: string | null): boolean {
     if (timeString == null) return false
     return /^([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/.test(timeString)
@@ -55,10 +47,10 @@ export class Time {
   public static secondsBetween (first: Time | string, second: Time | string): number
   public static secondsBetween (first: Time | string, second: Time | string): number {
     if (typeof first === 'string') {
-      first = Time.fromString(first)
+      first = new Time(first)
     }
     if (typeof second === 'string') {
-      second = Time.fromString(second)
+      second = new Time(second)
     }
     return Math.abs(first.toSeconds() - second.toSeconds())
   }
@@ -78,7 +70,29 @@ export class Time {
   private seconds: number
 
   /** @throws TimeError */
-  public constructor (hours: number, minutes: number, seconds: number) {
+  public constructor (timeString: string)
+  public constructor (timeObject: PlainTimeObject)
+  public constructor (hours: number, minutes: number, seconds: number)
+  public constructor (
+    target: number | string | PlainTimeObject,
+    minutes: number = 0,
+    seconds: number= 0
+  ) {
+    let hours: number
+    if(typeof target === 'string') {
+      if (!Time.isValidTimeString(target)) {
+        throw new InvalidTimeString(target)
+      }
+      [hours, minutes, seconds] = target.split(':').map(v => parseInt(v))
+    } else if(typeof target === 'number') {
+      hours = target
+    } else {
+      hours = target.hours
+      minutes = target.minutes
+      seconds = target.seconds
+    }
+
+
     this.setHours(hours)
     this.setMinutes(minutes)
     this.setSeconds(seconds)
