@@ -253,6 +253,201 @@ describe('Time class', () => {
     })
   })
 
+  describe('isBetween', () => {
+    it('Time between two inclusive boundaries returns true', () => {
+      const lowerBound = new Time('00:00:00')
+      const upperBound = new Time('23:59:59')
+      const time = new Time('12:00:00')
+
+      expect(time.isBetween(lowerBound,upperBound)).toBe(true)
+    })
+
+    it('Time same as both inclusive boundaries returns true', () => {
+      const lowerBound = new Time('12:00:00')
+      const upperBound = new Time('12:00:00')
+      const time = new Time('12:00:00')
+
+      expect(time.isBetween(lowerBound,upperBound)).toBe(true)
+    })
+
+    it('Time same as lower boundary between two inclusive boundaries returns true', () => {
+      const lowerBound = new Time('00:00:00')
+      const upperBound = new Time('23:59:59')
+      const time = new Time('00:00:00')
+
+      expect(time.isBetween(lowerBound,upperBound)).toBe(true)
+    })
+
+    it('Time same as upper boundary between two inclusive boundaries returns true', () => {
+      const lowerBound = new Time('00:00:00')
+      const upperBound = new Time('23:59:59')
+      const time = new Time('23:59:59')
+
+      expect(time.isBetween(lowerBound,upperBound)).toBe(true)
+    })
+
+    it('Time before two inclusive boundaries returns false', () => {
+      const lowerBound = new Time('12:00:01')
+      const upperBound = new Time('23:59:59')
+      const time = new Time('12:00:00')
+
+      expect(time.isBetween(lowerBound,upperBound)).toBe(false)
+    })
+
+    it('Time after two inclusive boundaries returns false', () => {
+      const lowerBound = new Time('11:00:00')
+      const upperBound = new Time('12:00:00')
+      const time = new Time('12:00:01')
+
+      expect(time.isBetween(lowerBound,upperBound)).toBe(false)
+    })
+
+    it('Time between two exclusive boundaries returns true', () => {
+      const lowerBound = new Time('00:00:00')
+      const upperBound = new Time('23:59:59')
+      const time = new Time('12:00:00')
+
+      expect(time.isBetween(lowerBound,upperBound, '()')).toBe(true)
+    })
+
+    it('Time same as both exclusive boundaries returns false', () => {
+      const lowerBound = new Time('12:00:00')
+      const upperBound = new Time('12:00:00')
+      const time = new Time('12:00:00')
+
+      expect(time.isBetween(lowerBound,upperBound, '()')).toBe(false)
+    })
+
+    it('Time same as lower boundary between two exclusive boundaries returns false', () => {
+      const lowerBound = new Time('00:00:00')
+      const upperBound = new Time('23:59:59')
+      const time = new Time('00:00:00')
+
+      expect(time.isBetween(lowerBound,upperBound, '()')).toBe(false)
+    })
+
+    it('Time same as upper boundary between two exclusive boundaries returns false', () => {
+      const lowerBound = new Time('00:00:00')
+      const upperBound = new Time('23:59:59')
+      const time = new Time('23:59:59')
+
+      expect(time.isBetween(lowerBound,upperBound, '()')).toBe(false)
+    })
+
+    it('Time before two exclusive boundaries returns false', () => {
+      const lowerBound = new Time('12:00:01')
+      const upperBound = new Time('23:59:59')
+      const time = new Time('12:00:00')
+
+      expect(time.isBetween(lowerBound,upperBound, '()')).toBe(false)
+    })
+
+    it('Time after two exclusive boundaries returns false', () => {
+      const lowerBound = new Time('11:00:00')
+      const upperBound = new Time('12:00:00')
+      const time = new Time('12:00:01')
+
+      expect(time.isBetween(lowerBound,upperBound, '()')).toBe(false)
+    })
+
+    it('Time between an exclusive lowerbound and inclusive upperbound returns true', () => {
+      const lowerBound = new Time('00:00:00')
+      const upperBound = new Time('23:59:59')
+      const time = new Time('12:00:00')
+
+      expect(time.isBetween(lowerBound,upperBound, '(]')).toBe(true)
+    })
+
+    it('Time same as both an exclusive lowerbound and inclusive upperbound returns false', () => {
+      const lowerBound = new Time('12:00:00')
+      const upperBound = new Time('12:00:00')
+      const time = new Time('12:00:00')
+
+      expect(time.isBetween(lowerBound,upperBound, '(]')).toBe(false)
+    })
+
+    it('Time same as lower boundary between an exclusive lowerbound and inclusive upperbound returns false', () => {
+      const lowerBound = new Time('00:00:00')
+      const upperBound = new Time('23:59:59')
+      const time = new Time('00:00:00')
+
+      expect(time.isBetween(lowerBound,upperBound, '(]')).toBe(false)
+    })
+
+    it('Time same as upper boundary between an exclusive lowerbound and inclusive upperbound returns true', () => {
+      const lowerBound = new Time('00:00:00')
+      const upperBound = new Time('23:59:59')
+      const time = new Time('23:59:59')
+
+      expect(time.isBetween(lowerBound,upperBound, '(]')).toBe(true)
+    })
+
+    it('Time before an exclusive lowerbound and inclusive upperbound returns false', () => {
+      const lowerBound = new Time('12:00:01')
+      const upperBound = new Time('23:59:59')
+      const time = new Time('12:00:00')
+
+      expect(time.isBetween(lowerBound,upperBound, '(]')).toBe(false)
+    })
+
+    it('Time after an exclusive lowerbound and inclusive upperbound returns false', () => {
+      const lowerBound = new Time('11:00:00')
+      const upperBound = new Time('12:00:00')
+      const time = new Time('12:00:01')
+
+      expect(time.isBetween(lowerBound,upperBound, '(]')).toBe(false)
+    })
+
+
+    it('Time between an inclusive lowerbound and exclusive upperbound returns true', () => {
+      const lowerBound = new Time('00:00:00')
+      const upperBound = new Time('23:59:59')
+      const time = new Time('12:00:00')
+
+      expect(time.isBetween(lowerBound,upperBound, '[)')).toBe(true)
+    })
+
+    it('Time same as both an inclusive lowerbound and exclusive upperbound returns false', () => {
+      const lowerBound = new Time('12:00:00')
+      const upperBound = new Time('12:00:00')
+      const time = new Time('12:00:00')
+
+      expect(time.isBetween(lowerBound,upperBound, '[)')).toBe(false)
+    })
+
+    it('Time same as lower boundary between an inclusive lowerbound and exclusive upperbound returns true', () => {
+      const lowerBound = new Time('00:00:00')
+      const upperBound = new Time('23:59:59')
+      const time = new Time('00:00:00')
+
+      expect(time.isBetween(lowerBound,upperBound, '[)')).toBe(true)
+    })
+
+    it('Time same as upper boundary between an inclusive lowerbound and exclusive upperbound returns false', () => {
+      const lowerBound = new Time('00:00:00')
+      const upperBound = new Time('23:59:59')
+      const time = new Time('23:59:59')
+
+      expect(time.isBetween(lowerBound,upperBound, '[)')).toBe(false)
+    })
+
+    it('Time before an inclusive lowerbound and exclusive upperbound returns false', () => {
+      const lowerBound = new Time('12:00:01')
+      const upperBound = new Time('23:59:59')
+      const time = new Time('12:00:00')
+
+      expect(time.isBetween(lowerBound,upperBound, '[)')).toBe(false)
+    })
+
+    it('Time after an inclusive lowerbound and exclusive upperbound returns false', () => {
+      const lowerBound = new Time('11:00:00')
+      const upperBound = new Time('12:00:00')
+      const time = new Time('12:00:01')
+
+      expect(time.isBetween(lowerBound,upperBound, '[)')).toBe(false)
+    })
+  })
+
   describe('equals', () => {
     it('When comparing times, it should determine the equality correctly', () => {
       const time = new Time('10:10:10')
