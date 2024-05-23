@@ -40,7 +40,7 @@ export class DateRange {
     this._upperBound = upperBound
     this._lowerBound = lowerBound
 
-    if(lowerBound.isBefore(upperBound)) {
+    if(upperBound.isBefore(lowerBound)) {
       throw new InvalidBounds(this)
     }
   }
