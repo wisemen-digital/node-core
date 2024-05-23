@@ -40,14 +40,14 @@ describe('PlanningPlanningEventOverlapValidator', () => {
       const event1 = await createPlanningEvent({
         startDate: moment().format(YYYY_MM_DD),
         endDate: moment().format(YYYY_MM_DD),
-        startTime: Time.fromString('08:00:00'),
-        endTime: Time.fromString('09:00:00')
+        startTime: new Time('08:00:00'),
+        endTime: new Time('09:00:00')
       })
       const event2 = await createPlanningEvent({
         startDate: moment().format(YYYY_MM_DD),
         endDate: moment().format(YYYY_MM_DD),
-        startTime: Time.fromString('09:00:00'),
-        endTime: Time.fromString('10:00:00')
+        startTime: new Time('09:00:00'),
+        endTime: new Time('10:00:00')
       })
 
       expect(PlanningEventOverlapValidator.overlap(event1, event2)).toBe(false)
@@ -58,15 +58,15 @@ describe('PlanningPlanningEventOverlapValidator', () => {
       const event = await createPlanningEvent({
         startDate: moment().add(1, 'weeks').format(YYYY_MM_DD),
         endDate: moment().add(1, 'weeks').format(YYYY_MM_DD),
-        startTime: Time.fromString('08:00:00'),
-        endTime: Time.fromString('09:00:00')
+        startTime: new Time('08:00:00'),
+        endTime: new Time('09:00:00')
       })
       const recurringEvent = await createRecurringEvent({
         weeksPeriod: 1,
         startDate: moment().format(YYYY_MM_DD),
         endDate: moment().add(1, 'weeks').format(YYYY_MM_DD),
-        startTime: Time.fromString('08:00:00'),
-        endTime: Time.fromString('10:00:00')
+        startTime: new Time('08:00:00'),
+        endTime: new Time('10:00:00')
       })
 
       expect(PlanningEventOverlapValidator.overlap(event, recurringEvent)).toBe(true)
@@ -77,15 +77,15 @@ describe('PlanningPlanningEventOverlapValidator', () => {
       const event = await createPlanningEvent({
         startDate: moment().add(1, 'week').format(YYYY_MM_DD),
         endDate: moment().add(1, 'week').format(YYYY_MM_DD),
-        startTime: Time.fromString('08:00:00'),
-        endTime: Time.fromString('09:00:00')
+        startTime: new Time('08:00:00'),
+        endTime: new Time('09:00:00')
       })
       const recurringEvent = await createRecurringEvent({
         weeksPeriod: 2,
         startDate: moment().format(YYYY_MM_DD),
         endDate: moment().add(2, 'weeks').format(YYYY_MM_DD),
-        startTime: Time.fromString('08:00:00'),
-        endTime: Time.fromString('10:00:00')
+        startTime: new Time('08:00:00'),
+        endTime: new Time('10:00:00')
       })
 
       recurringEvent.exceptions = []
@@ -98,15 +98,15 @@ describe('PlanningPlanningEventOverlapValidator', () => {
       const event = await createPlanningEvent({
         startDate: moment().add(1, 'week').format(YYYY_MM_DD),
         endDate: moment().add(1, 'week').format(YYYY_MM_DD),
-        startTime: Time.fromString('08:00:00'),
-        endTime: Time.fromString('09:00:00')
+        startTime: new Time('08:00:00'),
+        endTime: new Time('09:00:00')
       })
       const recurringEvent = await createRecurringEvent({
         weeksPeriod: 1,
         startDate: moment().format(YYYY_MM_DD),
         endDate: moment().add(1, 'weeks').format(YYYY_MM_DD),
-        startTime: Time.fromString('08:00:00'),
-        endTime: Time.fromString('10:00:00'),
+        startTime: new Time('08:00:00'),
+        endTime: new Time('10:00:00'),
         exceptions: [createPlanningEventException({
           exceptionDate: moment().add(1, 'week').format(YYYY_MM_DD)
         })]
@@ -121,15 +121,15 @@ describe('PlanningPlanningEventOverlapValidator', () => {
         weeksPeriod: 2,
         startDate: moment().add(1, 'week').format(YYYY_MM_DD),
         endDate: null,
-        startTime: Time.fromString('08:00:00'),
-        endTime: Time.fromString('09:00:00')
+        startTime: new Time('08:00:00'),
+        endTime: new Time('09:00:00')
       })
       const event2 = await createRecurringEvent({
         weeksPeriod: 5,
         startDate: moment().format(YYYY_MM_DD),
         endDate: null,
-        startTime: Time.fromString('08:00:00'),
-        endTime: Time.fromString('10:00:00')
+        startTime: new Time('08:00:00'),
+        endTime: new Time('10:00:00')
       })
 
       expect(PlanningEventOverlapValidator.overlap(event1, event2)).toBe(true)
@@ -141,15 +141,15 @@ describe('PlanningPlanningEventOverlapValidator', () => {
         weeksPeriod: 4,
         startDate: moment().add(2, 'week').format(YYYY_MM_DD),
         endDate: null,
-        startTime: Time.fromString('08:00:00'),
-        endTime: Time.fromString('09:00:00')
+        startTime: new Time('08:00:00'),
+        endTime: new Time('09:00:00')
       })
       const event2 = await createRecurringEvent({
         weeksPeriod: 2,
         startDate: moment().format(YYYY_MM_DD),
         endDate: null,
-        startTime: Time.fromString('08:00:00'),
-        endTime: Time.fromString('10:00:00')
+        startTime: new Time('08:00:00'),
+        endTime: new Time('10:00:00')
       })
 
       expect(PlanningEventOverlapValidator.overlap(event1, event2)).toBe(true)
@@ -161,15 +161,15 @@ describe('PlanningPlanningEventOverlapValidator', () => {
         weeksPeriod: 2,
         startDate: moment().add(1, 'week').format(YYYY_MM_DD),
         endDate: null,
-        startTime: Time.fromString('08:00:00'),
-        endTime: Time.fromString('09:00:00')
+        startTime: new Time('08:00:00'),
+        endTime: new Time('09:00:00')
       })
       const event2 = await createRecurringEvent({
         weeksPeriod: 2,
         startDate: moment().format(YYYY_MM_DD),
         endDate: null,
-        startTime: Time.fromString('08:00:00'),
-        endTime: Time.fromString('10:00:00')
+        startTime: new Time('08:00:00'),
+        endTime: new Time('10:00:00')
       })
 
       expect(PlanningEventOverlapValidator.overlap(event1, event2)).toBe(false)
@@ -181,15 +181,15 @@ describe('PlanningPlanningEventOverlapValidator', () => {
         weeksPeriod: 2,
         startDate: moment().add(1, 'week').format(YYYY_MM_DD),
         endDate: moment().add(5, 'weeks').format(YYYY_MM_DD),
-        startTime: Time.fromString('08:00:00'),
-        endTime: Time.fromString('09:00:00')
+        startTime: new Time('08:00:00'),
+        endTime: new Time('09:00:00')
       })
       const event2 = await createRecurringEvent({
         weeksPeriod: 2,
         startDate: moment().format(YYYY_MM_DD),
         endDate: moment().add(6, 'weeks').format(YYYY_MM_DD),
-        startTime: Time.fromString('08:00:00'),
-        endTime: Time.fromString('10:00:00')
+        startTime: new Time('08:00:00'),
+        endTime: new Time('10:00:00')
       })
 
       expect(PlanningEventOverlapValidator.overlap(event1, event2)).toBe(false)
@@ -201,15 +201,15 @@ describe('PlanningPlanningEventOverlapValidator', () => {
         weeksPeriod: 2,
         startDate: moment().add(2, 'week').format(YYYY_MM_DD),
         endDate: moment().add(6, 'weeks').format(YYYY_MM_DD),
-        startTime: Time.fromString('08:00:00'),
-        endTime: Time.fromString('09:00:00')
+        startTime: new Time('08:00:00'),
+        endTime: new Time('09:00:00')
       })
       const event2 = await createRecurringEvent({
         weeksPeriod: 2,
         startDate: moment().format(YYYY_MM_DD),
         endDate: moment().add(6, 'weeks').format(YYYY_MM_DD),
-        startTime: Time.fromString('08:00:00'),
-        endTime: Time.fromString('10:00:00')
+        startTime: new Time('08:00:00'),
+        endTime: new Time('10:00:00')
       })
 
       expect(PlanningEventOverlapValidator.overlap(event1, event2)).toBe(true)
@@ -221,15 +221,15 @@ describe('PlanningPlanningEventOverlapValidator', () => {
         weeksPeriod: 5,
         startDate: moment().add(1, 'week').format(YYYY_MM_DD),
         endDate: moment().add(6, 'weeks').format(YYYY_MM_DD),
-        startTime: Time.fromString('08:00:00'),
-        endTime: Time.fromString('09:00:00')
+        startTime: new Time('08:00:00'),
+        endTime: new Time('09:00:00')
       })
       const event2 = await createRecurringEvent({
         weeksPeriod: 2,
         startDate: moment().format(YYYY_MM_DD),
         endDate: moment().add(6, 'weeks').format(YYYY_MM_DD),
-        startTime: Time.fromString('08:00:00'),
-        endTime: Time.fromString('10:00:00')
+        startTime: new Time('08:00:00'),
+        endTime: new Time('10:00:00')
       })
 
       expect(PlanningEventOverlapValidator.overlap(event1, event2)).toBe(true)
@@ -241,8 +241,8 @@ describe('PlanningPlanningEventOverlapValidator', () => {
         weeksPeriod: 4,
         startDate: moment().format(YYYY_MM_DD),
         endDate: moment().add(8, 'weeks').format(YYYY_MM_DD),
-        startTime: Time.fromString('08:00:00'),
-        endTime: Time.fromString('09:00:00'),
+        startTime: new Time('08:00:00'),
+        endTime: new Time('09:00:00'),
         exceptions: [
           createPlanningEventException({ exceptionDate: moment().format(YYYY_MM_DD) } ),
           createPlanningEventException({ exceptionDate: moment().add(4, 'weeks').format(YYYY_MM_DD) } ),
@@ -252,8 +252,8 @@ describe('PlanningPlanningEventOverlapValidator', () => {
         weeksPeriod: 2,
         startDate: moment().format(YYYY_MM_DD),
         endDate: moment().add(8, 'weeks').format(YYYY_MM_DD),
-        startTime: Time.fromString('08:00:00'),
-        endTime: Time.fromString('10:00:00'),
+        startTime: new Time('08:00:00'),
+        endTime: new Time('10:00:00'),
         exceptions: [
           createPlanningEventException({ exceptionDate: moment().add(8, 'weeks').format(YYYY_MM_DD) } ),
         ]
@@ -268,8 +268,8 @@ describe('PlanningPlanningEventOverlapValidator', () => {
         weeksPeriod: 4,
         startDate: moment().format(YYYY_MM_DD),
         endDate: moment().add(8, 'weeks').format(YYYY_MM_DD),
-        startTime: Time.fromString('08:00:00'),
-        endTime: Time.fromString('09:00:00'),
+        startTime: new Time('08:00:00'),
+        endTime: new Time('09:00:00'),
         exceptions: [
           createPlanningEventException({ exceptionDate: moment().format(YYYY_MM_DD) } ),
         ]
@@ -279,8 +279,8 @@ describe('PlanningPlanningEventOverlapValidator', () => {
         weeksPeriod: 2,
         startDate: moment().format(YYYY_MM_DD),
         endDate: moment().add(8, 'weeks').format(YYYY_MM_DD),
-        startTime: Time.fromString('08:00:00'),
-        endTime: Time.fromString('10:00:00'),
+        startTime: new Time('08:00:00'),
+        endTime: new Time('10:00:00'),
         exceptions: [
           createPlanningEventException({ exceptionDate: moment().add(8, 'weeks').format(YYYY_MM_DD) } ),
         ]

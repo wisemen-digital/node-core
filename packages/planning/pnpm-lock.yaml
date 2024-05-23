@@ -2,8 +2,8 @@ lockfileVersion: '6.0'
 
 dependencies:
   '@appwise/time':
-    specifier: 0.0.12
-    version: 0.0.12
+    specifier: 0.0.13
+    version: 0.0.13
   moment:
     specifier: ^2.29.4
     version: 2.29.4
@@ -33,8 +33,8 @@ packages:
       - supports-color
     dev: false
 
-  /@appwise/time@0.0.12:
-    resolution: {integrity: sha512-C2YvxHK0txykU56A4sIs3DxjjtM1kD69CTWS0u0eCRjy2uw3sQl6vEFgB5/SrHeZPfU0ROGo25khUBb/y8S9nQ==}
+  /@appwise/time@0.0.13:
+    resolution: {integrity: sha512-gV7tHs33Af/Y1OnvgOj7302BjhLxpGKbToNqpb5apH4nX5B0WtmuehbJsBfMqCQjj3FN95kdtM2CWPK9mjZI0g==}
     dependencies:
       '@appwise/express-dto-router': 1.0.2
       class-validator: 0.14.0
