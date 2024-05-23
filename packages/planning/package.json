@@ -1,6 +1,6 @@
 {
   "name": "@appwise/planning",
-  "version": "0.0.20",
+  "version": "0.0.21",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "type": "module",
@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "moment": "^2.29.4",
-    "@appwise/time": "0.0.13"
+    "@appwise/time": "*"
   },
   "devDependencies": {
     "@types/node": "^20.2.5",
