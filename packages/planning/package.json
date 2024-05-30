@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "moment": "^2.29.4",
-    "@appwise/time": "*"
+    "@appwise/time": "^0.0.14"
   },
   "devDependencies": {
     "@types/node": "^20.2.5",
