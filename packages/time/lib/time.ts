@@ -1,6 +1,7 @@
 import { SECONDS_PER_HOUR, SECONDS_PER_MINUTE } from './constants.js'
 import { InvalidBounds, InvalidHours, InvalidMinutes, InvalidSeconds, InvalidTimeString } from './time-error.js'
 import {PlainTimeObject} from "./plain-time-object.type.js";
+import {Inclusivity} from "./inclusivity.js";
 
 export class Time {
   public static STRING_FORMAT = 'hh:mm:ss'
@@ -122,15 +123,22 @@ export class Time {
   }
 
   /**
-   * @param lowerBound must be before upperBound
-   * @param upperBound must be after lowerBound
+   * @param lowerBound must be before or same as upperBound
+   * @param upperBound must be after or same as lowerBound
    * @throws InvalidBounds
    */
-  public isBetween (lowerBound: Time, upperBound: Time): boolean {
-    if (lowerBound.isAfterOrEqual(upperBound)) {
+  public isBetween (lowerBound: Time, upperBound: Time, inclusivity: Inclusivity = '[]'): boolean {
+    if (lowerBound.isAfter(upperBound)) {
       throw new InvalidBounds(lowerBound, upperBound)
     }
-    return this.isAfter(lowerBound) && this.isBefore(upperBound)
+
+    switch (inclusivity){
+      case "[]": return this.isAfterOrEqual(lowerBound) && this.isBeforeOrEqual(upperBound)
+      case "[)": return this.isAfterOrEqual(lowerBound) && this.isBefore(upperBound)
+      case "(]": return this.isAfter(lowerBound) && this.isBeforeOrEqual(upperBound)
+      case "()": return this.isAfter(lowerBound) && this.isBefore(upperBound)
+      default:   return inclusivity
+    }
   }
 
   public equals (other: Time): boolean {
