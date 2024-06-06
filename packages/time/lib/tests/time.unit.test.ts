@@ -7,6 +7,7 @@ import {
   InvalidSeconds,
   InvalidTimeString
 } from '../time-error.js'
+import {MINUTES_PER_HOUR, SECONDS_PER_HOUR} from "../constants.js";
 
 describe('Time class', () => {
   describe('isValidTimeString', () => {
@@ -46,14 +47,6 @@ describe('Time class', () => {
       expect(Time.hoursBetween(midnight, afterMidnight)).toBe(0)
     })
 
-    it('When sending times, the order should not matter', () => {
-      const twoAM = new Time('02:00:00')
-      const fourAM = new Time('04:00:00')
-
-      expect(Time.hoursBetween(twoAM, fourAM)).toBe(2)
-      expect(Time.hoursBetween(fourAM, twoAM)).toBe(2)
-    })
-
     it('When sending times a with a difference more than an hour, it returns the right amount of hours', () => {
       let time1 = new Time('02:59:59')
       let time2 = new Time('04:00:00')
@@ -64,23 +57,22 @@ describe('Time class', () => {
       time2 = new Time('05:29:59')
       expect(Time.hoursBetween(time1, time2)).toBe(2)
     })
+
+    it('When sending a time which is before the first time, the hours are calculated to include the night difference', () => {
+      let time1 = new Time('20:00:00')
+      let time2 = new Time('03:00:00')
+
+      expect(Time.hoursBetween(time1, time2)).toBe(7)
+    })
   })
 
   describe('minutesBetween', () => {
     it('When sending times with a difference less than a minute, it should return 0', () => {
-      const midnight = new Time('00:00:59')
-      const afterMidnight = new Time('00:00:00')
+      const afterMidnight = new Time('00:00:59')
+      const midnight = new Time('00:00:00')
 
       expect(Time.minutesBetween(midnight, midnight)).toBe(0)
       expect(Time.minutesBetween(midnight, afterMidnight)).toBe(0)
-    })
-
-    it('When sending times, the order should not matter', () => {
-      const twoAM = new Time('00:34:00')
-      const fourAM = new Time('00:40:00')
-
-      expect(Time.minutesBetween(twoAM, fourAM)).toBe(6)
-      expect(Time.minutesBetween(fourAM, twoAM)).toBe(6)
     })
 
     it('When sending times a with a difference more than a minute, it returns the right amount of minutes', () => {
@@ -93,6 +85,13 @@ describe('Time class', () => {
       time2 = new Time('05:29:59')
       expect(Time.minutesBetween(time1, time2)).toBe(179)
     })
+
+    it('When sending a time which is before the first time, the hours are calculated to include the night difference', () => {
+      let time1 = new Time('20:00:00')
+      let time2 = new Time('03:00:00')
+
+      expect(Time.minutesBetween(time1, time2)).toBe(7 * MINUTES_PER_HOUR)
+    })
   })
 
   describe('secondsBetween', () => {
@@ -104,27 +103,26 @@ describe('Time class', () => {
       expect(Time.secondsBetween(afterMidnight, afterMidnight)).toBe(0)
     })
 
-    it('When sending times, the order should not matter', () => {
-      const twoAM = new Time('00:00:20')
-      const fourAM = new Time('00:00:40')
-
-      expect(Time.secondsBetween(twoAM, fourAM)).toBe(20)
-      expect(Time.secondsBetween(fourAM, twoAM)).toBe(20)
-    })
-
     it('When sending times a with a difference more than a second, it returns the right amount of secods', () => {
-      let time1 = new Time('04:00:59')
-      let time2 = new Time('04:00:00')
+      let time1 = new Time('04:00:00')
+      let time2 = new Time('04:00:59')
 
       expect(Time.secondsBetween(time1, time2)).toBe(59)
 
-      time1 = new Time('04:30:59')
-      time2 = new Time('04:00:00')
+      time1 = new Time('04:00:00')
+      time2 = new Time('04:30:59')
       expect(Time.secondsBetween(time1, time2)).toBe(30 * 60 + 59)
 
-      time1 = new Time('07:30:59')
-      time2 = new Time('04:00:00')
+      time1 = new Time('04:00:00')
+      time2 = new Time('07:30:59')
       expect(Time.secondsBetween(time1, time2)).toBe(3 * 60 * 60 + 30 * 60 + 59)
+    })
+
+    it('When sending a time which is before the first time, the hours are calculated to include the night difference', () => {
+      let time1 = new Time('20:00:00')
+      let time2 = new Time('03:00:00')
+
+      expect(Time.secondsBetween(time1, time2)).toBe(7 * SECONDS_PER_HOUR)
     })
   })
 

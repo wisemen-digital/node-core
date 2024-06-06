@@ -1,4 +1,4 @@
-import { SECONDS_PER_HOUR, SECONDS_PER_MINUTE } from './constants.js'
+import {SECONDS_PER_DAY, SECONDS_PER_HOUR, SECONDS_PER_MINUTE} from './constants.js'
 import { InvalidBounds, InvalidHours, InvalidMinutes, InvalidSeconds, InvalidTimeString } from './time-error.js'
 import {PlainTimeObject} from "./plain-time-object.type.js";
 import {Inclusivity} from "./inclusivity.js";
@@ -20,6 +20,8 @@ export class Time {
   /**
    * Get the absolute floored amount of hours between
    * two times
+   * Ordering of parameters is important:
+   * @example 20:00:00 - 03:00:00 results in 7 hours (4 hours until midnight + 3 hours)
    */
   public static hoursBetween (first: string, second: string): number
   public static hoursBetween (first: Time, second: Time): number
@@ -31,6 +33,8 @@ export class Time {
   /**
    * Get the absolute floored amount of minutes between
    * two times. Includes the hours difference.
+   * Ordering of parameters is important:
+   * @example 20:00:00 - 03:00:00 results in 420 minutes (4 hours until midnight + 3 hours)
    */
   public static minutesBetween (first: string, second: string): number
   public static minutesBetween (first: Time, second: Time): number
@@ -42,6 +46,8 @@ export class Time {
   /**
    * Get the absolute floored amount of seconds between
    * two times. Includes the hours and minutes differences.
+   * Ordering of parameters is important:
+   * @example 20:00:00 - 03:00:00 results in 25200 seconds (4 hours until midnight + 3 hours)
    */
   public static secondsBetween (first: string, second: string): number
   public static secondsBetween (first: Time, second: Time): number
@@ -53,7 +59,12 @@ export class Time {
     if (typeof second === 'string') {
       second = new Time(second)
     }
-    return Math.abs(first.toSeconds() - second.toSeconds())
+    if(first.isAfter(second)) {
+      // Count through the night
+      return  (second.toSeconds() + SECONDS_PER_DAY) - first.toSeconds()
+    } else {
+      return second.toSeconds() - first.toSeconds()
+    }
   }
 
   public static min (firstTime: Time, secondTime: Time): Time {
