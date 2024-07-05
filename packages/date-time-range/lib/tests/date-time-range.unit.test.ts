@@ -14,13 +14,13 @@ describe('DateTimeRange class', () => {
     })
   })
 
-  const lowerBound = dayjs('2024-01-01 08:00:00')
-  const upperBound = dayjs('2024-01-01 17:00:00')
-  const dateBetweenBounds = dayjs('2024-01-01 12:00:00')
-  const dateBeforeLowerBound = dayjs('2024-01-01 07:59:59')
-  const dateAfterLowerBound = dayjs('2024-01-01 17:00:01')
-
   describe('contains', () => {
+    const lowerBound = dayjs('2024-01-01 08:00:00')
+    const upperBound = dayjs('2024-01-01 17:00:00')
+    const dateBetweenBounds = dayjs('2024-01-01 12:00:00')
+    const dateBeforeLowerBound = dayjs('2024-01-01 07:59:59')
+    const dateAfterLowerBound = dayjs('2024-01-01 17:00:01')
+    
     it('Closed range []', () => {
       const range = new DateTimeRange(lowerBound, upperBound, '[]')
 
@@ -60,10 +60,7 @@ describe('DateTimeRange class', () => {
       expect(range.contains(dateBeforeLowerBound)).toBeFalsy()
       expect(range.contains(dateAfterLowerBound)).toBeFalsy()
     })
-  })
 
-
-  describe('contains', () => {
     it('infinity upperbound', () => {
       const range = new DateTimeRange(lowerBound, null, '[]')
 
