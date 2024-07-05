@@ -7,7 +7,7 @@ dayjs.extend(isBetween)
 dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
 
-type Inclusion = '[]' | '[)' | '(]' | '()'
+type Inclusivity = '[]' | '[)' | '(]' | '()'
 
 class DateTimeRangeParseError extends Error {
   constructor (value: string) {
@@ -25,7 +25,7 @@ export class DateTimeRange {
   constructor (
     readonly lowerBound: dayjs.Dayjs | null,
     readonly upperBound: dayjs.Dayjs | null,
-    readonly inclusion: Inclusion
+    readonly inclusivity: Inclusivity
   ) {
     if (lowerBound != null && upperBound != null && lowerBound.isAfter(upperBound)) {
       throw new DateTimeRangeInvalidError()
@@ -65,8 +65,8 @@ export class DateTimeRange {
   }
 
   toString (): string {
-    const leftBracket = this.inclusion[0]
-    const rightBracket = this.inclusion[1]
+    const leftBracket = this.inclusivity[0]
+    const rightBracket = this.inclusivity[1]
     const lowerBoundString = this.lowerBound?.format('YYYY-MM-DD HH:mm:ss') ?? 'infinity'
     const upperBoundString = this.upperBound?.format('YYYY-MM-DD HH:mm:ss') ?? '-infinity'
 
@@ -78,17 +78,17 @@ export class DateTimeRange {
       return true
     }
     if (this.lowerBound == null) {
-      if (this.inclusion[1] === ')')
+      if (this.inclusivity[1] === ')')
         return dateTime.isBefore(this.upperBound)
-      if (this.inclusion[1] === ']')
+      if (this.inclusivity[1] === ']')
         return dateTime.isSameOrBefore(this.upperBound)
     }
     if (this.upperBound == null) {
-      if (this.inclusion[0] === '(')
+      if (this.inclusivity[0] === '(')
         return dateTime.isAfter(this.lowerBound)
-      if (this.inclusion[0] === '[')
+      if (this.inclusivity[0] === '[')
         return dateTime.isSameOrAfter(this.lowerBound)
     }
-    return dateTime.isBetween(this.lowerBound, this.upperBound, null, this.inclusion);
+    return dateTime.isBetween(this.lowerBound, this.upperBound, null, this.inclusivity);
   }
 }
