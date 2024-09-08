@@ -29,7 +29,6 @@
     "url": "git@github.com:appwise-labs/node-core.git"
   },
   "dependencies": {
-    "dayjs": "^1.11.11",
-    "isBetween": "link:dayjs/plugin/isBetween"
+    "dayjs": "^1.11.11"
   }
 }

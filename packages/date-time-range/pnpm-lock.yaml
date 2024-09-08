@@ -4,9 +4,6 @@ dependencies:
   dayjs:
     specifier: ^1.11.11
     version: 1.11.11
-  isBetween:
-    specifier: link:dayjs/plugin/isBetween
-    version: link:dayjs/plugin/isBetween
 
 devDependencies:
   '@types/node':
