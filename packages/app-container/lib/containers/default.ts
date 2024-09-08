@@ -1,7 +1,7 @@
 import type { Server, ServerResponse } from 'http'
 import express, { type Express } from 'express'
 import type { INestApplicationContext } from '@nestjs/common'
-// import { initSentry } from '../sentry/sentry.js'
+import { ExpressAdapter } from '@nestjs/platform-express'
 
 const port = process.env.PORT ?? 3000
 
@@ -18,7 +18,7 @@ export abstract class ProbedContainer {
 
   protected nest?: INestApplicationContext
 
-  abstract bootstrap (app: Express): Promise<INestApplicationContext>
+  abstract bootstrap (app: ExpressAdapter): Promise<INestApplicationContext>
 
   constructor () {
     this.state = 'starting'
@@ -38,7 +38,9 @@ export abstract class ProbedContainer {
 
   protected async init (): Promise<void> {
     try {
-      this.nest = await this.bootstrap(this.app)
+      const adapter = new ExpressAdapter(this.app)
+
+      this.nest = await this.bootstrap(adapter)
 
       await this.nest.init()
 

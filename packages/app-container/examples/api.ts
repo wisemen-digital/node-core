@@ -1,6 +1,5 @@
 import { NestFactory } from '@nestjs/core'
 import { Module, type INestApplicationContext } from '@nestjs/common'
-import type { Express } from 'express'
 import { ExpressAdapter } from '@nestjs/platform-express'
 import { ApiContainer } from '../lib/containers/api.js'
 
@@ -8,7 +7,7 @@ import { ApiContainer } from '../lib/containers/api.js'
 export class AppModule {}
 
 class Api extends ApiContainer {
-  async bootstrap (express: Express): Promise<INestApplicationContext> {
+  async bootstrap (express: ExpressAdapter): Promise<INestApplicationContext> {
     const app = await NestFactory.create(
       AppModule,
       new ExpressAdapter(express)
