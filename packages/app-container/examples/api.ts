@@ -1,28 +1,24 @@
-import express, { Express } from 'express'
-import { ApiContainer } from '@appwise/app-container'
+import { NestFactory } from '@nestjs/core'
+import { Module, type INestApplicationContext } from '@nestjs/common'
+import type { Express } from 'express'
+import { ExpressAdapter } from '@nestjs/platform-express'
+import { ApiContainer } from '../lib/containers/api.js'
 
-function init (_app: Express): void {
-  // sentry stuff
-}
+@Module({})
+export class AppModule {}
 
-class App extends ApiContainer {
-  async up (): Promise<void> {
-    // do stuff
-  }
+class Api extends ApiContainer {
+  async bootstrap (express: Express): Promise<INestApplicationContext> {
+    const app = await NestFactory.create(
+      AppModule,
+      new ExpressAdapter(express)
+    )
 
-  async down (): Promise<void> {
-    // do stuff
-  }
+    app.setGlobalPrefix('api')
+    app.enableCors()
 
-  async populate (app: Express): Promise<void> {
-    init(app)
-
-    // do stuff
-
-    app.use(express.urlencoded({ extended: false }))
-
-    // add router
+    return app
   }
 }
 
-const _app = new App()
+const _api = new Api()

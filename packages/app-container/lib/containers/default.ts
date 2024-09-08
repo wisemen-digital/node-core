@@ -1,77 +1,101 @@
-/* eslint-disable no-console */
-
-import { type Server, type ServerResponse } from 'http'
+import type { Server, ServerResponse } from 'http'
 import express, { type Express } from 'express'
-import { register } from '../metrics.js'
-import EventEmitter from 'events'
+import type { INestApplicationContext } from '@nestjs/common'
+// import { initSentry } from '../sentry/sentry.js'
 
-export declare interface DefaultContainer {
-  on: (event: 'mounted', listener: (server: Server) => void) => this
+const port = process.env.PORT ?? 3000
+
+type State = 'starting' | 'ready' | 'shutdown' | 'unknown'
+
+export interface ProbedContainer {
+  execute? (nest: INestApplicationContext): Promise<void>
 }
 
-export abstract class DefaultContainer extends EventEmitter {
-  public readonly app: Express = express()
-  protected server?: Server
-  private state: 'starting' | 'ready' | 'shutdown' | 'unknown'
+export abstract class ProbedContainer {
+  private readonly app: Express
+  private readonly server: Server
+  private state: State
 
-  constructor (type: 'job' | 'worker' | 'api', gracefully = true) {
-    super()
+  protected nest?: INestApplicationContext
 
-    console.log(`starting ${type}`)
+  abstract bootstrap (app: Express): Promise<INestApplicationContext>
 
+  constructor () {
     this.state = 'starting'
 
-    if (gracefully) {
-      process.on('SIGTERM', () => { void this.destroy() })
-      process.on('SIGINT', () => { void this.destroy() })
-      process.on('SIGUSR2', () => { void this.destroy() })
-      process.on('SIGHUP', () => { void this.destroy() })
-    }
-
-    process.nextTick(() => {
-      this.initialize()
-        .catch(async e => {
-          await this.destroy()
-
-          this.emit('error', e)
-        })
-    })
-  }
-
-  abstract up (): Promise<void>
-  abstract down (): Promise<void>
-
-  protected async initialize (): Promise<void> {
-    this.app.get('/', (_, res) => { this.version(res) })
-    this.app.get('/health', (_, res) => { this.liveness(res) })
-    this.app.get('/ready', (_, res) => { this.readiness(res) })
-    this.app.get('/metrics', (_, res) => { this.metrics(res) })
-
-    this.server = this.app.listen(process.env.PORT ?? 3000, () => {
+    this.app = express()
+    this.server = this.app.listen(port, () => {
       console.log('server started')
     })
 
-    await this.up()
+    this.enableShutdownHooks()
+    this.enableProbes()
 
-    this.state = 'ready'
+    void this.init()
 
-    this.emit('mounted', this.server)
+    // initSentry()
   }
 
-  protected async destroy (): Promise<void> {
-    console.log('shutting down server')
+  protected async init (): Promise<void> {
+    try {
+      this.nest = await this.bootstrap(this.app)
+
+      await this.nest.init()
+
+      this.state = 'ready'
+
+      if (this.execute != null) {
+        await this.execute(this.nest)
+
+        await this.close()
+      }
+    } catch {
+      await this.close()
+    }
+  }
+
+  protected async close (): Promise<void> {
+    if (this.state === 'shutdown') {
+      return
+    }
 
     this.state = 'shutdown'
 
-    if (this.server == null) {
-      await this.down()
-    } else {
-      this.server?.close(() => {
-        void this.down().finally(() => {
-          console.log('server shutdown')
+    try {
+      await new Promise<void>((resolve, reject) => {
+        this.server.close((err) => {
+          if (err) reject(err)
+          else resolve()
         })
       })
+
+      await this.nest?.close()
+
+      console.log('application closed')
+    } catch (e) {
+      console.error('error shutting down', e)
+
+      process.exit(1)
     }
+  }
+
+  private enableShutdownHooks (): void {
+    process.on('SIGTERM', () => void this.close())
+    process.on('SIGINT', () => void this.close())
+    process.on('SIGUSR2', () => void this.close())
+    process.on('SIGHUP', () => void this.close())
+  }
+
+  private enableProbes (): void {
+    this.app.get('/', (_, res) => {
+      this.version(res)
+    })
+    this.app.get('/health', (_, res) => {
+      this.liveness(res)
+    })
+    this.app.get('/ready', (_, res) => {
+      this.readiness(res)
+    })
   }
 
   private liveness (res: ServerResponse): void {
@@ -90,28 +114,6 @@ export abstract class DefaultContainer extends EventEmitter {
     }
 
     res.end()
-  }
-
-  private metrics (res: ServerResponse): void {
-    if (this.state !== 'ready') {
-      res.writeHead(500, { 'Content-Type': 'text/plain' })
-      res.write('not OK')
-      return
-    }
-
-    register.metrics()
-      .then(string => {
-        res.writeHead(200, { 'Content-Type': 'text/plain' })
-        res.write(string)
-      })
-      .catch((e) => {
-        console.log(e)
-        res.writeHead(500, { 'Content-Type': 'application/json' })
-        res.write(e)
-      })
-      .finally(() => {
-        res.end()
-      })
   }
 
   private version (res: ServerResponse): void {

@@ -1,18 +1,3 @@
-/* eslint-disable no-console */
-import { type Express } from 'express'
-import { DefaultContainer } from './default.js'
+import { ProbedContainer } from './default.js'
 
-export abstract class ApiContainer extends DefaultContainer {
-  constructor (gracefully = true) {
-    super('api', gracefully)
-  }
-
-  abstract populate (app: Express): void
-
-  protected async initialize (): Promise<void> {
-    await super.initialize()
-
-    this.populate(this.app)
-
-  }
-}
+export abstract class ApiContainer extends ProbedContainer {}

@@ -1,18 +1,14 @@
-/* eslint-disable no-console */
+import type { INestApplicationContext } from '@nestjs/common'
+import { ProbedContainer } from './default.js'
 
-import { DefaultContainer } from './default.js'
+export abstract class JobContainer extends ProbedContainer {
+  abstract execute (nest: INestApplicationContext): Promise<void>
 
-export abstract class JobContainer extends DefaultContainer {
-  constructor (gracefully = true) {
-    super('job', gracefully)
-  }
+  protected async init (): Promise<void> {
+    await super.init()
 
-  abstract run (): Promise<void>
+    await this.execute(this.nest!)
 
-  protected async initialize (): Promise<void> {
-    await super.initialize()
-
-    await this.run()
-    await this.destroy()
+    await this.close()
   }
 }
