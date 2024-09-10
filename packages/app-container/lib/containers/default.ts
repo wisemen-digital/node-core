@@ -7,10 +7,6 @@ const port = process.env.PORT ?? 3000
 
 type State = 'starting' | 'ready' | 'shutdown' | 'unknown'
 
-export interface ProbedContainer {
-  execute? (nest: INestApplicationContext): Promise<void>
-}
-
 export abstract class ProbedContainer {
   private readonly app: Express
   private readonly server: Server
@@ -32,8 +28,6 @@ export abstract class ProbedContainer {
     this.enableProbes()
 
     void this.init()
-
-    // initSentry()
   }
 
   protected async init (): Promise<void> {
@@ -45,12 +39,6 @@ export abstract class ProbedContainer {
       await this.nest.init()
 
       this.state = 'ready'
-
-      if (this.execute != null) {
-        await this.execute(this.nest)
-
-        await this.close()
-      }
     } catch {
       await this.close()
     }
