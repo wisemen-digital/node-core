@@ -39,8 +39,10 @@ export abstract class ProbedContainer {
       await this.nest.init()
 
       this.state = 'ready'
-    } catch {
+    } catch (e) {
       await this.close()
+
+      throw e
     }
   }
 
