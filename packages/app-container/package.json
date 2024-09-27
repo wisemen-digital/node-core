@@ -1,6 +1,6 @@
 {
   "name": "@wisemen/app-container",
-  "version": "2.1.2",
+  "version": "2.1.3",
   "description": "A package for a nest app container in kubernetes",
   "directories": {
     "example": "examples"
