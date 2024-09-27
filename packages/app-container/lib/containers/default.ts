@@ -36,6 +36,8 @@ export abstract class ProbedContainer {
 
       this.nest = await this.bootstrap(adapter)
 
+      await this.nest.init()
+
       this.state = 'ready'
     } catch (e) {
       await this.close()
