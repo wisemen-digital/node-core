@@ -27,23 +27,27 @@ export abstract class ProbedContainer {
     this.enableShutdownHooks()
     this.enableProbes()
 
-    void this.init()
+    void this._init()
   }
 
-  protected async init (): Promise<void> {
+  private async _init (): Promise<void> {
     try {
-      const adapter = new ExpressAdapter(this.app)
-
-      this.nest = await this.bootstrap(adapter)
-
-      await this.nest.init()
-
-      this.state = 'ready'
+      await this.init()
     } catch (e) {
       await this.close()
 
       throw e
     }
+  }
+
+  protected async init (): Promise<void> {
+    const adapter = new ExpressAdapter(this.app)
+
+    this.nest = await this.bootstrap(adapter)
+
+    await this.nest.init()
+
+    this.state = 'ready'
   }
 
   protected async close (): Promise<void> {
