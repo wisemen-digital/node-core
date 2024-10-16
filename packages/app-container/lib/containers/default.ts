@@ -36,6 +36,8 @@ export abstract class ProbedContainer {
     } catch (e) {
       await this.close()
 
+      console.error(e)
+
       process.exit(1)
     }
   }
