@@ -45,6 +45,8 @@ export abstract class ProbedContainer {
   protected async init (): Promise<void> {
     const adapter = new ExpressAdapter(this.app)
 
+    adapter.setHttpServer(this.server)
+
     this.nest = await this.bootstrap(adapter)
 
     await this.nest.init()
