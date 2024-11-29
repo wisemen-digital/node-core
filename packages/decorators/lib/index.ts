@@ -1,2 +1,1 @@
-export * from './bound.js'
-export * from './controller.js'
+export * from './uuid-param.js'

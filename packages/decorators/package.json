@@ -1,6 +1,6 @@
 {
-  "name": "@appwise/decorators",
-  "version": "0.0.2",
+  "name": "@wisemen/decorators",
+  "version": "0.0.3",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "type": "module",
@@ -27,5 +27,8 @@
   "repository": {
     "type": "git",
     "url": "git@github.com:appwise-labs/node-core.git"
+  },
+  "dependencies": {
+    "@nestjs/common": "^10.4.12"
   }
 }
