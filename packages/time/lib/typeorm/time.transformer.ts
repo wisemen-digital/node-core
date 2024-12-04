@@ -9,7 +9,7 @@ export class TypeormTimeTransformer {
     }
   }
 
-  to (value: Time): string {
-    return value.toString()
+  to (value: Time | null): string | null {
+    return value?.toString() ?? null
   }
 }
