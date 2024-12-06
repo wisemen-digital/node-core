@@ -28,7 +28,8 @@
     "url": "git@github.com:appwise-labs/node-core.git"
   },
   "dependencies": {
-    "@nestjs/typeorm": "^10.0.2"
+    "@nestjs/typeorm": "^10.0.2",
+    "change-case": "^5.4.4"
   },
   "peerDependencies": {
     "@nestjs/common": "^10.4.12",
