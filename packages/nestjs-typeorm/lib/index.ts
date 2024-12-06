@@ -1,10 +1,10 @@
-export * from './create-providers.js'
-export * from './module.js'
-export * from './repository.js'
-export * from './transaction.js'
-
 export {
   InjectRepository,
   InjectEntityManager,
   InjectDataSource,
- } from '@nestjs/typeorm'
+} from '@nestjs/typeorm'
+
+export * from './extensions/index.js'
+export * from './columns/index.js'
+export * from './operators/index.js'
+export * from './types/index.js'

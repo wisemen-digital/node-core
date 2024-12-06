@@ -18,8 +18,8 @@
     "release": "release-it"
   },
   "devDependencies": {
-    "@types/node": "^20.2.5",
-    "typescript": "^5.0.4"
+    "@types/node": "^22.10.1",
+    "typescript": "^5.7.2"
   },
   "author": "Joren Vandeweyer",
   "license": "GPL",
@@ -28,9 +28,12 @@
     "url": "git@github.com:appwise-labs/node-core.git"
   },
   "dependencies": {
+    "@nestjs/typeorm": "^10.0.2"
+  },
+  "peerDependencies": {
     "@nestjs/common": "^10.4.12",
     "@nestjs/config": "^3.3.0",
-    "@nestjs/typeorm": "^10.0.2",
+    "class-validator": "^0.14.1",
     "typeorm": "^0.3.20"
   }
 }
