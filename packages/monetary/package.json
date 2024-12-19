@@ -1,0 +1,37 @@
+{
+  "name": "@appwise/monetary",
+  "version": "0.0.1",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "type": "module",
+  "files": [
+    "dist/"
+  ],
+  "scripts": {
+    "lint": "eslint lib",
+    "prebuild": "rm -rf ./dist",
+    "clean": "rm -rf ./dist",
+    "build": "tsc",
+    "pretest": "npm run clean && npm run build",
+    "test": "node --test",
+    "prerelease": "npm run build",
+    "release": "release-it"
+  },
+  "dependencies": {
+    "@nestjs/common": "^10.4.15",
+    "@nestjs/swagger": "^8.1.0",
+    "class-validator": "^0.14.1",
+    "typeorm": "^0.3.20"
+  },
+  "devDependencies": {
+    "@types/node": "^20.2.5",
+    "expect": "^29.5.0",
+    "typescript": "^5.0.4"
+  },
+  "author": "Maarten Sijmkens",
+  "license": "GPL",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:appwise-labs/node-core.git"
+  }
+}
