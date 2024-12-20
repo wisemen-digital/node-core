@@ -1,5 +1,5 @@
 {
-  "name": "@appwise/time",
+  "name": "@wisemen/time",
   "version": "0.0.16",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
