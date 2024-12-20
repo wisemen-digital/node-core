@@ -1,4 +1,4 @@
-import { Time } from '@appwise/time'
+import { Time } from '@wisemen/time'
 
 
 export interface Timeslot {

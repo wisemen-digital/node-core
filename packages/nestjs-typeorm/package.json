@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "@nestjs/typeorm": "^10.0.2",
+    "@wisemen/time": "^0.0.17",
     "change-case": "^5.4.4"
   },
   "peerDependencies": {
