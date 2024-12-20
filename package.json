@@ -15,10 +15,10 @@
     "./packages/*"
   ],
   "dependencies": {
-    "@appwise/time": "*",
-    "@appwise/validators": "*",
+    "@wisemen/time": "*",
+    "@wisemen/validators": "*",
     "@appwise/planning": "*",
-    "@appwise/decorators": "*",
+    "@wisemen/decorators": "*",
     "@appwise/transformer": "*",
     "@wisemen/vue-cli": "*"
   },
