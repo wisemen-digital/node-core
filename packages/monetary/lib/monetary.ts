@@ -1,13 +1,13 @@
 import { MonetaryDto } from "./monetary.dto.js"
 import { MonetaryObject } from "./monetary.object.js"
 
-export class Monetary<C extends string = 'EUR', P extends number = 2> {
+export class Monetary<C extends string, P extends number> {
   readonly amount: number
   readonly currency: C
   readonly precision: P
   
   constructor(object: MonetaryObject<C, P>)
-  constructor(amount: number, currency?: C, precision?: P)
+  constructor(amount: number, currency: C, precision: P)
   constructor(
     objectOrAmount: MonetaryObject<C, P> | number,
     currency?: C, 
@@ -25,7 +25,7 @@ export class Monetary<C extends string = 'EUR', P extends number = 2> {
   }
 
   valueOf (): number {
-    return this.amount / Math.pow(10, this.precision)
+    return this.amount / 10 ** this.precision
   }
 
   equals (money: Monetary<C, P>): boolean {
@@ -56,3 +56,4 @@ export class Monetary<C extends string = 'EUR', P extends number = 2> {
     return new MonetaryDto(this.round())
   }
 }
+
