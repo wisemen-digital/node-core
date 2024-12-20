@@ -1,5 +1,5 @@
 {
-  "name": "@appwise/date-time-range",
+  "name": "@wisemen/date-time-range",
   "version": "0.0.14",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
