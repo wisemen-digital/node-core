@@ -33,10 +33,10 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "git@github.com:appwise-labs/node-core.git"
+    "url": "git@github.com:wisemen-digital/node-core.git"
   },
   "bugs": {
-    "url": "https://github.com/appwise-labs/node-core/issues"
+    "url": "https://github.com/wisemen-digital/node-core/issues"
   },
-  "homepage": "https://github.com/appwise-labs/node-core/packages/express-dto-router#readme"
+  "homepage": "https://github.com/wisemen-digital/node-core/packages/express-dto-router#readme"
 }

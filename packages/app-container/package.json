@@ -35,7 +35,7 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "git@github.com:appwise-labs/node-core.git"
+    "url": "git@github.com:wisemen-digital/node-core.git"
   },
   "bugs": {
     "url": "https://github.com/wisemen-digital/node-core/issues"
