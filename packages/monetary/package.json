@@ -26,6 +26,7 @@
   "devDependencies": {
     "@types/node": "^20.17.10",
     "expect": "^29.7.0",
+    "release-it": "^17.10.0",
     "typescript": "^5.7.2"
   },
   "author": "Maarten Sijmkens",
