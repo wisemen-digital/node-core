@@ -6,7 +6,14 @@ settings:
 
 importers:
 
-  .: {}
+  .:
+    devDependencies:
+      '@types/node':
+        specifier: ^22.10.2
+        version: 22.10.2
+      typescript:
+        specifier: ^5.7.2
+        version: 5.7.2
 
   packages/app-container:
     dependencies:
@@ -210,13 +217,6 @@ importers:
       dayjs:
         specifier: ^1.11.13
         version: 1.11.13
-    devDependencies:
-      release-it:
-        specifier: ^15.11.0
-        version: 15.11.0
-      typescript:
-        specifier: ^5.0.4
-        version: 5.7.2
 
   packages/vue-cli:
     dependencies:

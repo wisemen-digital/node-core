@@ -5,7 +5,7 @@ import {
   ValidatorConstraint,
   ValidatorConstraintInterface
 } from 'class-validator'
-import { Time } from '@appwise/time'
+import { Time } from '@wisemen/time'
 
 export function IsAfterTimeString (
   timeCallback: (argObject: object) => string | null,

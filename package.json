@@ -10,5 +10,9 @@
     "lint": "npm run lint -ws --if-present"
   },
   "author": "Joren Vandeweyer",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "typescript": "^5.7.2"
+  }
 }
