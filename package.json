@@ -10,20 +10,5 @@
     "lint": "npm run lint -ws --if-present"
   },
   "author": "Joren Vandeweyer",
-  "license": "ISC",
-  "workspaces": [
-    "./packages/*"
-  ],
-  "dependencies": {
-    "@wisemen/time": "*",
-    "@wisemen/validators": "*",
-    "@appwise/planning": "*",
-    "@wisemen/decorators": "*",
-    "@appwise/transformer": "*",
-    "@wisemen/vue-cli": "*"
-  },
-  "devDependencies": {
-    "release-it": "^15.11.0",
-    "typescript": "^5.1.3"
-  }
+  "license": "ISC"
 }
