@@ -29,7 +29,7 @@ export class Monetary<C extends string, P extends number> {
   }
 
   equals (money: Monetary<C, P>): boolean {
-    return this.amount === money.amount
+    return this.valueOf() === money.valueOf()
   }
 
   add (money: Monetary<C, P>): Monetary<C, P> {
