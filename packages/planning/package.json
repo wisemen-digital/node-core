@@ -16,8 +16,8 @@
     "test": "node --test"
   },
   "dependencies": {
-    "moment": "^2.29.4",
-    "@appwise/time": "^0.0.14"
+    "@wisemen/time": "^0.0.17",
+    "moment": "^2.29.4"
   },
   "devDependencies": {
     "@types/node": "^20.2.5",
