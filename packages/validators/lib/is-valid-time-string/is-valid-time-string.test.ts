@@ -1,7 +1,7 @@
 import { describe, it } from 'node:test'
 import { validate } from 'class-validator'
 import { expect } from 'expect'
-import { IsValidTimeString } from '../is-valid-time.js'
+import { IsValidTimeString } from './is-valid-time-string.validator.js'
 
 class TestClass {
   @IsValidTimeString()

@@ -20,6 +20,12 @@
     "class-validator": "^0.14.0",
     "dayjs": "^1.11.13"
   },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "expect": "^29.7.0",
+    "release-it": "^15.11.0",
+    "typescript": "^5.0.4"
+  },
   "author": "Joren Vandeweyer",
   "license": "ISC",
   "repository": {
