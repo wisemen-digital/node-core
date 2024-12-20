@@ -11,7 +11,7 @@ export function IsRRN (validationOptions?: ValidationOptions): PropertyDecorator
   return Validate(IsRRNValidator, validationOptions)
 }
 
-@ValidatorConstraint({ name: 'isTimeString', async: false })
+@ValidatorConstraint({ name: 'isRRN', async: false })
 class IsRRNValidator implements ValidatorConstraintInterface {
   validate (rrn: unknown, _args: ValidationArguments): boolean {
     if (typeof rrn !== 'string') return false
@@ -31,7 +31,7 @@ class IsRRNValidator implements ValidatorConstraintInterface {
   }
 
   defaultMessage (args: ValidationArguments): string {
-    return `${args.property} must be a time string of format 90020199704`
+    return `${args.property} must be a string of format 90020199704`
   }
 }
 

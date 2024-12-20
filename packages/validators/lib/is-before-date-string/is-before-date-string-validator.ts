@@ -4,7 +4,7 @@ import {
   ,
   ValidatorConstraint
 } from 'class-validator'
-import moment from 'moment'
+import dayjs from 'dayjs'
 
 export function IsBeforeDateString (
   dateCallback: (argObject: object) => string | null,
@@ -27,13 +27,13 @@ class IsDateWithoutTimeStringValidator implements ValidatorConstraintInterface {
   validate (dateString: unknown, args: ValidationArguments): boolean {
     if (typeof dateString !== 'string') return false
 
-    const dateToCheck = moment(dateString)
+    const dateToCheck = dayjs(dateString)
     if (!dateToCheck.isValid()) return false
 
     const comparisonDateString = args.constraints[0](args.object)
     if (comparisonDateString === null) return false
 
-    const comparisonDate = moment(comparisonDateString)
+    const comparisonDate = dayjs(comparisonDateString)
     if (!comparisonDate.isValid()) return false
 
     return dateToCheck.isBefore(comparisonDate)
