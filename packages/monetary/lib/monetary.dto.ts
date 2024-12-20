@@ -16,10 +16,4 @@ export class MonetaryDto<C extends string, P extends number> implements Monetary
   @ApiProperty({ type: 'number', example: 2 })
   @IsInt()
   readonly precision: P
-
-  constructor(monetary: Monetary<C, P>) {
-    this.amount = monetary.amount
-    this.currency = monetary.currency
-    this.precision = monetary.precision
-  }
 }
