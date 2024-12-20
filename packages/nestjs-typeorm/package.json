@@ -25,10 +25,11 @@
   "license": "GPL",
   "repository": {
     "type": "git",
-    "url": "git@github.com:appwise-labs/node-core.git"
+    "url": "git@github.com:wisemen-digital/node-core.git"
   },
   "dependencies": {
     "@nestjs/typeorm": "^10.0.2",
+    "@wisemen/time": "^0.0.17",
     "change-case": "^5.4.4"
   },
   "peerDependencies": {

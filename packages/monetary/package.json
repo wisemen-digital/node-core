@@ -1,5 +1,5 @@
 {
-  "name": "@appwise/monetary",
+  "name": "@wisemen/monetary",
   "version": "0.1.0",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -32,6 +32,6 @@
   "license": "GPL",
   "repository": {
     "type": "git",
-    "url": "git@github.com:appwise-labs/node-core.git"
+    "url": "git@github.com:wisemen-digital/node-core.git"
   }
 }

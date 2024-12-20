@@ -1,7 +1,7 @@
 import type { Moment } from 'moment'
 import moment from 'moment'
 import { PlanningEvent } from './planning-event.js'
-import {DAYS_PER_WEEK, Time} from '@appwise/time'
+import {DAYS_PER_WEEK, Time} from '@wisemen/time'
 import {YYYY_MM_DD} from "./constants.js";
 import {parseNullableDate} from "./util/parse-nullable-date.js";
 import {doDatePeriodsOverlap} from "./util/do-periods-overlap.js";
