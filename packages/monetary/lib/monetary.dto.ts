@@ -3,21 +3,21 @@ import { IsInt, IsNotEmpty, IsString } from "class-validator";
 import { MonetaryObject } from "./monetary.object.js";
 import { Monetary } from "./monetary.js";
 
-export class MonetaryDto implements MonetaryObject<string, number> {
+export class MonetaryDto<C extends string, P extends number> implements MonetaryObject<C, P> {
   @ApiProperty({ type: 'number', example: 499 })
   @IsInt()
   readonly amount: number
 
-  @ApiProperty({ type: 'string', example: 'USD' })
+  @ApiProperty({ type: 'string', example: 'EUR' })
   @IsString()
   @IsNotEmpty()
-  readonly currency: string
+  readonly currency: C
 
   @ApiProperty({ type: 'number', example: 2 })
   @IsInt()
-  readonly precision: number
+  readonly precision: P
 
-  constructor(monetary: Monetary<string, number>) {
+  constructor(monetary: Monetary<C, P>) {
     this.amount = monetary.amount
     this.currency = monetary.currency
     this.precision = monetary.precision

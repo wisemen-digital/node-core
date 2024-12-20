@@ -52,7 +52,7 @@ export class Monetary<C extends string, P extends number> {
     return `${this.valueOf().toFixed(this.precision)} ${this.currency}`
   }
 
-  export (): MonetaryDto {
+  export (): MonetaryDto<C, P> {
     return new MonetaryDto(this.round())
   }
 }
