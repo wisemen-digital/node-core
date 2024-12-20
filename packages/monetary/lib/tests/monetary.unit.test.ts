@@ -20,7 +20,7 @@ describe('Monetary class', () => {
       expect(r.equals(new Monetary(200, 'USD', 2))).toBe(true)
     })
 
-    it('multiplies and round monetary', () => {
+    it('multiplies and rounds monetary', () => {
       const p1 = new Monetary(350, 'USD', 2)
       const r = p1.multiply(1.05).round()
 
@@ -29,7 +29,7 @@ describe('Monetary class', () => {
   })
 
   describe('Monetary comparisons', () => {
-    it('adds monetaries', () => {
+    it('compares monetaries', () => {
       const p1 = new Monetary(350, 'USD', 2)
       const p2 = new Monetary(150, 'USD', 2)
       const p3 = new Monetary(350, 'USD', 2)
@@ -58,7 +58,7 @@ describe('Monetary class', () => {
       expect(r).toBe('3.50 USD')
     })
 
-    it('converts monetary to string', () => {
+    it('converts monetary to string with precision 4', () => {
       const p1 = new Monetary(35000, 'USD', 4)
       const r = p1.toString()
 
