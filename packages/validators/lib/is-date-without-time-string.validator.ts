@@ -6,7 +6,7 @@ import {
   Validate,
   ValidatorConstraint
 } from 'class-validator'
-import moment from 'moment'
+import dayjs from 'dayjs'
 
 /**
    * Validate that the value is a string with format hh:mm:ss
@@ -19,7 +19,12 @@ export function IsDateWithoutTimeString (validationOptions?: ValidationOptions):
 export class IsDateWithoutTimeStringValidator implements ValidatorConstraintInterface {
   validate (dateString: unknown, _args: ValidationArguments): boolean {
     if (typeof dateString !== 'string') return false
-    return moment(dateString, 'YYYY-MM-DD', true).isValid()
+
+    const regex = /^\d{4}-\d{2}-\d{2}$/
+
+    if (!regex.test(dateString)) return false
+
+    return dayjs(dateString, 'YYYY-MM-DD').isValid()
   }
 
   defaultMessage (args: ValidationArguments): string {

@@ -16,11 +16,9 @@
     "test": "node --test"
   },
   "dependencies": {
-    "@appwise/express-dto-router": "^1.0.2",
-    "@appwise/time": "^0.0.13",
+    "@wisemen/time": "^0.0.17",
     "class-validator": "^0.14.0",
-    "moment": "^2.29.4",
-    "typeorm": "^0.3.16"
+    "dayjs": "^1.11.13"
   },
   "devDependencies": {
     "release-it": "^15.11.0",
