@@ -7,76 +7,80 @@ export class DateRange {
   public readonly startDate: DateRangeBoundary
   public readonly endDate: DateRangeBoundary
 
-  private readonly _lowerBound: WiseDate
-  private readonly _upperBound: WiseDate
-  private readonly lowerBoundMode: Inclusivity
-  private readonly upperBoundMode: Inclusivity
-
   constructor(
     startDate: WiseDate,
     endDate: WiseDate,
   )
   constructor(
-    startDate: WiseDate,
-    endDate: WiseDate,
-    boundMode: Inclusivity
+    startDate: DateRangeBoundary,
+    endDate: DateRangeBoundary,
   )
   constructor(
     startDate: WiseDate,
     endDate: WiseDate,
-    lowerBoundMode: Inclusivity,
-    upperBoundMode: Inclusivity
+    inclusivity: Inclusivity
   )
   constructor(
     startDate: WiseDate,
     endDate: WiseDate,
-    lowerBoundOrBoundsMode: Inclusivity = Inclusivity.INCLUSIVE,
-    upperBoundMode?: Inclusivity
+    lowerBoundInclusivity: Inclusivity,
+    upperBoundInclusivity: Inclusivity
+  )
+  constructor(
+    startDate: WiseDate | DateRangeBoundary,
+    endDate: WiseDate | DateRangeBoundary,
+    lowerBoundOrBoundsInclusivity: Inclusivity = Inclusivity.INCLUSIVE,
+    upperBoundInclusivity?: Inclusivity
   ) {
-    if(upperBoundMode === undefined) {
-      this.startDate = new DateRangeBoundary(startDate, lowerBoundOrBoundsMode)
-      this.endDate = new DateRangeBoundary(endDate, lowerBoundOrBoundsMode)
-
-      this.lowerBoundMode = lowerBoundOrBoundsMode
-      this.upperBoundMode = lowerBoundOrBoundsMode
+    if(startDate instanceof DateRangeBoundary && endDate instanceof DateRangeBoundary) {
+      this.startDate = startDate
+      this.endDate = endDate
+    } else if(upperBoundInclusivity === undefined) {
+      this.startDate = new DateRangeBoundary(startDate as WiseDate, lowerBoundOrBoundsInclusivity)
+      this.endDate = new DateRangeBoundary(endDate as WiseDate, lowerBoundOrBoundsInclusivity)
     } else {
-      this.startDate = new DateRangeBoundary(startDate, lowerBoundOrBoundsMode)
-      this.endDate = new DateRangeBoundary(endDate, upperBoundMode)
-
-      this.lowerBoundMode = lowerBoundOrBoundsMode
-      this.upperBoundMode = upperBoundMode
+      this.startDate = new DateRangeBoundary(startDate as WiseDate, lowerBoundOrBoundsInclusivity)
+      this.endDate = new DateRangeBoundary(endDate as WiseDate, upperBoundInclusivity)
     }
 
-    this._upperBound = endDate
-    this._lowerBound = startDate
-
-    if(endDate.isBefore(startDate)) {
+    if(this.endDate.date.isBefore(this.startDate.date)
+      && this.startDate.date.isAfter(this.endDate.date)) {
       throw new InvalidBounds(this)
     }
   }
 
 
   public get years(): number {
-    return  this.endDate.date.diff(this.startDate.date, 'years')
+    const endDate = this.getEffectiveEndDate()
+    const startDate = this.getEffectiveStartDate()
+    return Math.max(0, endDate.diff(startDate, 'years'))
   }
 
   public get months(): number {
-    return  this.endDate.date.diff(this.startDate.date, 'months')
+    const endDate = this.getEffectiveEndDate()
+    const startDate = this.getEffectiveStartDate()
+    return Math.max(0, endDate.diff(startDate, 'months'))
   }
 
   public get quarters(): number {
-    return  this.endDate.date.diff(this.startDate.date, 'quarters')
+    const endDate = this.getEffectiveEndDate()
+    const startDate = this.getEffectiveStartDate()
+    return Math.max(0, endDate.diff(startDate, 'quarters'))
   }
 
   public get weeks(): number {
-    return  this.endDate.date.diff(this.startDate.date, 'weeks')
+    const endDate = this.getEffectiveEndDate()
+    const startDate = this.getEffectiveStartDate()
+    return Math.max(0, endDate.diff(startDate, 'weeks'))
   }
 
   public get days(): number {
-    return  this.endDate.date.diff(this.startDate.date, 'days')
+    const endDate = this.getEffectiveEndDate()
+    const startDate = this.getEffectiveStartDate()
+    return Math.max(0, endDate.diff(startDate, 'days'))
   }
 
-  public isEmpty(): boolean {
+  public get isEmpty(): boolean {
     return this.days === 0
   }
 
@@ -110,5 +114,17 @@ export class DateRange {
 
   private isSameOrAfterStartDate(date: WiseDate) {
     return this.startDate.isSameOrBeforeDate(date)
+  }
+
+  private getEffectiveStartDate(): WiseDate {
+    return isInclusive(this.startDate.inclusivity)
+      ? this.startDate.date
+      : this.startDate.date.add(1, 'day');
+  }
+
+  private getEffectiveEndDate(): WiseDate {
+    return isInclusive(this.endDate.inclusivity)
+      ? this.endDate.date.add(1, 'day')
+      : this.endDate.date;
   }
 }

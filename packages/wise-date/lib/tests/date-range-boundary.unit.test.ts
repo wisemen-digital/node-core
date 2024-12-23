@@ -371,5 +371,4 @@ describe('DateRangeBoundary unit tests', () => {
       expect(date.isSameOrAfterDate(new PastInfinityDate())).toBe(true)
     })
   })
-
 })
