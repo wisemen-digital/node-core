@@ -1,6 +1,5 @@
 import type { Moment } from 'moment'
 import moment from 'moment'
-import { ceil, floor, lcm } from 'mathjs'
 import { PlanningEvent } from './planning-event.js'
 import {DAYS_PER_WEEK, Time} from '@appwise/time'
 import {YYYY_MM_DD} from "./constants.js";
@@ -8,6 +7,7 @@ import {parseNullableDate} from "./util/parse-nullable-date.js";
 import {doDatePeriodsOverlap} from "./util/do-periods-overlap.js";
 import {PlanningEventOverlapValidator} from "./planning-event-overlap-validator.js";
 import {Timeslot} from "./util/timeslot.js";
+import { lcm } from './util/lcm.js';
 
 interface SplitResult {
   head: PlanningEvent | null
@@ -233,9 +233,9 @@ export class PlanningEventSplitter {
 
     let periodsUntilEndCandidate: number
     if (daysBetweenStarts % this.daysInOpenEventPeriod === 0) {
-      periodsUntilEndCandidate = floor(daysBetweenStarts / this.daysInOpenEventPeriod) - 1
+      periodsUntilEndCandidate = Math.floor(daysBetweenStarts / this.daysInOpenEventPeriod) - 1
     } else {
-      periodsUntilEndCandidate = floor(daysBetweenStarts / this.daysInOpenEventPeriod)
+      periodsUntilEndCandidate = Math.floor(daysBetweenStarts / this.daysInOpenEventPeriod)
     }
 
     const endCandidate = this.openEventStartDate.clone()
@@ -271,7 +271,7 @@ export class PlanningEventSplitter {
     } else {
       const daysBetweenStarts =
         this.overlappingEventStartDate.diff(this.openEventStartDate, 'days', true)
-      const periodsUntilStartCandidate = ceil(daysBetweenStarts / this.daysInOpenEventPeriod)
+      const periodsUntilStartCandidate = Math.ceil(daysBetweenStarts / this.daysInOpenEventPeriod)
       const overlapStartDate = this.openEventStartDate.clone()
         .add(periodsUntilStartCandidate * this.daysInOpenEventPeriod, 'days')
 
@@ -284,7 +284,7 @@ export class PlanningEventSplitter {
     } else {
       const daysBetween =
         this.overlappingEventEndDate.diff(this.openEventStartDate, 'days', true)
-      const periodsUntilEndCandidate = floor(daysBetween / this.daysInOpenEventPeriod)
+      const periodsUntilEndCandidate = Math.floor(daysBetween / this.daysInOpenEventPeriod)
       const overlapEndDate = this.openEventStartDate.clone()
         .add(periodsUntilEndCandidate * this.daysInOpenEventPeriod, 'days')
 
@@ -311,7 +311,7 @@ export class PlanningEventSplitter {
 
     // The start date is the first date after the end date of the overlap
     const daysBetween = overlapEnd.diff(this.openEventStartDate, 'days', true)
-    let periodsUntilStart = ceil(daysBetween / this.daysInOpenEventPeriod)
+    let periodsUntilStart = Math.ceil(daysBetween / this.daysInOpenEventPeriod)
     if (daysBetween % this.daysInOpenEventPeriod === 0) {
       periodsUntilStart += 1
     }
@@ -360,7 +360,7 @@ export class PlanningEventSplitter {
       return null
     } else {
       const daysBetween = eventEnd.diff(newStartDate, 'days', true)
-      const periodsUntilEndCandidate = floor(daysBetween / daysInNewPeriod)
+      const periodsUntilEndCandidate = Math.floor(daysBetween / daysInNewPeriod)
 
       return newStartDate.clone()
         .add(periodsUntilEndCandidate * daysInNewPeriod, 'days')

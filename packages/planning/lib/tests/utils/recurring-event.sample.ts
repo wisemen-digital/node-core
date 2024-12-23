@@ -11,8 +11,8 @@ export function createRecurringEvent(withValues?: Partial<RecurringEvent>): Recu
     endDate: defaultToIfUndefined(withValues?.endDate, moment().add(1,'week').format(YYYY_MM_DD)),
     weeksPeriod: defaultToIfUndefined(withValues?.weeksPeriod, 1),
     exceptions: defaultToIfUndefined(withValues?.exceptions, []),
-    startTime: defaultToIfUndefined(withValues?.startTime, Time.fromString('09:00:00')),
-    endTime: defaultToIfUndefined(withValues?.endTime, Time.fromString('10:00:00'))
+    startTime: defaultToIfUndefined(withValues?.startTime, new Time('09:00:00')),
+    endTime: defaultToIfUndefined(withValues?.endTime, new Time('10:00:00'))
   }
 }
 

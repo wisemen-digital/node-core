@@ -1,0 +1,13 @@
+{
+  "git": {
+    "tagName": "app-container@${version}",
+    "commitMessage": "Release ${tagName}",
+    "tagAnnotation": "Release ${tagName}"
+  },
+  "npm": {
+    "publishArgs": [
+      "--access",
+      "public"
+    ]
+  }
+}

@@ -28,14 +28,14 @@ describe('PlanningEventSplitter Unit Test', function () {
       const splitTarget = await createPlanningEvent({
         startDate: moment().format(YYYY_MM_DD),
         endDate: moment().format(YYYY_MM_DD),
-        startTime: Time.fromString('09:00:00'),
-        endTime: Time.fromString('11:00:00')
+        startTime: new Time('09:00:00'),
+        endTime: new Time('11:00:00')
       })
       const event = await createPlanningEvent({
         startDate: moment().format(YYYY_MM_DD),
         endDate: moment().format(YYYY_MM_DD),
-        startTime: Time.fromString('09:00:00'),
-        endTime: Time.fromString('11:00:00')
+        startTime: new Time('09:00:00'),
+        endTime: new Time('11:00:00')
       })
 
       const splitResult = PlanningEventSplitter.split(splitTarget, event)
@@ -47,15 +47,15 @@ describe('PlanningEventSplitter Unit Test', function () {
         weeksPeriod: 1,
         startDate: moment().format(YYYY_MM_DD),
         endDate: moment().add(5, 'weeks').format(YYYY_MM_DD),
-        startTime: Time.fromString('09:00:00'),
-        endTime: Time.fromString('11:00:00')
+        startTime: new Time('09:00:00'),
+        endTime: new Time('11:00:00')
       })
       const event = await createRecurringEvent({
         weeksPeriod: 1,
         startDate: moment().format(YYYY_MM_DD),
         endDate: moment().add(5, 'weeks').format(YYYY_MM_DD),
-        startTime: Time.fromString('09:00:00'),
-        endTime: Time.fromString('11:00:00')
+        startTime: new Time('09:00:00'),
+        endTime: new Time('11:00:00')
       })
 
       const splitResult = PlanningEventSplitter.split(splitTarget, event)
@@ -67,14 +67,14 @@ describe('PlanningEventSplitter Unit Test', function () {
       const splitTarget = await createPlanningEvent({
         startDate: today,
         endDate: today,
-        startTime: Time.fromString('08:00:00'),
-        endTime: Time.fromString('10:00:00')
+        startTime: new Time('08:00:00'),
+        endTime: new Time('10:00:00')
       })
       const event = await createPlanningEvent({
         startDate: today,
         endDate: today,
-        startTime: Time.fromString('09:00:00'),
-        endTime: Time.fromString('10:00:00')
+        startTime: new Time('09:00:00'),
+        endTime: new Time('10:00:00')
       })
 
       const splitResult = PlanningEventSplitter.split(splitTarget, event)
@@ -82,8 +82,8 @@ describe('PlanningEventSplitter Unit Test', function () {
       expect(splitResult[0]).toMatchObject({
         startDate: today,
         endDate: today,
-        startTime: Time.fromString('08:00:00'),
-        endTime: Time.fromString('09:00:00')
+        startTime: new Time('08:00:00'),
+        endTime: new Time('09:00:00')
       })
     })
 
@@ -92,14 +92,14 @@ describe('PlanningEventSplitter Unit Test', function () {
       const splitTarget = await createPlanningEvent({
         startDate: today,
         endDate: today,
-        startTime: Time.fromString('08:00:00'),
-        endTime: Time.fromString('11:00:00')
+        startTime: new Time('08:00:00'),
+        endTime: new Time('11:00:00')
       })
       const event = await createPlanningEvent({
         startDate: today,
         endDate: today,
-        startTime: Time.fromString('09:00:00'),
-        endTime: Time.fromString('10:00:00')
+        startTime: new Time('09:00:00'),
+        endTime: new Time('10:00:00')
       })
 
       const splitResult = PlanningEventSplitter.split(splitTarget, event)
@@ -108,14 +108,14 @@ describe('PlanningEventSplitter Unit Test', function () {
         expect.objectContaining({
           startDate: today,
           endDate: today,
-          startTime: Time.fromString('08:00:00'),
-          endTime: Time.fromString('09:00:00')
+          startTime: new Time('08:00:00'),
+          endTime: new Time('09:00:00')
         }),
         expect.objectContaining({
           startDate: today,
           endDate: today,
-          startTime: Time.fromString('10:00:00'),
-          endTime: Time.fromString('11:00:00')
+          startTime: new Time('10:00:00'),
+          endTime: new Time('11:00:00')
         })
       ]))
     })
@@ -126,8 +126,8 @@ describe('PlanningEventSplitter Unit Test', function () {
         weeksPeriod: 2,
         startDate: today,
         endDate: null,
-        startTime: Time.fromString('08:00:00'),
-        endTime: Time.fromString('11:00:00')
+        startTime: new Time('08:00:00'),
+        endTime: new Time('11:00:00')
       })
 
       const event = await createRecurringEvent({
@@ -136,8 +136,8 @@ describe('PlanningEventSplitter Unit Test', function () {
           .add(4, 'weeks')
           .format(YYYY_MM_DD),
         endDate: null,
-        startTime: Time.fromString('08:00:00'),
-        endTime: Time.fromString('11:00:00')
+        startTime: new Time('08:00:00'),
+        endTime: new Time('11:00:00')
       })
 
       const splitResult = PlanningEventSplitter.split(splitTarget, event)
@@ -148,8 +148,8 @@ describe('PlanningEventSplitter Unit Test', function () {
           endDate: moment(today, YYYY_MM_DD)
             .add(2, 'weeks')
             .format(YYYY_MM_DD),
-          startTime: Time.fromString('08:00:00'),
-          endTime: Time.fromString('11:00:00')
+          startTime: new Time('08:00:00'),
+          endTime: new Time('11:00:00')
         })
       ]))
     })
@@ -161,8 +161,8 @@ describe('PlanningEventSplitter Unit Test', function () {
         weeksPeriod: 2,
         startDate: today,
         endDate: null,
-        startTime: Time.fromString('08:00:00'),
-        endTime: Time.fromString('11:00:00')
+        startTime: new Time('08:00:00'),
+        endTime: new Time('11:00:00')
       })
 
       const event = await createRecurringEvent({
@@ -174,8 +174,8 @@ describe('PlanningEventSplitter Unit Test', function () {
         endDate: moment(today, YYYY_MM_DD)
           .add(8, 'weeks')
           .format(YYYY_MM_DD),
-        startTime: Time.fromString('08:00:00'),
-        endTime: Time.fromString('11:00:00')
+        startTime: new Time('08:00:00'),
+        endTime: new Time('11:00:00')
       })
 
       const splitResult = PlanningEventSplitter.split(splitTarget, event)
@@ -186,16 +186,16 @@ describe('PlanningEventSplitter Unit Test', function () {
           endDate: moment(today, YYYY_MM_DD)
             .add(2, 'weeks')
             .format(YYYY_MM_DD),
-          startTime: Time.fromString('08:00:00'),
-          endTime: Time.fromString('11:00:00')
+          startTime: new Time('08:00:00'),
+          endTime: new Time('11:00:00')
         }),
         expect.objectContaining({
           startDate: moment(today, YYYY_MM_DD)
             .add(10, 'weeks')
             .format(YYYY_MM_DD),
           endDate: null,
-          startTime: Time.fromString('08:00:00'),
-          endTime: Time.fromString('11:00:00')
+          startTime: new Time('08:00:00'),
+          endTime: new Time('11:00:00')
         })
       ]))
     })
@@ -206,8 +206,8 @@ describe('PlanningEventSplitter Unit Test', function () {
         weeksPeriod: 2,
         startDate: today,
         endDate: null,
-        startTime: Time.fromString('08:00:00'),
-        endTime: Time.fromString('11:00:00')
+        startTime: new Time('08:00:00'),
+        endTime: new Time('11:00:00')
       })
 
       const event = await createRecurringEvent({
@@ -218,8 +218,8 @@ describe('PlanningEventSplitter Unit Test', function () {
         endDate: moment(today, YYYY_MM_DD)
           .add(14, 'weeks')
           .format(YYYY_MM_DD),
-        startTime: Time.fromString('08:00:00'),
-        endTime: Time.fromString('11:00:00')
+        startTime: new Time('08:00:00'),
+        endTime: new Time('11:00:00')
       })
 
       const splitResult = PlanningEventSplitter.split(splitTarget, event)
@@ -231,8 +231,8 @@ describe('PlanningEventSplitter Unit Test', function () {
           endDate: moment(today, YYYY_MM_DD)
             .add(2, 'weeks')
             .format(YYYY_MM_DD),
-          startTime: Time.fromString('08:00:00'),
-          endTime: Time.fromString('11:00:00')
+          startTime: new Time('08:00:00'),
+          endTime: new Time('11:00:00')
         }),
         // Overlaps
         expect.objectContaining({
@@ -243,8 +243,8 @@ describe('PlanningEventSplitter Unit Test', function () {
             .add(6, 'weeks')
             .format(YYYY_MM_DD),
           weeksPeriod: 10,
-          startTime: Time.fromString('08:00:00'),
-          endTime: Time.fromString('11:00:00')
+          startTime: new Time('08:00:00'),
+          endTime: new Time('11:00:00')
         }),
         expect.objectContaining({
           startDate: moment(today, YYYY_MM_DD)
@@ -254,8 +254,8 @@ describe('PlanningEventSplitter Unit Test', function () {
             .add(8, 'weeks')
             .format(YYYY_MM_DD),
           weeksPeriod: 10,
-          startTime: Time.fromString('08:00:00'),
-          endTime: Time.fromString('11:00:00')
+          startTime: new Time('08:00:00'),
+          endTime: new Time('11:00:00')
         }),
         expect.objectContaining({
           startDate: moment(today, YYYY_MM_DD)
@@ -265,8 +265,8 @@ describe('PlanningEventSplitter Unit Test', function () {
             .add(10, 'weeks')
             .format(YYYY_MM_DD),
           weeksPeriod: 10,
-          startTime: Time.fromString('08:00:00'),
-          endTime: Time.fromString('11:00:00')
+          startTime: new Time('08:00:00'),
+          endTime: new Time('11:00:00')
         }),
         expect.objectContaining({
           startDate: moment(today, YYYY_MM_DD)
@@ -276,8 +276,8 @@ describe('PlanningEventSplitter Unit Test', function () {
             .add(12, 'weeks')
             .format(YYYY_MM_DD),
           weeksPeriod: 10,
-          startTime: Time.fromString('08:00:00'),
-          endTime: Time.fromString('11:00:00')
+          startTime: new Time('08:00:00'),
+          endTime: new Time('11:00:00')
         }),
         // Tail
         expect.objectContaining({
@@ -285,8 +285,8 @@ describe('PlanningEventSplitter Unit Test', function () {
             .add(16, 'weeks')
             .format(YYYY_MM_DD),
           endDate: null,
-          startTime: Time.fromString('08:00:00'),
-          endTime: Time.fromString('11:00:00')
+          startTime: new Time('08:00:00'),
+          endTime: new Time('11:00:00')
         })
       ]))
     })
@@ -297,8 +297,8 @@ describe('PlanningEventSplitter Unit Test', function () {
         weeksPeriod: 1,
         startDate: today,
         endDate: null,
-        startTime: Time.fromString('08:00:00'),
-        endTime: Time.fromString('11:00:00')
+        startTime: new Time('08:00:00'),
+        endTime: new Time('11:00:00')
       })
 
       const event = await createRecurringEvent({
@@ -309,8 +309,8 @@ describe('PlanningEventSplitter Unit Test', function () {
         endDate: moment(today, YYYY_MM_DD)
           .add(6, 'weeks')
           .format(YYYY_MM_DD),
-        startTime: Time.fromString('09:00:00'),
-        endTime: Time.fromString('10:00:00')
+        startTime: new Time('09:00:00'),
+        endTime: new Time('10:00:00')
       })
 
       const splitResult = PlanningEventSplitter.split(splitTarget, event)
@@ -323,8 +323,8 @@ describe('PlanningEventSplitter Unit Test', function () {
             .add(1, 'weeks')
             .format(YYYY_MM_DD),
           weeksPeriod: 1,
-          startTime: Time.fromString('08:00:00'),
-          endTime: Time.fromString('11:00:00')
+          startTime: new Time('08:00:00'),
+          endTime: new Time('11:00:00')
         }),
         // Overlaps
         expect.objectContaining({
@@ -335,8 +335,8 @@ describe('PlanningEventSplitter Unit Test', function () {
             .add(6, 'weeks')
             .format(YYYY_MM_DD),
           weeksPeriod: 2,
-          startTime: Time.fromString('08:00:00'),
-          endTime: Time.fromString('09:00:00')
+          startTime: new Time('08:00:00'),
+          endTime: new Time('09:00:00')
         }),
         expect.objectContaining({
           startDate: moment(today, YYYY_MM_DD)
@@ -346,8 +346,8 @@ describe('PlanningEventSplitter Unit Test', function () {
             .add(6, 'weeks')
             .format(YYYY_MM_DD),
           weeksPeriod: 2,
-          startTime: Time.fromString('10:00:00'),
-          endTime: Time.fromString('11:00:00')
+          startTime: new Time('10:00:00'),
+          endTime: new Time('11:00:00')
         }),
         expect.objectContaining({
           startDate: moment(today, YYYY_MM_DD)
@@ -357,8 +357,8 @@ describe('PlanningEventSplitter Unit Test', function () {
             .add(5, 'weeks')
             .format(YYYY_MM_DD),
           weeksPeriod: 2,
-          startTime: Time.fromString('08:00:00'),
-          endTime: Time.fromString('11:00:00')
+          startTime: new Time('08:00:00'),
+          endTime: new Time('11:00:00')
         }),
         // Tail
         expect.objectContaining({
@@ -367,8 +367,8 @@ describe('PlanningEventSplitter Unit Test', function () {
             .format(YYYY_MM_DD),
           endDate: null,
           weeksPeriod: 1,
-          startTime: Time.fromString('08:00:00'),
-          endTime: Time.fromString('11:00:00')
+          startTime: new Time('08:00:00'),
+          endTime: new Time('11:00:00')
         })
       ]))
     })

@@ -1,6 +1,7 @@
 import { SECONDS_PER_HOUR, SECONDS_PER_MINUTE } from './constants.js'
 import { InvalidBounds, InvalidHours, InvalidMinutes, InvalidSeconds, InvalidTimeString } from './time-error.js'
 import {PlainTimeObject} from "./plain-time-object.type.js";
+import {Inclusivity} from "./inclusivity.js";
 
 export class Time {
   public static STRING_FORMAT = 'hh:mm:ss'
@@ -10,14 +11,6 @@ export class Time {
   public static MAX_MINUTES = 59
   public static MIN_SECONDS = 0
   public static MAX_SECONDS = 59
-
-  public static fromString (timeString: string): Time {
-    if (!Time.isValidTimeString(timeString)) {
-      throw new InvalidTimeString(timeString)
-    }
-    const [hours, minutes, seconds] = timeString.split(':').map(v => parseInt(v))
-    return new Time(hours, minutes, seconds)
-  }
 
   public static isValidTimeString (timeString?: string | null): boolean {
     if (timeString == null) return false
@@ -55,10 +48,10 @@ export class Time {
   public static secondsBetween (first: Time | string, second: Time | string): number
   public static secondsBetween (first: Time | string, second: Time | string): number {
     if (typeof first === 'string') {
-      first = Time.fromString(first)
+      first = new Time(first)
     }
     if (typeof second === 'string') {
-      second = Time.fromString(second)
+      second = new Time(second)
     }
     return Math.abs(first.toSeconds() - second.toSeconds())
   }
@@ -78,7 +71,29 @@ export class Time {
   private seconds: number
 
   /** @throws TimeError */
-  public constructor (hours: number, minutes: number, seconds: number) {
+  public constructor (timeString: string)
+  public constructor (timeObject: PlainTimeObject)
+  public constructor (hours: number, minutes: number, seconds: number)
+  public constructor (
+    target: number | string | PlainTimeObject,
+    minutes: number = 0,
+    seconds: number= 0
+  ) {
+    let hours: number
+    if(typeof target === 'string') {
+      if (!Time.isValidTimeString(target)) {
+        throw new InvalidTimeString(target)
+      }
+      [hours, minutes, seconds] = target.split(':').map(v => parseInt(v))
+    } else if(typeof target === 'number') {
+      hours = target
+    } else {
+      hours = target.hours
+      minutes = target.minutes
+      seconds = target.seconds
+    }
+
+
     this.setHours(hours)
     this.setMinutes(minutes)
     this.setSeconds(seconds)
@@ -108,15 +123,22 @@ export class Time {
   }
 
   /**
-   * @param lowerBound must be before upperBound
-   * @param upperBound must be after lowerBound
+   * @param lowerBound must be before or same as upperBound
+   * @param upperBound must be after or same as lowerBound
    * @throws InvalidBounds
    */
-  public isBetween (lowerBound: Time, upperBound: Time): boolean {
-    if (lowerBound.isAfterOrEqual(upperBound)) {
+  public isBetween (lowerBound: Time, upperBound: Time, inclusivity: Inclusivity = '[]'): boolean {
+    if (lowerBound.isAfter(upperBound)) {
       throw new InvalidBounds(lowerBound, upperBound)
     }
-    return this.isAfter(lowerBound) && this.isBefore(upperBound)
+
+    switch (inclusivity){
+      case "[]": return this.isAfterOrEqual(lowerBound) && this.isBeforeOrEqual(upperBound)
+      case "[)": return this.isAfterOrEqual(lowerBound) && this.isBefore(upperBound)
+      case "(]": return this.isAfter(lowerBound) && this.isBeforeOrEqual(upperBound)
+      case "()": return this.isAfter(lowerBound) && this.isBefore(upperBound)
+      default:   return inclusivity
+    }
   }
 
   public equals (other: Time): boolean {

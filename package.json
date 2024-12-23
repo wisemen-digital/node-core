@@ -15,11 +15,13 @@
     "./packages/*"
   ],
   "dependencies": {
-    "@node-core/time": "*",
-    "@node-core/wise-date": "*",
-    "@node-core/validators": "*",
-    "@node-core/planning": "*",
-    "@node-core/decorators": "*"
+    "@appwise/time": "*",
+    "@appwise/validators": "*",
+    "@appwise/planning": "*",
+    "@appwise/decorators": "*",
+    "@appwise/transformer": "*",
+    "@appwise/wise-date": "*",
+    "@wisemen/vue-cli": "*"
   },
   "devDependencies": {
     "release-it": "^15.11.0",

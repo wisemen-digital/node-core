@@ -1,6 +1,6 @@
 {
   "name": "@appwise/validators",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "type": "module",
@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@appwise/express-dto-router": "^1.0.2",
-    "@node-core/time": "*",
+    "@appwise/time": "^0.0.13",
     "class-validator": "^0.14.0",
     "moment": "^2.29.4",
     "typeorm": "^0.3.16"

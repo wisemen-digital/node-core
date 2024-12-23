@@ -11,7 +11,7 @@ export function createPlanningEvent(withValues?: Partial<PlanningEvent>): Planni
     endDate: defaultToIfUndefined(withValues?.endDate, moment().format(YYYY_MM_DD)),
     weeksPeriod: defaultToIfUndefined(withValues?.weeksPeriod, null),
     exceptions: defaultToIfUndefined(withValues?.exceptions, []),
-    startTime: defaultToIfUndefined(withValues?.startTime, Time.fromString('09:00:00')),
-    endTime: defaultToIfUndefined(withValues?.endTime, Time.fromString('10:00:00'))
+    startTime: defaultToIfUndefined(withValues?.startTime, new Time('09:00:00')),
+    endTime: defaultToIfUndefined(withValues?.endTime, new Time('10:00:00'))
   }
 }

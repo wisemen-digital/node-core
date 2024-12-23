@@ -5,7 +5,7 @@ import {
   ValidatorConstraint,
   ValidatorConstraintInterface
 } from 'class-validator'
-import { Time } from '@node-core/time'
+import { Time } from '@appwise/time'
 
 export function IsAfterTimeString (
   timeCallback: (argObject: object) => string | null,
@@ -34,8 +34,8 @@ class IsAfterTimeStringValidator implements ValidatorConstraintInterface {
     const minimumTimeString = provideMinimumTime(dto)
     if (!Time.isValidTimeString(minimumTimeString)) return false
 
-    const minimumTime = Time.fromString(minimumTimeString)
-    const time = Time.fromString(timeString)
+    const minimumTime = new Time(minimumTimeString)
+    const time = new Time(timeString)
     return time.isAfter(minimumTime)
   }
 
