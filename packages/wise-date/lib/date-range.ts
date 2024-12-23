@@ -1,71 +1,79 @@
 import {WiseDate} from "./wise-date.js";
 import {InvalidBounds, NoOverlap} from "./date-range-errors.js";
-import {DateRangeBound, intersect, isInclusive} from "./date-range-bound.js";
-import {BoundedDate} from "./bounded-date.js";
+import {Inclusivity, intersect, isInclusive} from "./inclusivity.js";
+import {DateRangeBoundary} from "./date-range-boundary.js";
 
 export class DateRange {
+  public readonly startDate: DateRangeBoundary
+  public readonly endDate: DateRangeBoundary
+
   private readonly _lowerBound: WiseDate
   private readonly _upperBound: WiseDate
-  private readonly lowerBoundMode: DateRangeBound
-  private readonly upperBoundMode: DateRangeBound
+  private readonly lowerBoundMode: Inclusivity
+  private readonly upperBoundMode: Inclusivity
 
   constructor(
-    lowerBound: WiseDate,
-    upperBound: WiseDate,
+    startDate: WiseDate,
+    endDate: WiseDate,
   )
   constructor(
-    lowerBound: WiseDate,
-    upperBound: WiseDate,
-    boundMode: DateRangeBound
+    startDate: WiseDate,
+    endDate: WiseDate,
+    boundMode: Inclusivity
   )
   constructor(
-    lowerBound: WiseDate,
-    upperBound: WiseDate,
-    lowerBoundMode: DateRangeBound,
-    upperBoundMode: DateRangeBound
+    startDate: WiseDate,
+    endDate: WiseDate,
+    lowerBoundMode: Inclusivity,
+    upperBoundMode: Inclusivity
   )
   constructor(
-    lowerBound: WiseDate,
-    upperBound: WiseDate,
-    lowerBoundOrBoundsMode: DateRangeBound = DateRangeBound.INCLUSIVE,
-    upperBoundMode?: DateRangeBound
+    startDate: WiseDate,
+    endDate: WiseDate,
+    lowerBoundOrBoundsMode: Inclusivity = Inclusivity.INCLUSIVE,
+    upperBoundMode?: Inclusivity
   ) {
     if(upperBoundMode === undefined) {
+      this.startDate = new DateRangeBoundary(startDate, lowerBoundOrBoundsMode)
+      this.endDate = new DateRangeBoundary(endDate, lowerBoundOrBoundsMode)
+
       this.lowerBoundMode = lowerBoundOrBoundsMode
       this.upperBoundMode = lowerBoundOrBoundsMode
     } else {
+      this.startDate = new DateRangeBoundary(startDate, lowerBoundOrBoundsMode)
+      this.endDate = new DateRangeBoundary(endDate, upperBoundMode)
+
       this.lowerBoundMode = lowerBoundOrBoundsMode
       this.upperBoundMode = upperBoundMode
     }
-    this._upperBound = upperBound
-    this._lowerBound = lowerBound
 
-    if(upperBound.isBefore(lowerBound)) {
+    this._upperBound = endDate
+    this._lowerBound = startDate
+
+    if(endDate.isBefore(startDate)) {
       throw new InvalidBounds(this)
     }
   }
 
-  public get lowerBound(): WiseDate { return this._lowerBound.clone() }
-  public get upperBound(): WiseDate { return this._lowerBound.clone() }
 
   public get years(): number {
-    return  this.upperBound.diff(this.lowerBound, 'years')
+    return  this.endDate.date.diff(this.startDate.date, 'years')
   }
 
   public get months(): number {
-    return  this.upperBound.diff(this.lowerBound, 'months')
+    return  this.endDate.date.diff(this.startDate.date, 'months')
   }
 
   public get quarters(): number {
-    return  this.upperBound.diff(this.lowerBound, 'quarters')
+    return  this.endDate.date.diff(this.startDate.date, 'quarters')
   }
 
   public get weeks(): number {
-    return  this.upperBound.diff(this.lowerBound, 'weeks')
+    return  this.endDate.date.diff(this.startDate.date, 'weeks')
   }
 
   public get days(): number {
-    return  this.upperBound.diff(this.lowerBound, 'days')
+    return  this.endDate.date.diff(this.startDate.date, 'days')
   }
 
   public isEmpty(): boolean {
@@ -73,32 +81,22 @@ export class DateRange {
   }
 
   public contains(date: WiseDate): boolean {
-    return this.isSameOrAfterLowerBound(date) && this.isSameOrBeforeUpperBound(date)
+    return this.isSameOrAfterStartDate(date) && this.isSameOrBeforeEndDate(date)
   }
 
-  public overlaps(otherRange: DateRange): boolean {
-    const thisLowerBound = new BoundedDate(this._lowerBound, this.lowerBoundMode)
-    const thisUpperBound = new BoundedDate(this._upperBound, this.upperBoundMode)
-    const otherLowerBound = new BoundedDate(otherRange._lowerBound, otherRange.lowerBoundMode)
-    const otherUpperBound = new BoundedDate(otherRange._upperBound, otherRange.upperBoundMode)
-
-    return thisLowerBound.isSameOrBefore(otherUpperBound) &&
-      thisUpperBound.isSameOrAfter(otherLowerBound)
+  public overlaps(withRange: DateRange): boolean {
+    return this.startDate.isSameOrBefore(withRange.endDate) &&
+      this.endDate.isSameOrAfter(withRange.startDate)
   }
 
   public overlap(otherRange: DateRange): DateRange {
     if(!this.overlaps(otherRange)) throw new NoOverlap(this, otherRange)
 
-    const thisLowerBound = new BoundedDate(this._lowerBound, this.lowerBoundMode)
-    const thisUpperBound = new BoundedDate(this._upperBound, this.upperBoundMode)
-    const otherLowerBound = new BoundedDate(otherRange._lowerBound, otherRange.lowerBoundMode)
-    const otherUpperBound = new BoundedDate(otherRange._upperBound, otherRange.upperBoundMode)
-
-    const overlapLowerBound = BoundedDate.max(thisLowerBound, otherLowerBound)
-    const overlapUpperBound = BoundedDate.min(thisUpperBound, otherUpperBound)
+    const overlapLowerBound = DateRangeBoundary.max(this.startDate, otherRange.startDate)
+    const overlapUpperBound = DateRangeBoundary.min(this.endDate, otherRange.endDate)
 
     return new DateRange(overlapLowerBound.date, overlapUpperBound.date,
-      overlapLowerBound.bound, overlapUpperBound.bound)
+      overlapLowerBound.inclusivity, overlapUpperBound.inclusivity)
   }
 
   public diff(otherRange: DateRange): DateRange[] {
@@ -106,21 +104,11 @@ export class DateRange {
     return []
   }
 
-  private isSameOrBeforeUpperBound(date: WiseDate) {
-    let isBeforeUpperBound: boolean
-    if (this.upperBoundMode === DateRangeBound.INCLUSIVE) {
-      return date.isSameOrBefore(this._upperBound)
-    } else {
-      return date.isBefore(this._upperBound)
-    }
+  private isSameOrBeforeEndDate(date: WiseDate) {
+    return this.endDate.isSameOrAfterDate(date)
   }
 
-  private isSameOrAfterLowerBound(date: WiseDate) {
-    let isAfterLowerBound: boolean
-    if (this.lowerBoundMode === DateRangeBound.INCLUSIVE) {
-      return date.isSameOrAfter(this._lowerBound)
-    } else {
-      return date.isAfter(this._lowerBound)
-    }
+  private isSameOrAfterStartDate(date: WiseDate) {
+    return this.startDate.isSameOrBeforeDate(date)
   }
 }

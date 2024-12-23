@@ -102,7 +102,7 @@ export class FutureInfinityDate extends WiseDate {
   }
 
   toString(): String {
-    return 'future infinity';
+    return '+infinity';
   }
 
   isFutureInfinity(): boolean {

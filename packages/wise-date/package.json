@@ -23,7 +23,8 @@
   "devDependencies": {
     "@types/node": "^20.2.5",
     "expect": "^29.5.0",
-    "typescript": "^5.0.4"
+    "typescript": "^5.0.4",
+    "ts-node": "^10.9.2"
   },
   "author": "Kobe Kwanten",
   "license": "GPL",

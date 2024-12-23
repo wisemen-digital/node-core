@@ -88,7 +88,7 @@ export class PastInfinityDate extends WiseDate {
   }
 
   format(template: string): string {
-    return 'past infinity';
+    return '-infinity';
   }
 
   clone(): WiseDate {
