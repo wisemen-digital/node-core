@@ -1,0 +1,24 @@
+{
+  "name": "@wisemen/node-doc-processor-types",
+  "version": "0.0.1",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "type": "module",
+  "files": [
+    "dist/"
+  ],
+  "scripts": {
+    "lint": "eslint lib",
+    "prebuild": "rm -rf ./dist",
+    "clean": "rm -r ./dist",
+    "build": "tsc",
+    "pretest": "npm run clean && npm run build",
+    "test": "node --test"
+  },
+  "author": "Pieter Pauwels",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:wisemen-digital/node-core.git"
+  }
+}
