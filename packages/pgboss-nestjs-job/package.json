@@ -1,0 +1,35 @@
+{
+  "name": "@wisemen/pgboss-nestjs-job",
+  "version": "0.2.1",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "type": "module",
+  "files": [
+    "dist/"
+  ],
+  "scripts": {
+    "lint": "eslint lib",
+    "prebuild": "rm -rf ./dist",
+    "clean": "rm -r ./dist",
+    "build": "tsc",
+    "pretest": "npm run clean && npm run build",
+    "test": "node --test"
+  },
+  "author": "Joren Vandeweyer",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:wisemen-digital/node-core.git"
+  },
+  "dependencies": {
+    "@nestjs/common": "^11.0.3",
+    "@nestjs/config": "^4.0.0",
+    "@nestjs/core": "^10.4.1",
+    "@sentry/nestjs": "^8.50.0",
+    "@wisemen/nestjs-typeorm": "^0.0.4",
+    "colors": "^1.4.0",
+    "pg-boss": "^10.1.6",
+    "rxjs": "^7.8.1",
+    "typeorm": "^0.3.20"
+  }
+}
