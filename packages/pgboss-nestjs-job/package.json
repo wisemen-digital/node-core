@@ -22,13 +22,15 @@
     "url": "git@github.com:wisemen-digital/node-core.git"
   },
   "dependencies": {
+    "colors": "^1.4.0"
+  },
+  "peerDependencies": {
     "@nestjs/common": "^11.0.3",
     "@nestjs/core": "^10.4.1",
     "@sentry/nestjs": "^8.50.0",
-    "@wisemen/nestjs-typeorm": "^0.0.4",
-    "colors": "^1.4.0",
     "pg-boss": "^10.1.6",
     "rxjs": "^7.8.1",
+    "@wisemen/nestjs-typeorm": "^0.0.4",
     "typeorm": "^0.3.20"
   }
 }
