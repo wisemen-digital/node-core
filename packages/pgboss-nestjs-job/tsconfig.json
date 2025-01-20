@@ -18,7 +18,8 @@
     "skipLibCheck": true
   },
   "include": [
-    "./**/*.ts"
+    "./index.ts",
+    "./lib/**/*.ts"
   ],
   "exclude": [
   ],
