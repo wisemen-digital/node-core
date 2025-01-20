@@ -1,3 +1,7 @@
+## Config
+
+Make sure that the env variable `DATABASE_URI` is defined.
+
 ## Usage
 
 1. Create an entrypoint that creates an NestJs application context instance that contains the `PgBossWorkerModule`.

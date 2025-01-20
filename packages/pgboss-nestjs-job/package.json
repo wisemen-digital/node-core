@@ -23,7 +23,6 @@
   },
   "dependencies": {
     "@nestjs/common": "^11.0.3",
-    "@nestjs/config": "^4.0.0",
     "@nestjs/core": "^10.4.1",
     "@sentry/nestjs": "^8.50.0",
     "@wisemen/nestjs-typeorm": "^0.0.4",
