@@ -1,6 +1,6 @@
 {
   "git": {
-    "tagName": "pgboss-nestjs-job@${version}",
+    "tagName": "node-doc-processor@${version}",
     "commitMessage": "Release ${tagName}",
     "tagAnnotation": "Release ${tagName}"
   },
