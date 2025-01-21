@@ -1,0 +1,10 @@
+{
+  "git": {
+    "tagName": "pgboss-nestjs-job@${version}",
+    "commitMessage": "Release ${tagName}",
+    "tagAnnotation": "Release ${tagName}"
+  },
+  "npm": {
+    "publishArgs": ["--access", "public"]
+  }
+}
