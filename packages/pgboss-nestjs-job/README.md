@@ -4,6 +4,8 @@ Make sure that the env variable `DATABASE_URI` is defined.
 
 ## Usage
 
+### Defining a job
+
 1. Create an entrypoint that creates an NestJs application context instance that contains the `PgBossWorkerModule`.
 
 ```
@@ -54,6 +56,41 @@ export class MyJob extends BaseJobConfig<MyJobData> {}
 export class MyJobHandler extends BaseJobHandler<MyJobData> {
   public async run (data: MyJobData): Promise<void> {
     // Do stuff
+  }
+}
+```
+
+### Scheduling a job
+
+1. Import the `PgBossSchedulerModule` in your module you want to schedule a job in
+
+```
+@Module({
+  imports: [
+    PgBossSchedulerModule
+  ],
+  providers: [
+    MyService
+  ]
+})
+export class MyModule { }
+
+```
+
+2. Declare the `PgBossScheduler` in your constructor
+
+```
+@Injectable
+export class MyService {
+  constructor (
+    private readonly scheduler: PgBossScheduler
+  ) {}
+
+  async doSomething (): Promise<void> {
+    const job = new MyJob({
+      uuid: uuid.v4()
+    })
+    await this.scheduler.scheduleJob(job)
   }
 }
 ```
