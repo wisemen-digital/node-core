@@ -34,10 +34,36 @@ export class PgBossScheduler {
       singletonKey: handler.uniqueBy?.()
     }
 
-    await this.scheduleJobs([job])
+    await this.insertJobs([job])
   }
 
-  private async scheduleJobs <T extends object> (
+  async scheduleJobs<S extends BaseJobData, T extends BaseJobConfig<S>>(
+    handlers: T[]
+  ): Promise<void> {
+    if (handlers.length === 0) return
+
+    const jobs: JobInsert<S>[] | JobInsert[] = []
+
+    for (const handler of handlers) {
+      const queue = this.reflector.get<string>(PGBOSS_QUEUE_NAME, handler.constructor)
+      const className = this.reflector.get<string>(PGBOSS_JOB_HANDLER, handler.constructor)
+
+      const job: JobInsert<S> | JobInsert = {
+        name: queue,
+        data: {
+          className,
+          classData: handler.data
+        },
+        singletonKey: handler.uniqueBy?.()
+      }
+
+      jobs.push(job as JobInsert<S>)
+    }
+
+    await this.insertJobs(jobs)
+  }
+
+  private async insertJobs <T extends object> (
     jobs: JobInsert<T>[] | JobInsert[]
   ): Promise<void> {
     const manager = this.manager
