@@ -31,7 +31,16 @@ export class PgBossScheduler {
         className,
         classData: handler.data
       },
-      singletonKey: handler.uniqueBy?.()
+      priority: handler.options?.priority,
+      retryLimit: handler.options?.retryLimit,
+      retryDelay: handler.options?.retryDelay,
+      retryBackoff: handler.options?.retryBackoff,
+      startAfter: handler.options?.startAfter,
+      singletonKey: handler.uniqueBy?.(),
+      singletonSeconds: handler.options?.singletonSeconds,
+      expireInSeconds: handler.options?.expireInSeconds,
+      keepUntil: handler.options?.keepUntil,
+      deadLetter: handler.options?.deadLetter
     }
 
     await this.insertJobs([job])
@@ -54,7 +63,16 @@ export class PgBossScheduler {
           className,
           classData: handler.data
         },
-        singletonKey: handler.uniqueBy?.()
+        priority: handler.options?.priority,
+        retryLimit: handler.options?.retryLimit,
+        retryDelay: handler.options?.retryDelay,
+        retryBackoff: handler.options?.retryBackoff,
+        startAfter: handler.options?.startAfter,
+        singletonKey: handler.uniqueBy?.(),
+        singletonSeconds: handler.options?.singletonSeconds,
+        expireInSeconds: handler.options?.expireInSeconds,
+        keepUntil: handler.options?.keepUntil,
+        deadLetter: handler.options?.deadLetter
       }
 
       jobs.push(job as JobInsert<S>)
