@@ -8,10 +8,10 @@ This package includes several jobs that can be scheduled for the `node-doc-proce
 
 - `GeneratePdfFromUrlJob`
   - Generates a PDF from a webpage of a given url and uploads it to a given path in S3
-  - [view data](./lib/jobs/generate-pdf-from-url/generate-pdf-from-url.data.ts)
+  - [view data](/packages/node-doc-processor/lib/jobs/generate-pdf-from-url/generate-pdf-from-url.data.ts)
 - `MergePdfJob`
   - Merges PDF's stored in S3 together and uploads it to a given path in S3
-  - [view data](./lib/jobs/merge-pdf/merge-pdf.job.ts)
+  - [view data](/packages/node-doc-processor/lib/jobs/merge-pdf/merge-pdf.job.ts)
 
 ## Usage
 
