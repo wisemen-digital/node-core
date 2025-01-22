@@ -1,0 +1,1 @@
+export const DOC_PROCESSOR_QUEUE_NAME = 'doc-processor'
