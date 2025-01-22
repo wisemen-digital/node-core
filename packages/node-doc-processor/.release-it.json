@@ -1,0 +1,10 @@
+{
+  "git": {
+    "tagName": "node-doc-processor@${version}",
+    "commitMessage": "Release ${tagName}",
+    "tagAnnotation": "Release ${tagName}"
+  },
+  "npm": {
+    "publishArgs": ["--access", "public"]
+  }
+}
