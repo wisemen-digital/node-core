@@ -13,7 +13,7 @@ Make sure that the env variable `DATABASE_URI` is defined.
     PgBossWorkerModule.forRoot({
       queueName, // The name of the queue to process
       concurrency, // The number of jobs to process concurrently
-      batchSize, // The number of hobs to fetch
+      batchSize, // The number of jobs to fetch
       fetchRefreshThreshold, // Refresh threshold to fetch jobs
       pollInterval // The interval (in milliseconds) to poll for new jobs
     })
