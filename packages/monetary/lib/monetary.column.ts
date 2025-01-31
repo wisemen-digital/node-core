@@ -33,7 +33,7 @@ export class MoneyTypeOrmTransformer <C extends string, P extends number> {
       return instance as MoneyTypeOrmTransformer<C, P>
     }
 
-    const newInstance = new MoneyTypeOrmTransformer(precision,currency)
+    const newInstance = new MoneyTypeOrmTransformer(precision, currency)
     this.instances.set(key,newInstance)
     return newInstance
   }
