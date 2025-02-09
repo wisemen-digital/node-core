@@ -20,7 +20,7 @@
     "test": "node --test"
   },
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "5.0.1"
   },
   "devDependencies": {
     "@nestjs/common": "^11.0.8",

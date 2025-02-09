@@ -18,8 +18,8 @@ importers:
   packages/app-container:
     dependencies:
       express:
-        specifier: ^4.18.2
-        version: 4.21.2
+        specifier: 5.0.1
+        version: 5.0.1
     devDependencies:
       '@nestjs/common':
         specifier: ^11.0.8
