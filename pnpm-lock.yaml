@@ -161,6 +161,9 @@ importers:
       '@types/node':
         specifier: ^22.10.1
         version: 22.10.2
+      release-it:
+        specifier: ^15.11.0
+        version: 15.11.0
       typescript:
         specifier: ^5.7.2
         version: 5.7.2

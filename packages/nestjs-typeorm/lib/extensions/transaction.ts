@@ -7,6 +7,11 @@ export async function transaction<T> (
   dataSource: DataSource,
   runInTransaction: (entityManager: EntityManager) => Promise<T>
 ): Promise<T> {
+  const transactionManager = transactionStorage.getStore()
+  if(transactionManager != null) {
+    return await runInTransaction(transactionManager)
+  }
+
   return await dataSource.transaction(async (manager) => {
     return await transactionStorage.run(manager, async () => {
       return await runInTransaction(manager)
