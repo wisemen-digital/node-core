@@ -9,7 +9,7 @@ export async function transaction<T> (
 ): Promise<T> {
   const transactionManager = transactionStorage.getStore()
   if(transactionManager != null) {
-    return await runInTransaction(transactionManager)
+    await transactionManager.transaction(runInTransaction)
   }
 
   return await dataSource.transaction(async (manager) => {
