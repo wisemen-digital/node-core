@@ -1,6 +1,6 @@
 import { applyDecorators } from '@nestjs/common'
+import { Coordinates } from '@wisemen/coordinates'
 import { Column, ColumnOptions, Point } from 'typeorm'
-import { Coordinates } from '../types/coordinates.js'
 
 export type CoordinatesColumnOptions = Omit<ColumnOptions, 'type' | 'transformer' | 'spatialFeatureType' | 'srid'>
 
