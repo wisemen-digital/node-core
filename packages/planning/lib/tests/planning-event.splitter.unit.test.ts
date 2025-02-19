@@ -1,7 +1,7 @@
 import { describe, it } from 'node:test'
 import moment from 'moment'
 import { expect } from 'expect'
-import {Time} from "@appwise/time";
+import {Time} from "@wisemen/time";
 import {YYYY_MM_DD} from "../constants.js";
 import {PlanningEventSplitter} from "../planning-event.splitter.js";
 import {createPlanningEvent} from "./utils/planning-event.sample.js";

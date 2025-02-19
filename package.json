@@ -1,5 +1,5 @@
 {
-  "name": "appwise",
+  "name": "wisemen",
   "version": "0.0.2",
   "description": "Node Core",
   "main": "index.js",
@@ -11,19 +11,8 @@
   },
   "author": "Joren Vandeweyer",
   "license": "ISC",
-  "workspaces": [
-    "./packages/*"
-  ],
-  "dependencies": {
-    "@appwise/time": "*",
-    "@appwise/validators": "*",
-    "@appwise/planning": "*",
-    "@appwise/decorators": "*",
-    "@appwise/transformer": "*",
-    "@wisemen/vue-cli": "*"
-  },
   "devDependencies": {
-    "release-it": "^15.11.0",
-    "typescript": "^5.1.3"
+    "@types/node": "^22.10.2",
+    "typescript": "^5.7.2"
   }
 }

@@ -1,6 +1,6 @@
 import { applyDecorators } from '@nestjs/common'
 import { Column, ColumnOptions } from 'typeorm'
-import { TypeormTimeTransformer } from '@appwise/time'
+import { TypeormTimeTransformer } from '@wisemen/time'
 
 export type TimeColumnOptions = Omit<ColumnOptions, 'type' | 'transformer'>
 

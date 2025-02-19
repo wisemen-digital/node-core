@@ -1,6 +1,6 @@
 {
-  "name": "@appwise/planning",
-  "version": "0.0.23",
+  "name": "@wisemen/planning",
+  "version": "0.0.24",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "type": "module",
@@ -16,8 +16,8 @@
     "test": "node --test"
   },
   "dependencies": {
-    "moment": "^2.29.4",
-    "@appwise/time": "^0.0.14"
+    "@wisemen/time": "^0.0.17",
+    "moment": "^2.29.4"
   },
   "devDependencies": {
     "@types/node": "^20.2.5",
@@ -28,6 +28,6 @@
   "license": "GPL",
   "repository": {
     "type": "git",
-    "url": "git@github.com:appwise-labs/node-core.git"
+    "url": "git@github.com:wisemen-digital/node-core.git"
   }
 }

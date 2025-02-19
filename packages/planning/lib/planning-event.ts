@@ -1,4 +1,4 @@
-import { Time } from '@appwise/time'
+import { Time } from '@wisemen/time'
 import {PlanningException} from './planning-exceptions.js'
 
 export class PlanningEvent {

@@ -2,7 +2,7 @@ import { describe, it } from 'node:test'
 import moment from 'moment'
 import { expect } from 'expect'
 import { YYYY_MM_DD } from '../constants.js'
-import { Time } from '@appwise/time'
+import { Time } from '@wisemen/time'
 import {PlanningEventOverlapValidator} from "../planning-event-overlap-validator.js";
 import {createPlanningEvent} from "./utils/planning-event.sample.js";
 import {createRecurringEvent} from "./utils/recurring-event.sample.js";

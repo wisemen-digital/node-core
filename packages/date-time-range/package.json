@@ -1,5 +1,5 @@
 {
-  "name": "@appwise/date-time-range",
+  "name": "@wisemen/date-time-range",
   "version": "0.0.14",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -26,7 +26,7 @@
   "license": "GPL",
   "repository": {
     "type": "git",
-    "url": "git@github.com:appwise-labs/node-core.git"
+    "url": "git@github.com:wisemen-digital/node-core.git"
   },
   "dependencies": {
     "dayjs": "^1.11.11"

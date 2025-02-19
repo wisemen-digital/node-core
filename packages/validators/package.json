@@ -1,6 +1,6 @@
 {
-  "name": "@appwise/validators",
-  "version": "0.0.2",
+  "name": "@wisemen/validators",
+  "version": "0.0.3",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "type": "module",
@@ -16,20 +16,17 @@
     "test": "node --test"
   },
   "dependencies": {
-    "@appwise/express-dto-router": "^1.0.2",
-    "@appwise/time": "^0.0.13",
+    "@wisemen/time": "^0.0.17",
     "class-validator": "^0.14.0",
-    "moment": "^2.29.4",
-    "typeorm": "^0.3.16"
+    "dayjs": "^1.11.13"
   },
   "devDependencies": {
-    "release-it": "^15.11.0",
-    "typescript": "^5.0.4"
+    "expect": "^29.7.0"
   },
   "author": "Joren Vandeweyer",
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "git@github.com:appwise-labs/node-core.git"
+    "url": "git@github.com:wisemen-digital/node-core.git"
   }
 }
