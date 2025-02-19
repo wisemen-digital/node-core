@@ -1,23 +1,23 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsInt, IsNotEmpty, IsPositive, IsString } from "class-validator";
-import { MonetaryObject } from "./monetary.object.js";
 import { Monetary } from "./monetary.js";
+import { Currency, CurrencyApiProperty } from './currency.enum.js'
 
-export class MonetaryDto<C extends string, P extends number> implements MonetaryObject<C, P> {
-  @ApiProperty({ type: 'number', example: 499 })
+export class MonetaryDto {
+  @ApiProperty({ type: 'integer', example: 499 })
   @IsInt()
   readonly amount: number
 
-  @ApiProperty({ type: 'string', example: 'EUR' })
+  @CurrencyApiProperty()
   @IsString()
   @IsNotEmpty()
-  readonly currency: C
+  readonly currency: Currency
 
-  @ApiProperty({ type: 'number', example: 2 })
+  @ApiProperty({ type: 'integer', example: 2 })
   @IsInt()
-  readonly precision: P
+  readonly precision: number
 
-  constructor (monetary: Monetary<C, P>) {
+  constructor (monetary: Monetary) {
     this.amount = monetary.amount
     this.currency = monetary.currency
     this.precision = monetary.precision
