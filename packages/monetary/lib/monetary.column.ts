@@ -1,49 +1,105 @@
-import { applyDecorators } from '@nestjs/common'
 import { Column, ColumnOptions } from 'typeorm'
 import { Monetary } from './monetary.js'
+import { Currency } from './currency.enum.js'
 
-export type MonetaryColumnOptions = Omit<ColumnOptions, 'type' | 'transformer'>
+type EmbeddedMonetaryOptions = {
+  storeCurrencyName: true
+  currencyPrecisions?: Record<Currency, number>
+  defaultPrecision: number
+} & Omit<ColumnOptions, 'type' | 'transformer'>
 
-export function MonetaryColumn <C extends string, P extends number> (
-  currency: C,
-  precision: P,
-  options?: MonetaryColumnOptions
-): PropertyDecorator {
-  return applyDecorators(
-    Column({
+type AmountColumnOptions = {
+  storeCurrencyName: false,
+  currency: Currency,
+  precision: number
+} & Omit<ColumnOptions, 'type' | 'transformer'>
+
+export type MonetaryColumnOptions = (EmbeddedMonetaryOptions | AmountColumnOptions)
+
+/**
+ * Storing both the amount and currency code stores the column as `jsonb`.
+ * Storing only the amount stores the amount as an `int`
+ */
+export function MonetaryColumn(options: MonetaryColumnOptions): PropertyDecorator {
+  if (options.storeCurrencyName) {
+    return Column({
+      ...options,
+      type: 'jsonb',
+      transformer: new MoneyTypeOrmTransformer(
+        options.defaultPrecision,
+        options.currencyPrecisions ?? {} as Record<Currency, number>
+      )
+    })
+  } else {
+    return Column({
       ...options,
       type: 'int',
-      transformer: MoneyTypeOrmTransformer.instance(currency,precision)
+      transformer: new MoneyTypeOrmAmountTransformer(options.currency, options.precision)
     })
-  )
+  }
 }
 
-export class MoneyTypeOrmTransformer <C extends string, P extends number> {
-  private static instances: Map<string, MoneyTypeOrmTransformer<string, number>>
+export interface EmbeddedMonetary {
+  amount: number
+  currency: Currency
+}
 
-  static instance<C extends string, P extends number>(
-    currency: C,
-    precision: P
-  ): MoneyTypeOrmTransformer<C, P> {
-    this.instances ??= new Map()
-    const key = `${currency}_${precision}`
-    const instance = this.instances.get(key)
-
-    if(instance !== undefined) {
-      return instance as MoneyTypeOrmTransformer<C, P>
+export class MoneyTypeOrmTransformer {
+  public constructor(
+    private readonly defaultPrecision: number,
+    private readonly currencyPrecision: Record<Currency, number>
+  ) {
+    if (
+      !Number.isInteger(this.defaultPrecision)
+      || Object.values(currencyPrecision).some(precision => !Number.isInteger(precision))
+    ) {
+      throw new Error('precision must be an integer')
     }
-
-    const newInstance = new MoneyTypeOrmTransformer(precision, currency)
-    this.instances.set(key,newInstance)
-    return newInstance
   }
 
-  private constructor (
-    private readonly precision: P,
-    private readonly currency: C
-  ) {}
+  from(monetary: EmbeddedMonetary | null): Monetary | null {
+    if (monetary === null) {
+      return null
+    }
 
-  from (amount: number | null): Monetary<C, P> | null {
+    const precision = this.getPrecisionFor(monetary.currency)
+    return new Monetary(monetary.amount, monetary.currency, precision)
+  }
+
+  to(monetary: Monetary | null): EmbeddedMonetary | null {
+    if (monetary === null) {
+      return null
+    }
+
+    if (!monetary.isRounded()) {
+      throw new Error('Attempting to store a non rounded monetary value!')
+    }
+
+    const precision = this.getPrecisionFor(monetary.currency)
+    const normalizedMonetary = monetary.toPrecision(precision)
+    return {
+      amount: normalizedMonetary.amount,
+      currency: normalizedMonetary.currency
+    }
+  }
+
+  private getPrecisionFor(currency: Currency) {
+    return this.currencyPrecision[currency] ?? this.defaultPrecision
+  }
+}
+
+
+export class MoneyTypeOrmAmountTransformer {
+  public constructor(
+    private readonly currency: Currency,
+    private readonly precision: number
+  ) {
+    if (!Number.isInteger(this.precision)) {
+      throw new Error('precision must be an integer')
+    }
+  }
+
+  from(amount: number | null): Monetary | null {
     if (amount === null) {
       return null
     }
@@ -51,11 +107,15 @@ export class MoneyTypeOrmTransformer <C extends string, P extends number> {
     return new Monetary(amount, this.currency, this.precision)
   }
 
-  to (monetary: Monetary<C, P> | null): number | null {
+  to(monetary: Monetary | null): number | null {
     if (monetary === null) {
       return null
     }
 
-    return monetary.round().amount
+    if (!monetary.isRounded()) {
+      throw new Error('Attempting to store a non rounded monetary value!')
+    }
+
+    return monetary.toPrecision(this.precision).amount
   }
 }
