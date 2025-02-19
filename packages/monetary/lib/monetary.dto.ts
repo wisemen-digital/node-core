@@ -1,7 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsInt, IsNotEmpty, IsPositive, IsString } from "class-validator";
 import { Monetary } from "./monetary.js";
-import { CurrencyApiProperty } from './currency.enum.js'
+import { Currency, CurrencyApiProperty } from './currency.enum.js'
 
 export class MonetaryDto {
   @ApiProperty({ type: 'integer', example: 499 })
@@ -11,7 +11,7 @@ export class MonetaryDto {
   @CurrencyApiProperty()
   @IsString()
   @IsNotEmpty()
-  readonly currency: string
+  readonly currency: Currency
 
   @ApiProperty({ type: 'integer', example: 2 })
   @IsInt()

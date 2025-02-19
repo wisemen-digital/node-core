@@ -2,27 +2,56 @@ import { IsObject, ValidateBy, ValidateNested, ValidatorConstraintInterface } fr
 import { Type } from "class-transformer";
 import { applyDecorators } from "@nestjs/common";
 import { MonetaryDto } from "./monetary.dto.js";
+import { Currency } from './currency.enum.js'
+import { ValidationArguments } from 'class-validator/types/validation/ValidationArguments.js'
 
-export function IsMonetary <C extends string, P extends number> (currency: C, precision: P): PropertyDecorator {
+export interface IsMonetaryOptions {
+  maxPrecision?: number,
+  allowedCurrencies?: Set<Currency>
+}
+
+export function IsMonetary(options?: IsMonetaryOptions): PropertyDecorator {
   return applyDecorators(
     IsObject(),
     ValidateNested(),
     Type(() => MonetaryDto),
     ValidateBy({
-      name: 'IsMonetary',
-      validator: new IsMonetaryValidator(currency, precision),
+      name: 'IsMonetaryCurrency',
+      validator: new IsMonetaryCurrencyValidator(options?.allowedCurrencies),
+    }),
+    ValidateBy({
+      name: 'IsMonetaryPrecision',
+      validator: new IsMonetaryPrecisionValidator(options?.maxPrecision ?? Infinity),
     })
   )
 }
 
-class IsMonetaryValidator <C extends string, P extends number> implements ValidatorConstraintInterface {
-  constructor (private currency: C, private precision: P) {}
+class IsMonetaryCurrencyValidator implements ValidatorConstraintInterface {
+  constructor (
+    private allowedCurrencies?: Set<Currency>
+  ) {}
 
-  validate (monetaryDto: MonetaryDto<C, P>): boolean {
-    return monetaryDto.currency === this.currency && monetaryDto.precision === this.precision
+  validate (monetaryDto: MonetaryDto): boolean {
+    return this.allowedCurrencies === undefined
+      || this.allowedCurrencies.has(monetaryDto.currency)
   }
 
-  defaultMessage (): string {
-    return `MonetaryDto must have currency ${this.currency} and precision ${this.precision}`
+  defaultMessage (validationArguments?: ValidationArguments): string {
+    return `Monetary currency ${validationArguments?.value} is not allowed`
   }
 }
+
+class IsMonetaryPrecisionValidator implements ValidatorConstraintInterface {
+  constructor (
+    private maxPrecision: number
+  ) {}
+
+  validate (monetaryDto: MonetaryDto): boolean {
+    return monetaryDto.amount <= this.maxPrecision
+  }
+
+  defaultMessage (validationArguments?: ValidationArguments): string {
+    return `Monetary precision ${validationArguments?.value} must be <= ${this.maxPrecision}`
+  }
+}
+
