@@ -1,19 +1,26 @@
 import {WiseDate} from "./wise-date.js";
 import {InvalidBounds, NoOverlap} from "./date-range-errors.js";
-import {Inclusivity, intersect, isInclusive} from "./inclusivity.js";
-import {DateRangeBoundary} from "./date-range-boundary.js";
+import {
+  Inclusivity,
+  InclusivityString,
+  isInclusive,
+  mapToInclusivity
+} from "./inclusivity.js";
 
+/**
+ * DateRange only works with inclusive ranges internally, except for infinities
+ * When an exclusive date is given, this date is mapped to the next or previous inclusive date
+ * for the upper and lower bound respectively
+ *
+ * As a result, empty ranges cannot be represented.
+ */
 export class DateRange {
-  public readonly startDate: DateRangeBoundary
-  public readonly endDate: DateRangeBoundary
+  public readonly startDate: WiseDate
+  public readonly endDate: WiseDate
 
   constructor(
     startDate: WiseDate,
     endDate: WiseDate,
-  )
-  constructor(
-    startDate: DateRangeBoundary,
-    endDate: DateRangeBoundary,
   )
   constructor(
     startDate: WiseDate,
@@ -23,69 +30,66 @@ export class DateRange {
   constructor(
     startDate: WiseDate,
     endDate: WiseDate,
+    inclusivitiy: InclusivityString
+  )
+  constructor(
+    startDate: WiseDate,
+    endDate: WiseDate,
     lowerBoundInclusivity: Inclusivity,
     upperBoundInclusivity: Inclusivity
   )
   constructor(
-    startDate: WiseDate | DateRangeBoundary,
-    endDate: WiseDate | DateRangeBoundary,
-    lowerBoundOrBoundsInclusivity: Inclusivity = Inclusivity.INCLUSIVE,
+    startDate: WiseDate,
+    endDate: WiseDate,
+    lowerBoundOrBoundsInclusivity: Inclusivity | InclusivityString = Inclusivity.INCLUSIVE,
     upperBoundInclusivity?: Inclusivity
   ) {
-    if(startDate instanceof DateRangeBoundary && endDate instanceof DateRangeBoundary) {
-      this.startDate = startDate
-      this.endDate = endDate
-    } else if(upperBoundInclusivity === undefined) {
-      this.startDate = new DateRangeBoundary(startDate as WiseDate, lowerBoundOrBoundsInclusivity)
-      this.endDate = new DateRangeBoundary(endDate as WiseDate, lowerBoundOrBoundsInclusivity)
-    } else {
-      this.startDate = new DateRangeBoundary(startDate as WiseDate, lowerBoundOrBoundsInclusivity)
-      this.endDate = new DateRangeBoundary(endDate as WiseDate, upperBoundInclusivity)
+    if (typeof lowerBoundOrBoundsInclusivity === 'string') {
+      const [lower, upper] = mapToInclusivity(lowerBoundOrBoundsInclusivity)
+      lowerBoundOrBoundsInclusivity = lower
+      upperBoundInclusivity = upper
+    } else if (upperBoundInclusivity === undefined) {
+      upperBoundInclusivity = lowerBoundOrBoundsInclusivity
     }
 
-    if(this.endDate.date.isBefore(this.startDate.date)
-      && this.startDate.date.isAfter(this.endDate.date)) {
+    if (!isInclusive(lowerBoundOrBoundsInclusivity)) {
+      startDate = startDate.add(1, 'day')
+    }
+
+    if (!isInclusive(upperBoundInclusivity)) {
+      endDate = endDate.subtract(1, 'day')
+    }
+
+    if (endDate.isBefore(startDate) && startDate.isAfter(endDate)) {
       throw new InvalidBounds(this)
     }
+
+    this.startDate = startDate
+    this.endDate = endDate
   }
 
-
   public get years(): number {
-    const endDate = this.getEffectiveEndDate()
-    const startDate = this.getEffectiveStartDate()
-    return Math.max(0, endDate.diff(startDate, 'years'))
+    return this.endDate.diff(this.startDate, 'years')
   }
 
   public get months(): number {
-    const endDate = this.getEffectiveEndDate()
-    const startDate = this.getEffectiveStartDate()
-    return Math.max(0, endDate.diff(startDate, 'months'))
+    return this.endDate.diff(this.startDate, 'months')
   }
 
   public get quarters(): number {
-    const endDate = this.getEffectiveEndDate()
-    const startDate = this.getEffectiveStartDate()
-    return Math.max(0, endDate.diff(startDate, 'quarters'))
+    return this.endDate.diff(this.startDate, 'quarters')
   }
 
   public get weeks(): number {
-    const endDate = this.getEffectiveEndDate()
-    const startDate = this.getEffectiveStartDate()
-    return Math.max(0, endDate.diff(startDate, 'weeks'))
+    return this.endDate.diff(this.startDate, 'weeks')
   }
 
   public get days(): number {
-    const endDate = this.getEffectiveEndDate()
-    const startDate = this.getEffectiveStartDate()
-    return Math.max(0, endDate.diff(startDate, 'days'))
-  }
-
-  public get isEmpty(): boolean {
-    return this.days === 0
+    return this.endDate.diff(this.startDate, 'days')
   }
 
   public contains(date: WiseDate): boolean {
-    return this.isSameOrAfterStartDate(date) && this.isSameOrBeforeEndDate(date)
+    return date.isSameOrAfter(this.startDate) && date.isSameOrBefore(this.endDate)
   }
 
   public overlaps(withRange: DateRange): boolean {
@@ -93,38 +97,44 @@ export class DateRange {
       this.endDate.isSameOrAfter(withRange.startDate)
   }
 
-  public overlap(otherRange: DateRange): DateRange {
-    if(!this.overlaps(otherRange)) throw new NoOverlap(this, otherRange)
+  public overlap(withRange: DateRange): DateRange {
+    if (!this.overlaps(withRange)) throw new NoOverlap(this, withRange)
 
-    const overlapLowerBound = DateRangeBoundary.max(this.startDate, otherRange.startDate)
-    const overlapUpperBound = DateRangeBoundary.min(this.endDate, otherRange.endDate)
+    const {startDate: startA, endDate: endA} = this
+    const {startDate: startB, endDate: endB} = withRange
 
-    return new DateRange(overlapLowerBound.date, overlapUpperBound.date,
-      overlapLowerBound.inclusivity, overlapUpperBound.inclusivity)
+    return new DateRange(
+      WiseDate.max(startA, startB),
+      WiseDate.min(endA, endB)
+    )
   }
 
-  public diff(otherRange: DateRange): DateRange[] {
-    if(!this.overlaps(otherRange)) return []
-    return []
+  public diff(withRange: DateRange): DateRange[] {
+    if (!this.overlaps(withRange)) {
+      return [this]
+    }
+
+    const overlap = this.overlap(withRange)
+    const difference: DateRange[] = []
+    if (overlap.startDate.isAfter(this.startDate)) {
+      difference.push(new DateRange(this.startDate, overlap.startDate.subtract(1,'day')))
+    }
+
+    if (overlap.endDate.isBefore(this.endDate)) {
+      difference.push(new DateRange(overlap.endDate.add(1,'day'), this.endDate))
+    }
+
+    return difference
   }
 
-  private isSameOrBeforeEndDate(date: WiseDate) {
-    return this.endDate.isSameOrAfterDate(date)
+  public isSame(otherRange: DateRange): boolean {
+    return this.startDate.isSame(otherRange.startDate)
+      && this.endDate.isSame(otherRange.endDate)
   }
 
-  private isSameOrAfterStartDate(date: WiseDate) {
-    return this.startDate.isSameOrBeforeDate(date)
-  }
-
-  private getEffectiveStartDate(): WiseDate {
-    return isInclusive(this.startDate.inclusivity)
-      ? this.startDate.date
-      : this.startDate.date.add(1, 'day');
-  }
-
-  private getEffectiveEndDate(): WiseDate {
-    return isInclusive(this.endDate.inclusivity)
-      ? this.endDate.date.add(1, 'day')
-      : this.endDate.date;
+  public toString(): string {
+    const startInclusivity = this.startDate.isInfinity() ? `(` : '['
+    const endInclusivity = this.startDate.isInfinity() ? `)` : ']'
+    return startInclusivity + this.startDate.toString() + ', ' + this.endDate.toString() + endInclusivity
   }
 }

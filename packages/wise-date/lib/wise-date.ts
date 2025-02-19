@@ -4,7 +4,7 @@ import {DateUnit, DiffDateUnit, GetDateUnit, ReachableDateUnit} from "./units.js
 import {PlainDateObject} from "./plain-date-object.js";
 import {Month} from "./month.js";
 import customParseFormat from "dayjs/plugin/customParseFormat.js";
-import {Duration} from "./duration.js";
+
 dayjs.extend(customParseFormat)
 
 export class WiseDate {
@@ -13,13 +13,20 @@ export class WiseDate {
   }
 
   public static tomorrow(): WiseDate {
-    return new WiseDate(dayjs().add(1,'day'))
+    return new WiseDate(dayjs().add(1, 'day'))
   }
 
   public static yesterday(): WiseDate {
-    return new WiseDate(dayjs().subtract(1,'day'))
+    return new WiseDate(dayjs().subtract(1, 'day'))
   }
 
+  public static max(date: WiseDate, otherDate: WiseDate): WiseDate {
+    return date.isAfter(otherDate) ? date : otherDate
+  }
+
+  public static min(date: WiseDate, otherDate: WiseDate): WiseDate {
+    return date.isBefore(otherDate) ? date : otherDate
+  }
 
   private date: dayjs.Dayjs
 
@@ -37,30 +44,30 @@ export class WiseDate {
     input?: dayjs.Dayjs | string | Date | PlainDateObject,
     format: string = 'YYYY-MM-DD',
   ) {
-    if(input === undefined) {
+    if (input === undefined) {
       this.date = dayjs()
-    } else if(input instanceof Date) {
+    } else if (input instanceof Date) {
       this.date = dayjs(input)
-    } else if(dayjs.isDayjs(input)) {
+    } else if (dayjs.isDayjs(input)) {
       this.date = input.clone()
-    } else if (typeof input === 'string'){
+    } else if (typeof input === 'string') {
       this.date = dayjs(input, format, true)
     } else {
       this.date = dayjs(`${input.year}-${input.month}-${input.day}`, 'YYYY-M-D', true)
     }
 
-    if(!this.date.isValid()) {
+    if (!this.date.isValid()) {
       throw new InvalidDate(this)
     }
     this.date = this.date.startOf('day')
   }
 
-  public isSame(otherDate: WiseDate, unit?: DateUnit): boolean {
+  public isSame(otherDate: WiseDate, unit: DateUnit = 'day'): boolean {
     return this.date.isSame(otherDate.date, unit)
   }
 
-  public isAfter(otherDate: WiseDate, unit?: DateUnit): boolean {
-    if(otherDate.isFutureInfinity()){
+  public isAfter(otherDate: WiseDate, unit: DateUnit = 'day'): boolean {
+    if (otherDate.isFutureInfinity()) {
       return false
     } else if (otherDate.isPastInfinity()) {
       return true
@@ -69,21 +76,21 @@ export class WiseDate {
     }
   }
 
-  public isSameOrAfter(otherDate: WiseDate, unit?: DateUnit): boolean {
+  public isSameOrAfter(otherDate: WiseDate, unit: DateUnit = 'day'): boolean {
     return this.isAfter(otherDate, unit) || this.isSame(otherDate, unit)
   }
 
   public isBefore(otherDate: WiseDate, unit?: DateUnit): boolean {
-    if(otherDate.isPastInfinity()) {
+    if (otherDate.isPastInfinity()) {
       return false
     } else if (otherDate.isFutureInfinity()) {
       return true
     } else {
-       return this.date.isBefore(otherDate.date, unit)
+      return this.date.isBefore(otherDate.date, unit)
     }
   }
 
-  public isSameOrBefore(otherDate: WiseDate, unit?: DateUnit): boolean {
+  public isSameOrBefore(otherDate: WiseDate, unit: DateUnit = 'day'): boolean {
     return this.isBefore(otherDate, unit) || this.isSame(otherDate, unit)
   }
 
@@ -92,7 +99,7 @@ export class WiseDate {
   }
 
   public endOf(unit: ReachableDateUnit): WiseDate {
-    return new WiseDate(this.date.startOf(unit))
+    return new WiseDate(this.date.endOf(unit))
   }
 
   public get year(): number {
@@ -127,36 +134,20 @@ export class WiseDate {
     return this.date.isYesterday()
   }
 
-  public add(duration: Duration)
-  public add(amount: number, unit: DateUnit)
-  public add(input: Duration | number, unit?: DateUnit): WiseDate {
-    if(input instanceof Duration) {
-      return new WiseDate(this.date.add(input.toDayjsDuration()))
-    } else {
-      return new WiseDate(this.date.add(input,unit))
-    }
+  public add(amount: number, unit: DateUnit): WiseDate {
+    return new WiseDate(this.date.add(amount, unit))
   }
 
-  public subtract(duration: Duration)
-  public subtract(amount: number, unit: DateUnit)
-  public subtract(input: Duration | number, unit?: DateUnit): WiseDate {
-    if(input instanceof Duration) {
-      return new WiseDate(this.date.subtract(input.toDayjsDuration()))
-    } else {
-      return new WiseDate(this.date.subtract(input,unit))
-    }
+  public subtract(amount: number, unit: DateUnit): WiseDate {
+    return new WiseDate(this.date.subtract(amount, unit))
   }
 
   public diff(withOther: WiseDate, unit: DiffDateUnit, precise = false): number {
-    if(withOther.isFutureInfinity() || withOther.isPastInfinity()) {
+    if (withOther.isFutureInfinity() || withOther.isPastInfinity()) {
       return Infinity
     } else {
-      return this.date.diff(withOther.date,unit, precise)
+      return this.date.diff(withOther.date, unit, precise)
     }
-  }
-
-  public duration(betweenOther: WiseDate): Duration {
-    return new Duration(dayjs.duration(this.date.diff(betweenOther.date)))
   }
 
   /**
