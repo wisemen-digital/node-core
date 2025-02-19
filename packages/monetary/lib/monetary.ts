@@ -52,8 +52,12 @@ export class Monetary<C extends string, P extends number> {
     return `${this.valueOf().toFixed(this.precision)} ${this.currency}`
   }
 
-  export (): MonetaryDto {
-    return new MonetaryDto(this.round())
+  export (): MonetaryObject<C, P> {
+    return {
+      amount: this.amount,
+      currency: this.currency,
+      precision: this.precision
+    }
   }
 }
 
