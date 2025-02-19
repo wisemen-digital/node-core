@@ -27,7 +27,8 @@
   "devDependencies": {
     "@types/node": "^20.17.10",
     "expect": "^29.7.0",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "release-it": "^18.1.2"
   },
   "author": "Maarten Sijmkens",
   "license": "GPL",
