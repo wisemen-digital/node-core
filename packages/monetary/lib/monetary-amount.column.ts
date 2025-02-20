@@ -5,7 +5,7 @@ import { PrecisionLossError } from './precision-loss-error.js'
 
 export type MonetaryAmountColumnOptions = {
   currency: Currency,
-  precision: number
+  monetaryPrecision: number
 } & Omit<ColumnOptions, 'type' | 'transformer'>
 
 
@@ -14,7 +14,7 @@ export function MonetaryAmountColumn(options: MonetaryAmountColumnOptions): Prop
   return Column({
     ...options,
     type: 'int',
-    transformer: new MoneyTypeOrmAmountTransformer(options.currency, options.precision)
+    transformer: new MoneyTypeOrmAmountTransformer(options.currency, options.monetaryPrecision)
   })
 }
 
