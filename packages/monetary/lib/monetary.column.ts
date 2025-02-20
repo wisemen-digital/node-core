@@ -4,7 +4,6 @@ import { Currency } from './currency.enum.js'
 import { PrecisionLossError } from './precision-loss-error.js'
 
 export type EmbeddedMonetaryOptions = {
-  storeCurrencyName: true
   currencyPrecisions?: Record<Currency, number>
   defaultPrecision: number
 } & Omit<ColumnOptions, 'type' | 'transformer'>

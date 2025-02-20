@@ -4,7 +4,6 @@ import { Currency } from './currency.enum.js'
 import { PrecisionLossError } from './precision-loss-error.js'
 
 export type MonetaryAmountColumnOptions = {
-  storeCurrencyName: false,
   currency: Currency,
   precision: number
 } & Omit<ColumnOptions, 'type' | 'transformer'>
