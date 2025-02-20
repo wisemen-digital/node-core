@@ -1,6 +1,7 @@
 import { Column, ColumnOptions } from 'typeorm'
 import { Monetary } from './monetary.js'
 import { Currency } from './currency.enum.js'
+import { PrecisionLossError } from './precision-loss-error.js'
 
 type AmountColumnOptions = {
   storeCurrencyName: false,
@@ -40,6 +41,10 @@ export class MoneyTypeOrmAmountTransformer {
   to(monetary: Monetary | null): number | null {
     if (monetary === null) {
       return null
+    }
+
+    if(monetary.precision > this.precision) {
+      throw new PrecisionLossError()
     }
 
     if (!monetary.isRounded()) {

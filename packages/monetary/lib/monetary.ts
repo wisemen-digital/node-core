@@ -66,7 +66,7 @@ export class Monetary<C extends Currency = Currency> {
 
   /**
    * Change the precision of the monetary value
-   * @pre precision is only allowed to increase
+   * @post Does not round, ceil nor floor the resulting amount
    */
   toPrecision(newPrecision: number): Monetary<C> {
     return new Monetary(this.adjustAmountToPrecision(newPrecision), this.currency, newPrecision )
@@ -105,10 +105,6 @@ export class Monetary<C extends Currency = Currency> {
   }
 
   private adjustAmountToPrecision(precision: number): number {
-    if(precision < this.precision) {
-      throw new PrecisionLossError()
-    }
-
     const scaleDifference = precision - this.precision
     return this.amount * (10 ** scaleDifference)
   }

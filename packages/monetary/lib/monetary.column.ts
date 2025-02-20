@@ -1,6 +1,7 @@
 import { Column, ColumnOptions } from 'typeorm'
 import { Monetary } from './monetary.js'
 import { Currency } from './currency.enum.js'
+import { PrecisionLossError } from './precision-loss-error.js'
 
 type EmbeddedMonetaryOptions = {
   storeCurrencyName: true
@@ -59,6 +60,11 @@ export class MoneyTypeOrmTransformer {
     }
 
     const precision = this.getPrecisionFor(monetary.currency)
+    if(precision > monetary.precision) {
+      throw new PrecisionLossError()
+    }
+
+
     const normalizedMonetary = monetary.toPrecision(precision)
     return {
       amount: normalizedMonetary.amount,
