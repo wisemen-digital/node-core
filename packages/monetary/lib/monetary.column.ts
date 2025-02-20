@@ -3,7 +3,7 @@ import { Monetary } from './monetary.js'
 import { Currency } from './currency.enum.js'
 import { PrecisionLossError } from './precision-loss-error.js'
 
-type EmbeddedMonetaryOptions = {
+export type EmbeddedMonetaryOptions = {
   storeCurrencyName: true
   currencyPrecisions?: Record<Currency, number>
   defaultPrecision: number

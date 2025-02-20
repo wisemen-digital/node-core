@@ -3,7 +3,7 @@ import { Monetary } from './monetary.js'
 import { Currency } from './currency.enum.js'
 import { PrecisionLossError } from './precision-loss-error.js'
 
-type AmountColumnOptions = {
+export type MonetaryAmountColumnOptions = {
   storeCurrencyName: false,
   currency: Currency,
   precision: number
@@ -11,7 +11,7 @@ type AmountColumnOptions = {
 
 
 /** Stores the amount as an int */
-export function MonetaryAmountColumn(options: AmountColumnOptions): PropertyDecorator {
+export function MonetaryAmountColumn(options: MonetaryAmountColumnOptions): PropertyDecorator {
   return Column({
     ...options,
     type: 'int',
