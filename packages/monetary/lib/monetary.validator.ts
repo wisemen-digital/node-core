@@ -1,5 +1,5 @@
 import { IsObject, ValidateBy, ValidateNested, ValidatorConstraintInterface } from "class-validator";
-import { Type } from "class-transformer";
+import { plainToInstance, Transform, TransformFnParams, Type } from 'class-transformer'
 import { applyDecorators } from "@nestjs/common";
 import { MonetaryDto } from "./monetary.dto.js";
 import { Currency } from './currency.enum.js'
@@ -12,9 +12,9 @@ export interface IsMonetaryOptions {
 
 export function IsMonetary(options?: IsMonetaryOptions): PropertyDecorator {
   return applyDecorators(
-    Type(() => MonetaryDto),
     IsObject(),
     ValidateNested(),
+    Type(() => MonetaryDto),
     ValidateBy({
       name: 'IsMonetaryCurrency',
       validator: new IsMonetaryCurrencyValidator(options?.allowedCurrencies),
@@ -47,19 +47,19 @@ class IsMonetaryPrecisionValidator implements ValidatorConstraintInterface {
   ) {}
 
   validate (monetaryDto: object): boolean {
-    if(!Object.hasOwn(monetaryDto,'amount')) {
+    if(!Object.hasOwn(monetaryDto,'precision')) {
       return false
     }
 
-    if(typeof (monetaryDto as {amount: unknown}) !== 'number'){
+    if(typeof (monetaryDto as {precision: unknown}).precision !== 'number'){
       return false
     }
 
-    return (monetaryDto as {amount: number}).amount <= this.maxPrecision
+    return (monetaryDto as {precision: number}).precision <= this.maxPrecision
   }
 
   defaultMessage (validationArguments?: ValidationArguments): string {
-    return `Monetary precision ${validationArguments?.value} must be <= ${this.maxPrecision}`
+    return `Monetary precision ${validationArguments?.value?.precision} must be <= ${this.maxPrecision}`
   }
 }
 
