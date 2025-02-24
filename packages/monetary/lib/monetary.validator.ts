@@ -12,9 +12,9 @@ export interface IsMonetaryOptions {
 
 export function IsMonetary(options?: IsMonetaryOptions): PropertyDecorator {
   return applyDecorators(
+    Type(() => MonetaryDto),
     IsObject(),
     ValidateNested(),
-    Type(() => MonetaryDto),
     ValidateBy({
       name: 'IsMonetaryCurrency',
       validator: new IsMonetaryCurrencyValidator(options?.allowedCurrencies),
@@ -46,8 +46,16 @@ class IsMonetaryPrecisionValidator implements ValidatorConstraintInterface {
     private maxPrecision: number
   ) {}
 
-  validate (monetaryDto: MonetaryDto): boolean {
-    return monetaryDto.amount <= this.maxPrecision
+  validate (monetaryDto: object): boolean {
+    if(!Object.hasOwn(monetaryDto,'amount')) {
+      return false
+    }
+
+    if(typeof (monetaryDto as {amount: unknown}) !== 'number'){
+      return false
+    }
+
+    return (monetaryDto as {amount: number}).amount <= this.maxPrecision
   }
 
   defaultMessage (validationArguments?: ValidationArguments): string {
