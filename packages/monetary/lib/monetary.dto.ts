@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { IsEnum, IsInt } from 'class-validator'
 import { Currency, CurrencyApiProperty } from './currency.enum.js'
+import { Monetary } from './monetary.js'
 
 export class MonetaryDto {
   @ApiProperty({ type: 'integer', example: 499 })
@@ -14,6 +15,14 @@ export class MonetaryDto {
   @ApiProperty({ type: 'integer', example: 2 })
   @IsInt()
   precision: number
+
+  static from(monetary: Monetary): MonetaryDto {
+    return new MonetaryDtoBuilder()
+      .withAmount(monetary.amount)
+      .withCurrency(monetary.currency)
+      .withPrecision(monetary.precision)
+      .build()
+  }
 }
 
 export class MonetaryDtoBuilder {
