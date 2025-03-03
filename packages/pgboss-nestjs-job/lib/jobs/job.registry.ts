@@ -4,7 +4,8 @@
 import { Injectable, OnModuleInit, Logger } from '@nestjs/common'
 import { DiscoveryService, Reflector } from '@nestjs/core'
 import { PGBOSS_JOB_HANDLER } from './job.decorator.js'
-import { BaseJobData, JobHandler } from './base-job.js'
+import { BaseJobData } from './base-job.js'
+import { JobHandler } from './job-handler.js'
 
 @Injectable()
 export class JobRegistry implements OnModuleInit {
@@ -25,7 +26,6 @@ export class JobRegistry implements OnModuleInit {
       if (instance == null) continue
 
       const jobName = this.reflector.get<string>(PGBOSS_JOB_HANDLER, instance.constructor)
-      // const queueName = this.reflector.get<string>(PGBOSS_QUEUE_NAME, instance.constructor)
 
       if (jobName) {
         if (!(instance.run instanceof Function)) {
@@ -38,7 +38,7 @@ export class JobRegistry implements OnModuleInit {
     }
   }
 
-  get (jobName: string): JobHandler<BaseJobData> {
+  get (jobName: string): JobHandler {
     const handler = this.handlers.get(jobName)
 
     if (!handler) {
