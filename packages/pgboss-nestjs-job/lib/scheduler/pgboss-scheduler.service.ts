@@ -4,7 +4,7 @@ import { EntityManager } from 'typeorm'
 import { createTransactionManagerProxy, InjectEntityManager } from '@wisemen/nestjs-typeorm'
 import { Reflector } from '@nestjs/core'
 import { PgBossClient } from '../client/pgboss-client.js'
-import { BaseJobConfig, BaseJobData } from '../jobs/job.abstract.js'
+import { BaseJob, BaseJobData } from '../jobs/base-job.js'
 import { PGBOSS_JOB_HANDLER, PGBOSS_QUEUE_NAME } from '../jobs/job.decorator.js'
 
 @Injectable()
@@ -19,7 +19,7 @@ export class PgBossScheduler {
     this.manager = createTransactionManagerProxy(entityManager)
   }
 
-  async scheduleJob<S extends BaseJobData, T extends BaseJobConfig<S>>(
+  async scheduleJob<S extends BaseJobData, T extends BaseJob<S>>(
     handler: T
   ): Promise<void> {
     const queue = this.reflector.get<string>(PGBOSS_QUEUE_NAME, handler.constructor)

@@ -1,4 +1,4 @@
-import { BaseJobData } from './job.abstract.js'
+import { BaseJobData } from './base-job.js'
 
 export interface JobSerialization<T extends BaseJobData = never> {
   className: string

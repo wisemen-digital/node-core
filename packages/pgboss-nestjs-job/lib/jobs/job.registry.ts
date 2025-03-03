@@ -4,12 +4,12 @@
 import { Injectable, OnModuleInit, Logger } from '@nestjs/common'
 import { DiscoveryService, Reflector } from '@nestjs/core'
 import { PGBOSS_JOB_HANDLER } from './job.decorator.js'
-import { BaseJobData, BaseJobHandler } from './job.abstract.js'
+import { BaseJobData, JobHandler } from './base-job.js'
 
 @Injectable()
 export class JobRegistry implements OnModuleInit {
   private readonly logger = new Logger(JobRegistry.name)
-  private handlers = new Map<string, BaseJobHandler>()
+  private handlers = new Map<string, JobHandler>()
 
   constructor (
     private readonly discoveryService: DiscoveryService,
@@ -33,12 +33,12 @@ export class JobRegistry implements OnModuleInit {
         }
 
         this.logger.log(`Registering job handler: ${jobName}`)
-        this.handlers.set(jobName, instance as BaseJobHandler)
+        this.handlers.set(jobName, instance as JobHandler)
       }
     }
   }
 
-  get (jobName: string): BaseJobHandler<BaseJobData> {
+  get (jobName: string): JobHandler<BaseJobData> {
     const handler = this.handlers.get(jobName)
 
     if (!handler) {

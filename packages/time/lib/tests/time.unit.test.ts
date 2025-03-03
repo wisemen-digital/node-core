@@ -376,7 +376,7 @@ describe('Time class', () => {
     })
 
     it('Time same as lower boundary between an exclusive lowerbound and inclusive upperbound returns false', () => {
-      const lowerBound = new Time('00:00:00')
+      const lowerBound = new Time('00is:00:00')
       const upperBound = new Time('23:59:59')
       const time = new Time('00:00:00')
 

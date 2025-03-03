@@ -1,13 +1,13 @@
 import { SetMetadata } from '@nestjs/common'
-import { BaseJobConfig, BaseJobData } from './job.abstract.js'
+import { BaseJob, BaseJobData } from './base-job.js'
 
 export const PGBOSS_JOB_HANDLER = 'PGBOSS_JOB_HANDLER'
 export const PGBOSS_QUEUE_NAME = 'PGBOSS_QUEUE_NAME'
 
-type ConfigConstructor<S extends BaseJobData, T extends BaseJobConfig<S>>
+type ConfigConstructor<S extends BaseJobData, T extends BaseJob<S>>
   = new (...args: unknown[]) => T
 
-export function PgBossJobHandler<S extends BaseJobData, T extends BaseJobConfig<S>> (
+export function PgBossJobHandler<S extends BaseJobData, T extends BaseJob<S>> (
   config: ConfigConstructor<S, T>
 ): ClassDecorator {
   return (target) => {
