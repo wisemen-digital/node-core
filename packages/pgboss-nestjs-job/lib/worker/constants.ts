@@ -1,4 +1,5 @@
 import PgBoss from 'pg-boss'
-import { JobSerialization } from '../jobs/job-serialization.type.js'
+import { SerializedJob } from '../jobs/serialized-job.js'
 
-export type RawPgBossJob = PgBoss.Job<JobSerialization>
+export type RawPgBossJobData = Exclude<SerializedJob['data'], undefined>
+export type RawPgBossJob = PgBoss.Job<RawPgBossJobData>

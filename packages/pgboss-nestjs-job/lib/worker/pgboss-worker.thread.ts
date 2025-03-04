@@ -25,9 +25,7 @@ export class PgBossWorkerThread {
     }
   }
 
-  private async handleJob (
-    job: RawPgBossJob
-  ): Promise<unknown> {
+  private async handleJob (job: RawPgBossJob): Promise<unknown> {
     const startedAt = Date.now()
 
     try {

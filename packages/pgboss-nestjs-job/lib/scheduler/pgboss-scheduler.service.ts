@@ -1,11 +1,13 @@
 import { Injectable } from '@nestjs/common'
-import { ConnectionOptions, JobInsert } from 'pg-boss'
+import { ConnectionOptions } from 'pg-boss'
 import { EntityManager } from 'typeorm'
 import { createTransactionManagerProxy, InjectEntityManager } from '@wisemen/nestjs-typeorm'
 import { Reflector } from '@nestjs/core'
 import { PgBossClient } from '../client/pgboss-client.js'
-import { BaseJob, BaseJobData } from '../jobs/base-job.js'
+import { BaseJob } from '../jobs/base-job.js'
 import { PGBOSS_JOB_HANDLER, PGBOSS_QUEUE_NAME } from '../jobs/job.decorator.js'
+import { SerializedJob } from '../jobs/serialized-job.js'
+
 
 @Injectable()
 export class PgBossScheduler {
@@ -19,27 +21,30 @@ export class PgBossScheduler {
     this.manager = createTransactionManagerProxy(entityManager)
   }
 
-  async scheduleJob<S extends BaseJobData, T extends BaseJob<S>>(
-    handler: T
-  ): Promise<void> {
-    const queue = this.reflector.get<string>(PGBOSS_QUEUE_NAME, handler.constructor)
-    const className = this.reflector.get<string>(PGBOSS_JOB_HANDLER, handler.constructor)
-
-    const job: JobInsert<S> | JobInsert = {
-      name: queue,
-      data: {
-        className,
-        classData: handler.data
-      },
-      singletonKey: handler.uniqueBy?.(handler.data)
-    }
-
+  async scheduleJob<T extends BaseJob>(job: T): Promise<void> {
     await this.scheduleJobs([job])
   }
 
-  private async scheduleJobs <T extends object> (
-    jobs: JobInsert<T>[] | JobInsert[]
-  ): Promise<void> {
+  async scheduleJobs<T extends BaseJob>(jobs: T[]): Promise<void> {
+    const serializedJobs = jobs.map(job => this.serializeJob(job))
+    await this.insertJobs(serializedJobs)
+  }
+
+  private serializeJob<T extends BaseJob>(job: T): SerializedJob<T> {
+    const queue = this.reflector.get<string>(PGBOSS_QUEUE_NAME, job.constructor)
+    const className = this.reflector.get<string>(PGBOSS_JOB_HANDLER, job.constructor)
+
+    return {
+      name: queue,
+      data: {
+        className,
+        classData: job.data
+      },
+      singletonKey: job.uniqueBy?.(job.data)
+    }
+  }
+
+  private async insertJobs <T extends BaseJob> (jobs: SerializedJob<T>[]): Promise<void> {
     const manager = this.manager
 
     const options: ConnectionOptions = {
