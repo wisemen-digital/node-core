@@ -1,11 +1,11 @@
 import { Inject, Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common'
 import { captureError } from 'rxjs/internal/util/errorContext'
-import { JobSerialization } from '../jobs/job-serialization.type.js'
 import { PgBossClient } from '../client/pgboss-client.js'
 import { JobRegistry } from '../jobs/job.registry.js'
 import { PgBossWorkerConfig } from './pgboss-worker.config.js'
 import { PgBossWorkerThread } from './pgboss-worker.thread.js'
-import { RawPgBossJob } from './constants.js'
+import { RawPgBossJob, RawPgBossJobData } from './constants.js'
+import { SerializedJob } from '../jobs/serialized-job.js'
 
 @Injectable()
 export class PgBossWorker implements OnModuleInit, OnModuleDestroy {
@@ -83,7 +83,7 @@ export class PgBossWorker implements OnModuleInit, OnModuleDestroy {
     }
 
     this.jobFetchingPromise = new Promise((resolve, reject) => {
-      void this.client.fetch<JobSerialization>(
+      void this.client.fetch<RawPgBossJobData>(
         this.queueName,
         { batchSize: this.batchSize }
       )
