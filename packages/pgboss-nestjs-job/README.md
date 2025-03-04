@@ -43,7 +43,7 @@ export interface MyJobData extends BaseJobData {
 
 ```
 @PgBossJob('queue-name')
-export class MyJob extends BaseJobConfig<MyJobData> {}
+export class MyJob extends BaseJob<MyJobData> {}
 ```
 
 4. Create a job handler (make sure to provide it)
@@ -51,7 +51,7 @@ export class MyJob extends BaseJobConfig<MyJobData> {}
 ```
 @Injectable()
 @PgBossJobHandler(MyJob)
-export class MyJobHandler extends BaseJobHandler<MyJobData> {
+export class MyJobHandler extends JobHandler<MyJob> {
   public async run (data: MyJobData): Promise<void> {
     // Do stuff
   }
