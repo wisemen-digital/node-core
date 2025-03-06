@@ -1,7 +1,7 @@
 export * from './monetary.js'
 export * from './monetary.dto.js'
 export { MonetaryColumn, EmbeddedMonetaryOptions } from './monetary.column.js'
-export { MonetaryAmountColumn, MonetaryAmountColumnOptions  } from './monetary-amount.column.js'
+export { MonetaryAmountColumn, MonetaryAmountColumnOptions } from './monetary-amount.column.js'
 export * from './monetary.object.js'
 export * from './monetary.validator.js'
 export * from './currency.enum.js'

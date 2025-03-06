@@ -14,6 +14,7 @@
     "build": "tsc",
     "pretest": "npm run clean && npm run build",
     "test": "node --test",
+    "lint": "eslint --cache",
     "prerelease": "npm run build",
     "release": "release-it"
   },
@@ -28,7 +29,11 @@
     "@types/node": "^20.17.10",
     "expect": "^29.7.0",
     "release-it": "^18.1.2",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "@stylistic/eslint-plugin": "^2.8.0",
+    "@typescript-eslint/eslint-plugin": "^8.8.0",
+    "@wisemen/eslint-config-nestjs": "^0.1.6",
+    "eslint": "^9.21.0"
   },
   "author": "Maarten Sijmkens",
   "license": "GPL",

@@ -1,6 +1,6 @@
-import { MonetaryObject } from "./monetary.object.js"
-import { Currency } from './currency.enum.js'
 import assert from 'node:assert'
+import { MonetaryObject } from './monetary.object.js'
+import { Currency } from './currency.enum.js'
 import { IllegalMonetaryOperationError } from './illegal-monetary-operation.error.js'
 
 export class Monetary<C extends Currency = Currency> {
@@ -8,9 +8,9 @@ export class Monetary<C extends Currency = Currency> {
   readonly amount: number
   readonly precision: number
 
-  constructor(object: MonetaryObject<C>)
-  constructor(amount: number, currency: C, precision: number)
-  constructor(
+  constructor (object: MonetaryObject<C>)
+  constructor (amount: number, currency: C, precision: number)
+  constructor (
     objectOrAmount: MonetaryObject<C> | number,
     currency?: C,
     precision?: number
@@ -25,8 +25,8 @@ export class Monetary<C extends Currency = Currency> {
       this.precision = precision!
     }
 
-    if(!Number.isInteger(this.precision)) {
-      throw new Error("precision must be an integer")
+    if (!Number.isInteger(this.precision)) {
+      throw new Error('precision must be an integer')
     }
   }
 
@@ -41,6 +41,7 @@ export class Monetary<C extends Currency = Currency> {
   /** Creates a new Monetary with the highest precision and sum of both amounts */
   add (other: Monetary<C>): Monetary<C> {
     assert(this.currency === other.currency, new IllegalMonetaryOperationError())
+
     const highestPrecision = Math.max(this.precision, other.precision)
     const thisAmount = this.adjustAmountToPrecision(highestPrecision)
     const otherAmount = other.adjustAmountToPrecision(highestPrecision)
@@ -51,6 +52,7 @@ export class Monetary<C extends Currency = Currency> {
   /** Creates a new Monetary with the highest precision and difference of both amounts */
   subtract (other: Monetary<C>): Monetary<C> {
     assert(this.currency === other.currency, new IllegalMonetaryOperationError())
+
     const highestPrecision = Math.max(this.precision, other.precision)
     const thisAmount = this.adjustAmountToPrecision(highestPrecision)
     const otherAmount = other.adjustAmountToPrecision(highestPrecision)
@@ -67,12 +69,12 @@ export class Monetary<C extends Currency = Currency> {
    * Change the precision of the monetary value
    * @post Does not round, ceil nor floor the resulting amount
    */
-  toPrecision(newPrecision: number): Monetary<C> {
-    return new Monetary(this.adjustAmountToPrecision(newPrecision), this.currency, newPrecision )
+  toPrecision (newPrecision: number): Monetary<C> {
+    return new Monetary(this.adjustAmountToPrecision(newPrecision), this.currency, newPrecision)
   }
 
   /** Ceils the amount to the nearest integer for the current precision */
-  ceil(): Monetary<C> {
+  ceil (): Monetary<C> {
     return new Monetary<C>(Math.ceil(this.amount), this.currency, this.precision)
   }
 
@@ -82,12 +84,12 @@ export class Monetary<C extends Currency = Currency> {
   }
 
   /** Floors the amount to the nearest integer for the current precision */
-  floor(): Monetary<C> {
+  floor (): Monetary<C> {
     return new Monetary<C>(Math.floor(this.amount), this.currency, this.precision)
   }
 
   /** Checks whether the amount is an integer */
-  isRounded(): boolean {
+  isRounded (): boolean {
     return Number.isInteger(this.amount)
   }
 
@@ -103,9 +105,9 @@ export class Monetary<C extends Currency = Currency> {
     }
   }
 
-  private adjustAmountToPrecision(precision: number): number {
+  private adjustAmountToPrecision (precision: number): number {
     const scaleDifference = precision - this.precision
+
     return this.amount * (10 ** scaleDifference)
   }
 }
-
