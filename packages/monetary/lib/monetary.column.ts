@@ -8,9 +8,8 @@ export type EmbeddedMonetaryOptions = {
   defaultPrecision: number
 } & Omit<ColumnOptions, 'type' | 'transformer'>
 
-
 /** Stores the amount and currency as jsonb */
-export function MonetaryColumn(options: EmbeddedMonetaryOptions): PropertyDecorator {
+export function MonetaryColumn (options: EmbeddedMonetaryOptions): PropertyDecorator {
   return Column({
     ...options,
     type: 'jsonb',
@@ -19,7 +18,6 @@ export function MonetaryColumn(options: EmbeddedMonetaryOptions): PropertyDecora
       options.currencyPrecisions ?? {} as Record<Currency, number>
     )
   })
-
 }
 
 export interface EmbeddedMonetary {
@@ -28,7 +26,7 @@ export interface EmbeddedMonetary {
 }
 
 export class MoneyTypeOrmTransformer {
-  public constructor(
+  public constructor (
     private readonly defaultPrecision: number,
     private readonly currencyPrecision: Record<Currency, number>
   ) {
@@ -40,38 +38,40 @@ export class MoneyTypeOrmTransformer {
     }
   }
 
-  from(monetary: EmbeddedMonetary | null): Monetary | null {
+  from (monetary: EmbeddedMonetary | null): Monetary | null {
     if (monetary === null) {
       return null
     }
 
     const precision = this.getPrecisionFor(monetary.currency)
+
     return new Monetary(monetary.amount, monetary.currency, precision)
   }
 
-  to(monetary: Monetary | null): EmbeddedMonetary | null {
+  to (monetary: Monetary | null): EmbeddedMonetary | null {
     if (monetary === null) {
       return null
     }
 
-    if (!monetary.isRounded()) {
-      throw new Error('Attempting to store a non rounded monetary value!')
-    }
-
     const precision = this.getPrecisionFor(monetary.currency)
-    if(precision > monetary.precision) {
+
+    if (precision > monetary.precision) {
       throw new PrecisionLossError()
     }
 
-
     const normalizedMonetary = monetary.toPrecision(precision)
+
+    if (!normalizedMonetary.isRounded()) {
+      throw new Error('Attempting to store a non rounded monetary value!')
+    }
+
     return {
       amount: normalizedMonetary.amount,
       currency: normalizedMonetary.currency
     }
   }
 
-  private getPrecisionFor(currency: Currency) {
+  private getPrecisionFor (currency: Currency) {
     return this.currencyPrecision[currency] ?? this.defaultPrecision
   }
 }

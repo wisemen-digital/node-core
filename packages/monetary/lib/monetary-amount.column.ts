@@ -2,15 +2,15 @@ import { Column, ColumnOptions } from 'typeorm'
 import { Monetary } from './monetary.js'
 import { Currency } from './currency.enum.js'
 import { PrecisionLossError } from './precision-loss-error.js'
+import { UnsupportedCurrencyError } from './unsupported-currency-error.js'
 
 export type MonetaryAmountColumnOptions = {
-  currency: Currency,
+  currency: Currency
   monetaryPrecision: number
 } & Omit<ColumnOptions, 'type' | 'transformer'>
 
-
 /** Stores the amount as an int */
-export function MonetaryAmountColumn(options: MonetaryAmountColumnOptions): PropertyDecorator {
+export function MonetaryAmountColumn (options: MonetaryAmountColumnOptions): PropertyDecorator {
   return Column({
     ...options,
     type: 'int',
@@ -18,9 +18,8 @@ export function MonetaryAmountColumn(options: MonetaryAmountColumnOptions): Prop
   })
 }
 
-
 export class MoneyTypeOrmAmountTransformer {
-  public constructor(
+  public constructor (
     private readonly currency: Currency,
     private readonly precision: number
   ) {
@@ -29,7 +28,7 @@ export class MoneyTypeOrmAmountTransformer {
     }
   }
 
-  from(amount: number | null): Monetary | null {
+  from (amount: number | null): Monetary | null {
     if (amount === null) {
       return null
     }
@@ -37,19 +36,25 @@ export class MoneyTypeOrmAmountTransformer {
     return new Monetary(amount, this.currency, this.precision)
   }
 
-  to(monetary: Monetary | null): number | null {
+  to (monetary: Monetary | null): number | null {
     if (monetary === null) {
       return null
     }
 
-    if(monetary.precision > this.precision) {
+    if (monetary.currency !== this.currency) {
+      throw new UnsupportedCurrencyError(monetary.currency)
+    }
+
+    if (monetary.precision > this.precision) {
       throw new PrecisionLossError()
     }
 
-    if (!monetary.isRounded()) {
+    const normalizedAmount = monetary.toPrecision(this.precision)
+
+    if (!normalizedAmount.isRounded()) {
       throw new Error('Attempting to store a non rounded monetary value!')
     }
 
-    return monetary.toPrecision(this.precision).amount
+    return normalizedAmount.amount
   }
 }
