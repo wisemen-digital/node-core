@@ -8,7 +8,6 @@
     "dist/"
   ],
   "scripts": {
-    "lint": "eslint lib",
     "prebuild": "rm -rf ./dist",
     "clean": "rm -rf ./dist",
     "build": "tsc",
@@ -36,6 +35,7 @@
     "eslint": "^9.21.0"
   },
   "author": "Maarten Sijmkens",
+  "contributors": ["Kobe Kwanten"],
   "license": "GPL",
   "repository": {
     "type": "git",

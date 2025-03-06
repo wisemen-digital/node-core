@@ -2,6 +2,7 @@ import { Column, ColumnOptions } from 'typeorm'
 import { Monetary } from './monetary.js'
 import { Currency } from './currency.enum.js'
 import { PrecisionLossError } from './precision-loss-error.js'
+import { UnsupportedCurrencyError } from './unsupported-currency-error.js'
 
 export type MonetaryAmountColumnOptions = {
   currency: Currency
@@ -38,6 +39,10 @@ export class MoneyTypeOrmAmountTransformer {
   to (monetary: Monetary | null): number | null {
     if (monetary === null) {
       return null
+    }
+
+    if (monetary.currency !== this.currency) {
+      throw new UnsupportedCurrencyError(monetary.currency)
     }
 
     if (monetary.precision > this.precision) {

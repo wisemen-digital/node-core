@@ -66,4 +66,24 @@ describe('Monetary class', () => {
       expect(r).toBe('3.5000 USD')
     })
   })
+
+  describe('Monetary rounding', () => {
+    it('rounds values as expected', () => {
+      const price = new Monetary({
+        amount: 1000,
+        currency: Currency.EUR,
+        precision: 2
+      })
+
+      expect(price.isRounded()).toBe(true)
+
+      const discountedPrice = price.multiply(0.9999)
+
+      expect(discountedPrice.isRounded()).toBe(false)
+
+      expect(discountedPrice.round().amount).toBe(1000) // -> 10 euros
+      expect(discountedPrice.floor().amount).toBe(999) // -> 9.99 euros
+      expect(discountedPrice.ceil().amount).toBe(1000)// -> 10 euros
+    })
+  })
 })
