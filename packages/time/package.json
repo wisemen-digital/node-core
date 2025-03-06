@@ -27,6 +27,9 @@
     "typescript": "^5.0.4"
   },
   "author": "Kobe Kwanten",
+  "contributors": [
+    "Jonas Vannieuwenhuijsen"
+  ],
   "license": "GPL",
   "repository": {
     "type": "git",
