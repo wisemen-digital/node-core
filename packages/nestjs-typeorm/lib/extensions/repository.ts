@@ -1,4 +1,4 @@
-import { type EntityManager, type EntityTarget, FindOneOptions, FindOptionsWhere, ObjectLiteral, Repository } from 'typeorm'
+import { type EntityManager, type EntityTarget, FindOneOptions, FindOptionsOrder, FindOptionsOrderValue, FindOptionsWhere, MoreThan, ObjectLiteral, Repository } from 'typeorm'
 import { createTransactionManagerProxy } from './transaction.js'
 
 export class TypeOrmRepository<T extends ObjectLiteral> extends Repository <T> {
@@ -6,24 +6,41 @@ export class TypeOrmRepository<T extends ObjectLiteral> extends Repository <T> {
     super(entity, createTransactionManagerProxy(manager))
   }
 
-  async* findInBatches (
+  async *findInBatches(
     options: FindOneOptions<T>,
-    batchSize: number
+    batchSize: number,
+    primaryKeyOrder: FindOptionsOrderValue = 'ASC'
   ): AsyncGenerator<T[], void, void> {
-    let entities: T[] = []
-    let page = 0
+    const primaryColumns = this.metadata.primaryColumns;
 
+    if (primaryColumns.length !== 1) {
+      throw new Error("findInBatches only supports entities with a single primary column");
+    }
+
+    const primaryKey = primaryColumns[0].propertyName
+
+    let lastKey: any | undefined = undefined;
+    let entities: T[] = [];
+  
     do {
+      const where = lastKey
+        ? { ...options.where, [primaryKey]: MoreThan(lastKey) }
+        : options.where;
+      const order = { ...options.order, [primaryKey]: primaryKeyOrder } as FindOptionsOrder<T>
+  
       entities = await this.find({
         ...options,
+        where,
+        order,
         take: batchSize,
-        skip: batchSize * page++
-      })
-
-      if (entities.length === 0) return
-
-      yield entities
-    } while (entities.length >= batchSize)
+      });
+  
+      if (entities.length === 0) return;
+  
+      yield entities;
+  
+      lastKey = entities.at(-1)?.[primaryKey];
+    } while (lastKey !== undefined);
   }
 
   findByInBatches (
