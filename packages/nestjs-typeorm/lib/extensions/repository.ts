@@ -10,13 +10,11 @@ export class TypeOrmRepository<T extends ObjectLiteral> extends Repository <T> {
     options: FindOneOptions<T>,
     batchSize: number
   ): AsyncGenerator<T[], void, void> {
-    const primaryColumns = this.metadata.primaryColumns
-
-    if (primaryColumns.length !== 1) {
-      throw new Error("findInBatches only supports entities with a single primary column")
+    if (this.metadata.primaryColumns.length !== 1) {
+      throw new Error(`Entity ${this.metadata.name} has a composite primary key and cannot be fetched in batches`)
     }
 
-    const primaryKey = primaryColumns[0].propertyName
+    const primaryKey = this.metadata.primaryColumns[0].propertyName
 
     let lastPrimaryKeyValue: any | undefined = undefined
     let entities: T[] = []
