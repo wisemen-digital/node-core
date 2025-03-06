@@ -1,0 +1,13 @@
+{
+  "git": {
+    "tagName": "coordinates@${version}",
+    "commitMessage": "Release ${tagName}",
+    "tagAnnotation": "Release ${tagName}"
+  },
+  "npm": {
+    "publishArgs": [
+      "--access",
+      "public"
+    ]
+  }
+}

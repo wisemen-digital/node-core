@@ -31,4 +31,8 @@ export class Coordinates {
       coordinates: [this.longitude, this.latitude]
     }
   }
+
+  equals (other: Coordinates): boolean {
+    return this.latitude === other.latitude && this.longitude === other.longitude
+  }
 }

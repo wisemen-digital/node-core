@@ -1,6 +1,6 @@
 {
   "name": "@wisemen/time",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "type": "module",
@@ -18,7 +18,8 @@
     "release": "release-it"
   },
   "dependencies": {
-    "class-validator": "^0.14.0"
+    "class-validator": "^0.14.0",
+    "dayjs": "^1.11.13"
   },
   "devDependencies": {
     "@types/node": "^20.2.5",

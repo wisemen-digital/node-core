@@ -1,5 +1,7 @@
-export interface MonetaryObject<C extends string, P extends number> {
+import { Currency } from './currency.enum.js'
+
+export interface MonetaryObject<C extends Currency> {
   amount: number,
-  currency: C, 
-  precision: P
+  currency: C,
+  precision: number
 }

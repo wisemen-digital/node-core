@@ -1,6 +1,6 @@
 {
   "name": "@wisemen/nestjs-typeorm",
-  "version": "0.0.4",
+  "version": "0.0.9",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "type": "module",
@@ -19,7 +19,8 @@
   },
   "devDependencies": {
     "@types/node": "^22.10.1",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "release-it": "^15.11.0"
   },
   "author": "Joren Vandeweyer",
   "license": "GPL",
@@ -30,6 +31,7 @@
   "dependencies": {
     "@nestjs/typeorm": "^10.0.2",
     "@wisemen/time": "^0.0.17",
+    "@wisemen/coordinates": "^0.0.2",
     "change-case": "^5.4.4"
   },
   "peerDependencies": {

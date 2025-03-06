@@ -1,25 +1,56 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { IsInt, IsNotEmpty, IsString } from "class-validator";
-import { MonetaryObject } from "./monetary.object.js";
-import { Monetary } from "./monetary.js";
+import { ApiProperty } from '@nestjs/swagger'
+import { IsEnum, IsInt } from 'class-validator'
+import { Currency, CurrencyApiProperty } from './currency.enum.js'
+import { Monetary } from './monetary.js'
 
-export class MonetaryDto implements MonetaryObject<string, number> {
-  @ApiProperty({ type: 'number', example: 499 })
+export class MonetaryDto {
+  @ApiProperty({ type: 'integer', example: 499 })
   @IsInt()
-  readonly amount: number
+  amount: number
 
-  @ApiProperty({ type: 'string', example: 'USD' })
-  @IsString()
-  @IsNotEmpty()
-  readonly currency: string
+  @CurrencyApiProperty()
+  @IsEnum(Currency)
+  currency: Currency
 
-  @ApiProperty({ type: 'number', example: 2 })
+  @ApiProperty({ type: 'integer', example: 2 })
   @IsInt()
-  readonly precision: number
+  precision: number
 
-  constructor(monetary: Monetary<string, number>) {
-    this.amount = monetary.amount
-    this.currency = monetary.currency
-    this.precision = monetary.precision
+  static from(monetary: Monetary): MonetaryDto {
+    return new MonetaryDtoBuilder()
+      .withAmount(monetary.amount)
+      .withCurrency(monetary.currency)
+      .withPrecision(monetary.precision)
+      .build()
+  }
+}
+
+export class MonetaryDtoBuilder {
+  private readonly dto: MonetaryDto
+
+  constructor() {
+    this.dto = new MonetaryDto()
+    this.dto.amount = 0
+    this.dto.currency = Currency.EUR
+    this.dto.precision = 4
+  }
+
+  withAmount(amount: number): this {
+    this.dto.amount = amount
+    return this
+  }
+
+  withCurrency(currency: Currency): this {
+    this.dto.currency = currency
+    return this
+  }
+
+  withPrecision(precision: number): this {
+    this.dto.precision = precision
+    return this
+  }
+
+  build(): MonetaryDto {
+    return this.dto
   }
 }

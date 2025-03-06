@@ -7,6 +7,7 @@ import {
   InvalidSeconds,
   InvalidTimeString
 } from '../time-error.js'
+import dayjs from "dayjs";
 
 describe('Time class', () => {
   describe('isValidTimeString', () => {
@@ -198,6 +199,14 @@ describe('Time class', () => {
       expect(midnight.getHours()).toBe(0)
       expect(midnight.getMinutes()).toBe(0)
       expect(midnight.getSeconds()).toBe(0)
+    })
+
+    it('When creating a time with a date, it creates the correct time', () => {
+      const date = dayjs.tz('2024-01-01 10:13:42', 'Europe/Brussels').toDate()
+      const time = new Time(date)
+      expect(time.getHours()).toBe(10)
+      expect(time.getMinutes()).toBe(13)
+      expect(time.getSeconds()).toBe(42)
     })
   })
 
@@ -466,5 +475,16 @@ describe('Time class', () => {
       expect(time).not.toBe(copy)
       expect(time.equals(copy)).toBe(true)
     })
+  })
+
+  describe('combine', () => {
+    it('combines the time with a date for the given timezone', () => {
+      const time = new Time('10:11:12')
+      const otherDate = new Date('2024-01-01')
+      const date = time.combine(otherDate, 'Europe/Brussels')
+
+      const expectedDate = dayjs.tz('2024-01-01 10:11:12', 'Europe/Brussels')
+      expect(dayjs(date).isSame(expectedDate,'seconds'))
+    });
   })
 })

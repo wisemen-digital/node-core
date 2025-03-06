@@ -1,7 +1,13 @@
-import { SECONDS_PER_HOUR, SECONDS_PER_MINUTE } from './constants.js'
+import {SECONDS_PER_HOUR, SECONDS_PER_MINUTE, TimeZone} from './constants.js'
 import { InvalidBounds, InvalidHours, InvalidMinutes, InvalidSeconds, InvalidTimeString } from './time-error.js'
 import {PlainTimeObject} from "./plain-time-object.type.js";
 import {Inclusivity} from "./inclusivity.js";
+import dayjs from "dayjs";
+import UTC from 'dayjs/plugin/utc.js'
+import TZ from 'dayjs/plugin/timezone.js'
+
+dayjs.extend(UTC)
+dayjs.extend(TZ)
 
 export class Time {
   public static STRING_FORMAT = 'hh:mm:ss'
@@ -72,10 +78,11 @@ export class Time {
 
   /** @throws TimeError */
   public constructor (timeString: string)
+  public constructor (date: Date)
   public constructor (timeObject: PlainTimeObject)
   public constructor (hours: number, minutes: number, seconds: number)
   public constructor (
-    target: number | string | PlainTimeObject,
+    target: number | string | PlainTimeObject | Date,
     minutes: number = 0,
     seconds: number= 0
   ) {
@@ -87,12 +94,15 @@ export class Time {
       [hours, minutes, seconds] = target.split(':').map(v => parseInt(v))
     } else if(typeof target === 'number') {
       hours = target
+    } else if (target instanceof Date) {
+      hours = target.getHours()
+      minutes = target.getMinutes()
+      seconds = target.getSeconds()
     } else {
       hours = target.hours
       minutes = target.minutes
       seconds = target.seconds
     }
-
 
     this.setHours(hours)
     this.setMinutes(minutes)
@@ -169,6 +179,11 @@ export class Time {
 
   public copy(): Time {
     return new Time(this.hours, this.minutes, this.seconds)
+  }
+
+  public combine(withDate: Date, timeZone: TimeZone): Date {
+    const date = dayjs(withDate).format('YYYY-MM-DD')
+    return dayjs.tz(`${date} ${this.toString()}`, 'YYYY-MM-DD HH:mm:ss', timeZone).toDate()
   }
 
   private setHours (hours: number): void {
