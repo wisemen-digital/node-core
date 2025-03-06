@@ -59,9 +59,6 @@ Monetary supports 3 rounding operations:
 
 ```typescript
 // 10 euros with precsion 2
-import { month } from './month'
-import { Monetary } from './monetary'
-
 const price = new Monetary({
   amount: 1000,
   currency: Currency.EUR,
@@ -143,8 +140,6 @@ euros.toPrecision(0) // -> amount of 9,50 (unrounded)
 Storing arbitrary precision is not possible in Monetary. Monetary storing mechanisms require a set precision. All stored values will have the set precision. Values with a lower precision are normalized to the set precision. Values with a higher precision will trigger an error when stored.
 
 ```typescript
-import { MonetaryColumn } from './monetary.column'
-
 class Entity {
   @MonetaryColumn({defaultPrecision: 4})
   amount: Monetary
@@ -198,8 +193,6 @@ await entityRepository.insert({amount: dollars}) // -> throws UnsupportedCurrenc
 Storing multiple currencies in a single field will store the monetary values as `jsonb`. It's possible to define a precision per currency. If a precision is not set for a currency, the default precision is used.
 
 ```typescript
-import { MonetaryColumn } from './monetary.column'
-
 class Entity {
   @MonetaryColumn({
     defaultPrecision: 2,
@@ -246,8 +239,6 @@ Monetary provides a DTO `MonetaryDto` which defines `ApiProperty`s for open api 
 The DTO validates it's internal properties. When you need to validate the DTO as a nested property you can use `IsMonetary`. This validator applies `IsObject`, `ValidateNested` and `Type` internally. You can optionally define allowed currencies and a maximum precision.
 
 ```typescript
-import { MonetaryDto } from './monetary.dto'
-
 class EntityDto {
   @IsMonetary({
     maxPrecision: 4, // optional max precision
