@@ -45,8 +45,9 @@ export class TypeOrmRepository<T extends ObjectLiteral> extends Repository <T> {
 
   findByInBatches (
     where: FindOptionsWhere<T> | FindOptionsWhere<T>[],
-    batchSize: number
+    batchSize: number,
+    primaryKeyOrder: FindOptionsOrderValue = 'ASC'
   ): AsyncGenerator<T[], void, void> {
-    return this.findInBatches({ where }, batchSize)
+    return this.findInBatches({ where }, batchSize, primaryKeyOrder)
   }
 }
