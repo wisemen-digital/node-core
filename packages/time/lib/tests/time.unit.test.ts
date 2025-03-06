@@ -150,19 +150,17 @@ describe('Time class', () => {
   describe('new Time()', () => {
     it('Throws an error when invalid values are provided', () => {
       expect(() => new Time(24, 0, 0)).toThrow(InvalidHours)
-      expect(() => new Time(-1, 0, 0)).toThrow(InvalidHours)
       expect(() => new Time(NaN, 0, 0)).toThrow(InvalidHours)
       expect(() => new Time(Infinity, 0, 0)).toThrow(InvalidHours)
+      expect(() => new Time(0, NaN, 0)).toThrow(InvalidHours)
+      expect(() => new Time(0, Infinity, 0)).toThrow(InvalidHours)
+      expect(() => new Time(0, 0, NaN)).toThrow(InvalidHours)
+      expect(() => new Time(0, 0, Infinity)).toThrow(InvalidHours)
 
-      expect(() => new Time(0, 60, 0)).toThrow(InvalidMinutes)
-      expect(() => new Time(0, -1, 0)).toThrow(InvalidMinutes)
-      expect(() => new Time(0, NaN, 0)).toThrow(InvalidMinutes)
-      expect(() => new Time(0, Infinity, 0)).toThrow(InvalidMinutes)
 
-      expect(() => new Time(0, 0, 60)).toThrow(InvalidSeconds)
+      expect(() => new Time(-1, 0, 0)).toThrow(InvalidSeconds)
+      expect(() => new Time(0, -1, 0)).toThrow(InvalidSeconds)
       expect(() => new Time(0, 0, -1)).toThrow(InvalidSeconds)
-      expect(() => new Time(0, 0, NaN)).toThrow(InvalidSeconds)
-      expect(() => new Time(0, 0, Infinity)).toThrow(InvalidSeconds)
     })
 
     it('When creating a time with valid numeric values, it creates the correct time', () => {
@@ -208,6 +206,23 @@ describe('Time class', () => {
       expect(time.getMinutes()).toBe(13)
       expect(time.getSeconds()).toBe(42)
     })
+
+    it('When creating a time with absolute seconds, it creates the correct time', () => {
+      const time = new Time(86399)
+      expect(time.getHours()).toBe(23)
+      expect(time.getMinutes()).toBe(59)
+      expect(time.getSeconds()).toBe(59)
+
+      const noon = new Time(43200)
+      expect(noon.getHours()).toBe(12)
+      expect(noon.getMinutes()).toBe(0)
+      expect(noon.getSeconds()).toBe(0)
+
+      const midnight = new Time(0)
+      expect(midnight.getHours()).toBe(0)
+      expect(midnight.getMinutes()).toBe(0)
+      expect(midnight.getSeconds()).toBe(0)
+    })
   })
 
   describe('toString', () => {
@@ -234,9 +249,9 @@ describe('Time class', () => {
       const time = new Time('10:10:10')
       const otherTime = new Time('20:20:20')
 
-      expect(time.isBeforeOrEqual(time)).toBe(true)
-      expect(time.isBeforeOrEqual(otherTime)).toBe(true)
-      expect(otherTime.isBeforeOrEqual(time)).toBe(false)
+      expect(time.isSameOrBefore(time)).toBe(true)
+      expect(time.isSameOrBefore(otherTime)).toBe(true)
+      expect(otherTime.isSameOrBefore(time)).toBe(false)
     })
   })
 
@@ -256,9 +271,9 @@ describe('Time class', () => {
       const time = new Time('10:10:10')
       const otherTime = new Time('20:20:20')
 
-      expect(time.isAfterOrEqual(time)).toBe(true)
-      expect(time.isAfterOrEqual(otherTime)).toBe(false)
-      expect(otherTime.isAfterOrEqual(time)).toBe(true)
+      expect(time.isSameOrAfter(time)).toBe(true)
+      expect(time.isSameOrAfter(otherTime)).toBe(false)
+      expect(otherTime.isSameOrAfter(time)).toBe(true)
     })
   })
 
@@ -462,9 +477,9 @@ describe('Time class', () => {
       const time = new Time('10:10:10')
       const otherTime = new Time('20:20:20')
 
-      expect(time.equals(time)).toBe(true)
-      expect(time.equals(otherTime)).toBe(false)
-      expect(otherTime.equals(time)).toBe(false)
+      expect(time.isSame(time)).toBe(true)
+      expect(time.isSame(otherTime)).toBe(false)
+      expect(otherTime.isSame(time)).toBe(false)
     })
   })
 
@@ -473,7 +488,7 @@ describe('Time class', () => {
       const time = new Time('10:10:10')
       const copy = time.copy()
       expect(time).not.toBe(copy)
-      expect(time.equals(copy)).toBe(true)
+      expect(time.isSame(copy)).toBe(true)
     })
   })
 
@@ -486,5 +501,47 @@ describe('Time class', () => {
       const expectedDate = dayjs.tz('2024-01-01 10:11:12', 'Europe/Brussels')
       expect(dayjs(date).isSame(expectedDate,'seconds'))
     });
+  })
+
+  describe('subtract', () => {
+    it('Subtracts the given amount of time from the time object', () => {
+      const time = new Time('10:11:12')
+      const subtracted = time.subtract(1, 'hour')
+      expect(subtracted.toString()).toBe('09:11:12')
+
+      const subtracted2 = time.subtract(1, 'minute')
+      expect(subtracted2.toString()).toBe('10:10:12')
+
+      const subtracted3 = time.subtract(1, 'second')
+      expect(subtracted3.toString()).toBe('10:11:11')
+    });
+
+    it('Throws an error when subtracting more time than the time object has', () => {
+      const time = new Time('00:01:00')
+      expect(() => time.subtract(1, 'hour')).toThrow(InvalidSeconds)
+      expect(() => time.subtract(2, 'minute')).toThrow(InvalidSeconds)
+      expect(() => time.subtract(70, 'second')).toThrow(InvalidSeconds)
+    })
+  })
+
+  describe('add', () => {
+    it('Adds the given amount of time to the time object', () => {
+      const time = new Time('10:11:12')
+      const added = time.add(1, 'hour')
+      expect(added.toString()).toBe('11:11:12')
+
+      const added2 = time.add(1, 'minute')
+      expect(added2.toString()).toBe('10:12:12')
+
+      const added3 = time.add(1, 'second')
+      expect(added3.toString()).toBe('10:11:13')
+    });
+
+    it('Throws an error when adding time so the time exceeds 23:59:59', () => {
+      const time = new Time('23:59:59')
+      expect(() => time.add(3, 'hour')).toThrow(InvalidHours)
+      expect(() => time.add(3, 'minute')).toThrow(InvalidHours)
+      expect(() => time.add(3, 'second')).toThrow(InvalidHours)
+    })
   })
 })

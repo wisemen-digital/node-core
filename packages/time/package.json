@@ -13,7 +13,7 @@
     "clean": "rm -rf ./dist",
     "build": "tsc",
     "pretest": "npm run clean && npm run build",
-    "test": "node --test",
+    "test": "node --test \"**/*.test.js\"",
     "prerelease": "npm run build",
     "release": "release-it"
   },
