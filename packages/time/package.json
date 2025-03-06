@@ -8,7 +8,7 @@
     "dist/"
   ],
   "scripts": {
-    "lint": "eslint lib",
+    "lint": "eslint --cache",
     "prebuild": "rm -rf ./dist",
     "clean": "rm -rf ./dist",
     "build": "tsc",
@@ -24,7 +24,11 @@
   "devDependencies": {
     "@types/node": "^20.2.5",
     "expect": "^29.5.0",
-    "typescript": "^5.0.4"
+    "typescript": "^5.0.4",
+    "@stylistic/eslint-plugin": "^2.8.0",
+    "@typescript-eslint/eslint-plugin": "^8.8.0",
+    "@wisemen/eslint-config-nestjs": "^0.1.6",
+    "eslint": "^9.21.0"
   },
   "author": "Kobe Kwanten",
   "contributors": [

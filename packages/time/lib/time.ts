@@ -1,12 +1,12 @@
-import {SECONDS_PER_HOUR, SECONDS_PER_MINUTE, TimeZone} from './constants.js'
-import { InvalidBounds, InvalidHours, InvalidMinutes, InvalidSeconds, InvalidTimeString } from './time-error.js'
-import {PlainTimeObject} from "./plain-time-object.type.js";
-import {InclusivityString} from "./inclusivity.js";
-import dayjs from "dayjs";
+import dayjs from 'dayjs'
 import UTC from 'dayjs/plugin/utc.js'
 import TZ from 'dayjs/plugin/timezone.js'
-import { TimeUnit } from './units.js';
-import { exhaustiveCheck } from './exhaustive-check.helper.js';
+import { SECONDS_PER_HOUR, SECONDS_PER_MINUTE, TimeZone } from './constants.js'
+import { InvalidBounds, InvalidHours, InvalidMinutes, InvalidSeconds, InvalidTimeString } from './time-error.js'
+import { PlainTimeObject } from './plain-time-object.type.js'
+import { InclusivityString } from './inclusivity.js'
+import { TimeUnit } from './units.js'
+import { exhaustiveCheck } from './exhaustive-check.helper.js'
 
 dayjs.extend(UTC)
 dayjs.extend(TZ)
@@ -22,6 +22,7 @@ export class Time {
 
   public static isValidTimeString (timeString?: string | null): boolean {
     if (timeString == null) return false
+
     return /^([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/.test(timeString)
   }
 
@@ -33,6 +34,7 @@ export class Time {
   public static hoursBetween (first: Time, second: Time): number
   public static hoursBetween (first: Time | string, second: Time | string): number {
     const differenceInSeconds = Time.secondsBetween(first, second)
+
     return Math.floor(differenceInSeconds / SECONDS_PER_HOUR)
   }
 
@@ -44,6 +46,7 @@ export class Time {
   public static minutesBetween (first: Time, second: Time): number
   public static minutesBetween (first: Time | string, second: Time | string): number {
     const differenceInSeconds = Time.secondsBetween(first, second)
+
     return Math.floor(differenceInSeconds / SECONDS_PER_MINUTE)
   }
 
@@ -61,16 +64,19 @@ export class Time {
     if (typeof second === 'string') {
       second = new Time(second)
     }
+
     return Math.abs(first.absoluteSeconds - second.absoluteSeconds)
   }
 
   public static min (firstTime: Time, secondTime: Time): Time {
     if (firstTime.isBefore(secondTime)) return firstTime
+
     return secondTime
   }
 
   public static max (firstTime: Time, secondTime: Time): Time {
     if (firstTime.isAfter(secondTime)) return firstTime
+
     return secondTime
   }
 
@@ -88,18 +94,24 @@ export class Time {
     seconds?: number
   ) {
     let absoluteSeconds: number
-    if(typeof target === 'string') {
+
+    if (typeof target === 'string') {
       if (!Time.isValidTimeString(target)) {
         throw new InvalidTimeString(target)
       }
       const [hours, minutes, seconds] = target.split(':').map(v => parseInt(v))
+
       absoluteSeconds = this.calculateAbsoluteSeconds(hours, minutes, seconds)
-    } else if(typeof target === 'number' && minutes === undefined && seconds === undefined) {
+    } else if (typeof target === 'number' && minutes === undefined && seconds === undefined) {
       absoluteSeconds = target
-    } else if(typeof target === 'number' && minutes !== undefined && seconds !== undefined) {
+    } else if (typeof target === 'number' && minutes !== undefined && seconds !== undefined) {
       absoluteSeconds = this.calculateAbsoluteSeconds(target, minutes, seconds)
     } else if (target instanceof Date) {
-      absoluteSeconds = this.calculateAbsoluteSeconds(target.getHours(), target.getMinutes(), target.getSeconds())
+      absoluteSeconds = this.calculateAbsoluteSeconds(
+        target.getHours(),
+        target.getMinutes(),
+        target.getSeconds()
+      )
     } else if (typeof target === 'object') {
       absoluteSeconds = this.calculateAbsoluteSeconds(target.hours, target.minutes, target.seconds)
     } else {
@@ -115,6 +127,7 @@ export class Time {
     const hours = this.getHours().toString().padStart(2, '0')
     const minutes = this.getMinutes().toString().padStart(2, '0')
     const seconds = this.getSeconds().toString().padStart(2, '0')
+
     return `${hours}:${minutes}:${seconds}`
   }
 
@@ -139,17 +152,21 @@ export class Time {
    * @param upperBound must be after or same as lowerBound
    * @throws InvalidBounds
    */
-  public isBetween (lowerBound: Time, upperBound: Time, inclusivity: InclusivityString = '[]'): boolean {
+  public isBetween (
+    lowerBound: Time,
+    upperBound: Time,
+    inclusivity: InclusivityString = '[]'
+  ): boolean {
     if (lowerBound.isAfter(upperBound)) {
       throw new InvalidBounds(lowerBound, upperBound)
     }
 
-    switch (inclusivity){
-      case "[]": return this.isSameOrAfter(lowerBound) && this.isSameOrBefore(upperBound)
-      case "[)": return this.isSameOrAfter(lowerBound) && this.isBefore(upperBound)
-      case "(]": return this.isAfter(lowerBound) && this.isSameOrBefore(upperBound)
-      case "()": return this.isAfter(lowerBound) && this.isBefore(upperBound)
-      default:   return inclusivity
+    switch (inclusivity) {
+      case '[]': return this.isSameOrAfter(lowerBound) && this.isSameOrBefore(upperBound)
+      case '[)': return this.isSameOrAfter(lowerBound) && this.isBefore(upperBound)
+      case '(]': return this.isAfter(lowerBound) && this.isSameOrBefore(upperBound)
+      case '()': return this.isAfter(lowerBound) && this.isBefore(upperBound)
+      default: return inclusivity
     }
   }
 
@@ -177,41 +194,46 @@ export class Time {
     }
   }
 
-  public copy(): Time {
+  public copy (): Time {
     return new Time(this.toPlainObject())
   }
 
-  public combine(withDate: Date, timeZone: TimeZone): Date {
+  public combine (withDate: Date, timeZone: TimeZone): Date {
     const date = dayjs(withDate).format('YYYY-MM-DD')
+
     return dayjs.tz(`${date} ${this.toString()}`, 'YYYY-MM-DD HH:mm:ss', timeZone).toDate()
   }
 
-  public subtract(amount: number, unit: TimeUnit): Time {
+  public subtract (amount: number, unit: TimeUnit): Time {
     const seconds = this.absoluteSeconds - amount * this.secondsInUnit(unit)
+
     this.validateAbsoluteSeconds(seconds)
+
     return new Time(seconds)
   }
 
-  public add(amount: number, unit: TimeUnit): Time {
+  public add (amount: number, unit: TimeUnit): Time {
     const seconds = this.absoluteSeconds + amount * this.secondsInUnit(unit)
+
     this.validateAbsoluteSeconds(seconds)
+
     return new Time(seconds)
   }
 
-  private secondsInUnit(unit: TimeUnit): number {
+  private secondsInUnit (unit: TimeUnit): number {
     switch (unit) {
       case 'second':
-      case 'seconds': 
+      case 'seconds':
       case 's':
-      return 1
+        return 1
       case 'minute':
-      case 'minutes': 
+      case 'minutes':
       case 'm':
-      return SECONDS_PER_MINUTE
+        return SECONDS_PER_MINUTE
       case 'hour':
-      case 'hours': 
+      case 'hours':
       case 'h':
-      return SECONDS_PER_HOUR
+        return SECONDS_PER_HOUR
       default: exhaustiveCheck(unit)
     }
   }

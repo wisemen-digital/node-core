@@ -1,13 +1,12 @@
 import { describe, it } from 'node:test'
 import { expect } from 'expect'
+import dayjs from 'dayjs'
 import { Time } from '../time.js'
 import {
   InvalidHours,
-  InvalidMinutes,
   InvalidSeconds,
   InvalidTimeString
 } from '../time-error.js'
-import dayjs from "dayjs";
 
 describe('Time class', () => {
   describe('isValidTimeString', () => {
@@ -141,6 +140,7 @@ describe('Time class', () => {
 
     it('When sending a valid string, the constructed Time object contains the right values', () => {
       const time = new Time('23:30:00')
+
       expect(time.getHours()).toBe(23)
       expect(time.getMinutes()).toBe(30)
       expect(time.getSeconds()).toBe(0)
@@ -157,7 +157,6 @@ describe('Time class', () => {
       expect(() => new Time(0, 0, NaN)).toThrow(InvalidHours)
       expect(() => new Time(0, 0, Infinity)).toThrow(InvalidHours)
 
-
       expect(() => new Time(-1, 0, 0)).toThrow(InvalidSeconds)
       expect(() => new Time(0, -1, 0)).toThrow(InvalidSeconds)
       expect(() => new Time(0, 0, -1)).toThrow(InvalidSeconds)
@@ -165,11 +164,13 @@ describe('Time class', () => {
 
     it('When creating a time with valid numeric values, it creates the correct time', () => {
       const time = new Time(23, 59, 59)
+
       expect(time.getHours()).toBe(23)
       expect(time.getMinutes()).toBe(59)
       expect(time.getSeconds()).toBe(59)
 
       const midnight = new Time(0, 0, 0)
+
       expect(midnight.getHours()).toBe(0)
       expect(midnight.getMinutes()).toBe(0)
       expect(midnight.getSeconds()).toBe(0)
@@ -177,23 +178,27 @@ describe('Time class', () => {
 
     it('When creating a time with a string, it creates the correct time', () => {
       const time = new Time('23:59:59')
+
       expect(time.getHours()).toBe(23)
       expect(time.getMinutes()).toBe(59)
       expect(time.getSeconds()).toBe(59)
 
       const midnight = new Time('00:00:00')
+
       expect(midnight.getHours()).toBe(0)
       expect(midnight.getMinutes()).toBe(0)
       expect(midnight.getSeconds()).toBe(0)
     })
 
     it('When creating a time with an object, it creates the correct time', () => {
-      const time = new Time({hours: 23, minutes: 59, seconds: 59})
+      const time = new Time({ hours: 23, minutes: 59, seconds: 59 })
+
       expect(time.getHours()).toBe(23)
       expect(time.getMinutes()).toBe(59)
       expect(time.getSeconds()).toBe(59)
 
-      const midnight = new Time({hours: 0, minutes: 0, seconds: 0})
+      const midnight = new Time({ hours: 0, minutes: 0, seconds: 0 })
+
       expect(midnight.getHours()).toBe(0)
       expect(midnight.getMinutes()).toBe(0)
       expect(midnight.getSeconds()).toBe(0)
@@ -202,6 +207,7 @@ describe('Time class', () => {
     it('When creating a time with a date, it creates the correct time', () => {
       const date = dayjs.tz('2024-01-01 10:13:42', 'Europe/Brussels').toDate()
       const time = new Time(date)
+
       expect(time.getHours()).toBe(10)
       expect(time.getMinutes()).toBe(13)
       expect(time.getSeconds()).toBe(42)
@@ -209,16 +215,19 @@ describe('Time class', () => {
 
     it('When creating a time with absolute seconds, it creates the correct time', () => {
       const time = new Time(86399)
+
       expect(time.getHours()).toBe(23)
       expect(time.getMinutes()).toBe(59)
       expect(time.getSeconds()).toBe(59)
 
       const noon = new Time(43200)
+
       expect(noon.getHours()).toBe(12)
       expect(noon.getMinutes()).toBe(0)
       expect(noon.getSeconds()).toBe(0)
 
       const midnight = new Time(0)
+
       expect(midnight.getHours()).toBe(0)
       expect(midnight.getMinutes()).toBe(0)
       expect(midnight.getSeconds()).toBe(0)
@@ -283,7 +292,7 @@ describe('Time class', () => {
       const upperBound = new Time('23:59:59')
       const time = new Time('12:00:00')
 
-      expect(time.isBetween(lowerBound,upperBound)).toBe(true)
+      expect(time.isBetween(lowerBound, upperBound)).toBe(true)
     })
 
     it('Time same as both inclusive boundaries returns true', () => {
@@ -291,7 +300,7 @@ describe('Time class', () => {
       const upperBound = new Time('12:00:00')
       const time = new Time('12:00:00')
 
-      expect(time.isBetween(lowerBound,upperBound)).toBe(true)
+      expect(time.isBetween(lowerBound, upperBound)).toBe(true)
     })
 
     it('Time same as lower boundary between two inclusive boundaries returns true', () => {
@@ -299,7 +308,7 @@ describe('Time class', () => {
       const upperBound = new Time('23:59:59')
       const time = new Time('00:00:00')
 
-      expect(time.isBetween(lowerBound,upperBound)).toBe(true)
+      expect(time.isBetween(lowerBound, upperBound)).toBe(true)
     })
 
     it('Time same as upper boundary between two inclusive boundaries returns true', () => {
@@ -307,7 +316,7 @@ describe('Time class', () => {
       const upperBound = new Time('23:59:59')
       const time = new Time('23:59:59')
 
-      expect(time.isBetween(lowerBound,upperBound)).toBe(true)
+      expect(time.isBetween(lowerBound, upperBound)).toBe(true)
     })
 
     it('Time before two inclusive boundaries returns false', () => {
@@ -315,7 +324,7 @@ describe('Time class', () => {
       const upperBound = new Time('23:59:59')
       const time = new Time('12:00:00')
 
-      expect(time.isBetween(lowerBound,upperBound)).toBe(false)
+      expect(time.isBetween(lowerBound, upperBound)).toBe(false)
     })
 
     it('Time after two inclusive boundaries returns false', () => {
@@ -323,7 +332,7 @@ describe('Time class', () => {
       const upperBound = new Time('12:00:00')
       const time = new Time('12:00:01')
 
-      expect(time.isBetween(lowerBound,upperBound)).toBe(false)
+      expect(time.isBetween(lowerBound, upperBound)).toBe(false)
     })
 
     it('Time between two exclusive boundaries returns true', () => {
@@ -331,7 +340,7 @@ describe('Time class', () => {
       const upperBound = new Time('23:59:59')
       const time = new Time('12:00:00')
 
-      expect(time.isBetween(lowerBound,upperBound, '()')).toBe(true)
+      expect(time.isBetween(lowerBound, upperBound, '()')).toBe(true)
     })
 
     it('Time same as both exclusive boundaries returns false', () => {
@@ -339,7 +348,7 @@ describe('Time class', () => {
       const upperBound = new Time('12:00:00')
       const time = new Time('12:00:00')
 
-      expect(time.isBetween(lowerBound,upperBound, '()')).toBe(false)
+      expect(time.isBetween(lowerBound, upperBound, '()')).toBe(false)
     })
 
     it('Time same as lower boundary between two exclusive boundaries returns false', () => {
@@ -347,7 +356,7 @@ describe('Time class', () => {
       const upperBound = new Time('23:59:59')
       const time = new Time('00:00:00')
 
-      expect(time.isBetween(lowerBound,upperBound, '()')).toBe(false)
+      expect(time.isBetween(lowerBound, upperBound, '()')).toBe(false)
     })
 
     it('Time same as upper boundary between two exclusive boundaries returns false', () => {
@@ -355,7 +364,7 @@ describe('Time class', () => {
       const upperBound = new Time('23:59:59')
       const time = new Time('23:59:59')
 
-      expect(time.isBetween(lowerBound,upperBound, '()')).toBe(false)
+      expect(time.isBetween(lowerBound, upperBound, '()')).toBe(false)
     })
 
     it('Time before two exclusive boundaries returns false', () => {
@@ -363,7 +372,7 @@ describe('Time class', () => {
       const upperBound = new Time('23:59:59')
       const time = new Time('12:00:00')
 
-      expect(time.isBetween(lowerBound,upperBound, '()')).toBe(false)
+      expect(time.isBetween(lowerBound, upperBound, '()')).toBe(false)
     })
 
     it('Time after two exclusive boundaries returns false', () => {
@@ -371,7 +380,7 @@ describe('Time class', () => {
       const upperBound = new Time('12:00:00')
       const time = new Time('12:00:01')
 
-      expect(time.isBetween(lowerBound,upperBound, '()')).toBe(false)
+      expect(time.isBetween(lowerBound, upperBound, '()')).toBe(false)
     })
 
     it('Time between an exclusive lowerbound and inclusive upperbound returns true', () => {
@@ -379,7 +388,7 @@ describe('Time class', () => {
       const upperBound = new Time('23:59:59')
       const time = new Time('12:00:00')
 
-      expect(time.isBetween(lowerBound,upperBound, '(]')).toBe(true)
+      expect(time.isBetween(lowerBound, upperBound, '(]')).toBe(true)
     })
 
     it('Time same as both an exclusive lowerbound and inclusive upperbound returns false', () => {
@@ -387,7 +396,7 @@ describe('Time class', () => {
       const upperBound = new Time('12:00:00')
       const time = new Time('12:00:00')
 
-      expect(time.isBetween(lowerBound,upperBound, '(]')).toBe(false)
+      expect(time.isBetween(lowerBound, upperBound, '(]')).toBe(false)
     })
 
     it('Time same as lower boundary between an exclusive lowerbound and inclusive upperbound returns false', () => {
@@ -395,7 +404,7 @@ describe('Time class', () => {
       const upperBound = new Time('23:59:59')
       const time = new Time('00:00:00')
 
-      expect(time.isBetween(lowerBound,upperBound, '(]')).toBe(false)
+      expect(time.isBetween(lowerBound, upperBound, '(]')).toBe(false)
     })
 
     it('Time same as upper boundary between an exclusive lowerbound and inclusive upperbound returns true', () => {
@@ -403,7 +412,7 @@ describe('Time class', () => {
       const upperBound = new Time('23:59:59')
       const time = new Time('23:59:59')
 
-      expect(time.isBetween(lowerBound,upperBound, '(]')).toBe(true)
+      expect(time.isBetween(lowerBound, upperBound, '(]')).toBe(true)
     })
 
     it('Time before an exclusive lowerbound and inclusive upperbound returns false', () => {
@@ -411,7 +420,7 @@ describe('Time class', () => {
       const upperBound = new Time('23:59:59')
       const time = new Time('12:00:00')
 
-      expect(time.isBetween(lowerBound,upperBound, '(]')).toBe(false)
+      expect(time.isBetween(lowerBound, upperBound, '(]')).toBe(false)
     })
 
     it('Time after an exclusive lowerbound and inclusive upperbound returns false', () => {
@@ -419,16 +428,15 @@ describe('Time class', () => {
       const upperBound = new Time('12:00:00')
       const time = new Time('12:00:01')
 
-      expect(time.isBetween(lowerBound,upperBound, '(]')).toBe(false)
+      expect(time.isBetween(lowerBound, upperBound, '(]')).toBe(false)
     })
-
 
     it('Time between an inclusive lowerbound and exclusive upperbound returns true', () => {
       const lowerBound = new Time('00:00:00')
       const upperBound = new Time('23:59:59')
       const time = new Time('12:00:00')
 
-      expect(time.isBetween(lowerBound,upperBound, '[)')).toBe(true)
+      expect(time.isBetween(lowerBound, upperBound, '[)')).toBe(true)
     })
 
     it('Time same as both an inclusive lowerbound and exclusive upperbound returns false', () => {
@@ -436,7 +444,7 @@ describe('Time class', () => {
       const upperBound = new Time('12:00:00')
       const time = new Time('12:00:00')
 
-      expect(time.isBetween(lowerBound,upperBound, '[)')).toBe(false)
+      expect(time.isBetween(lowerBound, upperBound, '[)')).toBe(false)
     })
 
     it('Time same as lower boundary between an inclusive lowerbound and exclusive upperbound returns true', () => {
@@ -444,7 +452,7 @@ describe('Time class', () => {
       const upperBound = new Time('23:59:59')
       const time = new Time('00:00:00')
 
-      expect(time.isBetween(lowerBound,upperBound, '[)')).toBe(true)
+      expect(time.isBetween(lowerBound, upperBound, '[)')).toBe(true)
     })
 
     it('Time same as upper boundary between an inclusive lowerbound and exclusive upperbound returns false', () => {
@@ -452,7 +460,7 @@ describe('Time class', () => {
       const upperBound = new Time('23:59:59')
       const time = new Time('23:59:59')
 
-      expect(time.isBetween(lowerBound,upperBound, '[)')).toBe(false)
+      expect(time.isBetween(lowerBound, upperBound, '[)')).toBe(false)
     })
 
     it('Time before an inclusive lowerbound and exclusive upperbound returns false', () => {
@@ -460,7 +468,7 @@ describe('Time class', () => {
       const upperBound = new Time('23:59:59')
       const time = new Time('12:00:00')
 
-      expect(time.isBetween(lowerBound,upperBound, '[)')).toBe(false)
+      expect(time.isBetween(lowerBound, upperBound, '[)')).toBe(false)
     })
 
     it('Time after an inclusive lowerbound and exclusive upperbound returns false', () => {
@@ -468,7 +476,7 @@ describe('Time class', () => {
       const upperBound = new Time('12:00:00')
       const time = new Time('12:00:01')
 
-      expect(time.isBetween(lowerBound,upperBound, '[)')).toBe(false)
+      expect(time.isBetween(lowerBound, upperBound, '[)')).toBe(false)
     })
   })
 
@@ -487,6 +495,7 @@ describe('Time class', () => {
     it('Creates a new copy of a time object', () => {
       const time = new Time('10:10:10')
       const copy = time.copy()
+
       expect(time).not.toBe(copy)
       expect(time.isSame(copy)).toBe(true)
     })
@@ -499,25 +508,30 @@ describe('Time class', () => {
       const date = time.combine(otherDate, 'Europe/Brussels')
 
       const expectedDate = dayjs.tz('2024-01-01 10:11:12', 'Europe/Brussels')
-      expect(dayjs(date).isSame(expectedDate,'seconds'))
-    });
+
+      expect(dayjs(date).isSame(expectedDate, 'seconds'))
+    })
   })
 
   describe('subtract', () => {
     it('Subtracts the given amount of time from the time object', () => {
       const time = new Time('10:11:12')
       const subtracted = time.subtract(1, 'hour')
+
       expect(subtracted.toString()).toBe('09:11:12')
 
       const subtracted2 = time.subtract(1, 'minute')
+
       expect(subtracted2.toString()).toBe('10:10:12')
 
       const subtracted3 = time.subtract(1, 'second')
+
       expect(subtracted3.toString()).toBe('10:11:11')
-    });
+    })
 
     it('Throws an error when subtracting more time than the time object has', () => {
       const time = new Time('00:01:00')
+
       expect(() => time.subtract(1, 'hour')).toThrow(InvalidSeconds)
       expect(() => time.subtract(2, 'minute')).toThrow(InvalidSeconds)
       expect(() => time.subtract(70, 'second')).toThrow(InvalidSeconds)
@@ -528,17 +542,21 @@ describe('Time class', () => {
     it('Adds the given amount of time to the time object', () => {
       const time = new Time('10:11:12')
       const added = time.add(1, 'hour')
+
       expect(added.toString()).toBe('11:11:12')
 
       const added2 = time.add(1, 'minute')
+
       expect(added2.toString()).toBe('10:12:12')
 
       const added3 = time.add(1, 'second')
+
       expect(added3.toString()).toBe('10:11:13')
-    });
+    })
 
     it('Throws an error when adding time so the time exceeds 23:59:59', () => {
       const time = new Time('23:59:59')
+
       expect(() => time.add(3, 'hour')).toThrow(InvalidHours)
       expect(() => time.add(3, 'minute')).toThrow(InvalidHours)
       expect(() => time.add(3, 'second')).toThrow(InvalidHours)
