@@ -8,8 +8,7 @@ export class TypeOrmRepository<T extends ObjectLiteral> extends Repository <T> {
 
   async *findInBatches(
     options: FindOneOptions<T>,
-    batchSize: number,
-    primaryKeyOrder: FindOptionsOrderValue = 'ASC'
+    batchSize: number
   ): AsyncGenerator<T[], void, void> {
     const primaryColumns = this.metadata.primaryColumns;
 
@@ -26,7 +25,9 @@ export class TypeOrmRepository<T extends ObjectLiteral> extends Repository <T> {
       const where = lastKey
         ? { ...options.where, [primaryKey]: MoreThan(lastKey) }
         : options.where;
-      const order = { ...options.order, [primaryKey]: primaryKeyOrder } as FindOptionsOrder<T>
+      const order = options.order !== undefined && primaryKey in options.order
+        ? options.order
+        : { ...options.order, [primaryKey]: 'ASC' } as FindOptionsOrder<T>
   
       entities = await this.find({
         ...options,
@@ -45,9 +46,8 @@ export class TypeOrmRepository<T extends ObjectLiteral> extends Repository <T> {
 
   findByInBatches (
     where: FindOptionsWhere<T> | FindOptionsWhere<T>[],
-    batchSize: number,
-    primaryKeyOrder: FindOptionsOrderValue = 'ASC'
+    batchSize: number
   ): AsyncGenerator<T[], void, void> {
-    return this.findInBatches({ where }, batchSize, primaryKeyOrder)
+    return this.findInBatches({ where }, batchSize)
   }
 }
