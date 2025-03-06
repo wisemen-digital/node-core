@@ -310,6 +310,9 @@ importers:
       expect:
         specifier: ^29.5.0
         version: 29.7.0
+      release-it:
+        specifier: ^18.1.2
+        version: 18.1.2(@types/node@20.17.10)(typescript@5.7.2)
       typescript:
         specifier: ^5.0.4
         version: 5.7.2

@@ -28,7 +28,8 @@
     "@stylistic/eslint-plugin": "^2.8.0",
     "@typescript-eslint/eslint-plugin": "^8.8.0",
     "@wisemen/eslint-config-nestjs": "^0.1.6",
-    "eslint": "^9.21.0"
+    "eslint": "^9.21.0",
+    "release-it": "^18.1.2"
   },
   "author": "Kobe Kwanten",
   "contributors": [
