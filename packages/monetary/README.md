@@ -178,7 +178,7 @@ class Entity {
   amount: Monetary
 }
 
-// 9,50 dollars with precsion 2
+// 9,50 dollars with precision 2
 const dollars = new Monetary({
   amount: 950,
   currency: Currency.USD,
