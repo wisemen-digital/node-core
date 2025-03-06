@@ -10,21 +10,21 @@ export class TypeOrmRepository<T extends ObjectLiteral> extends Repository <T> {
     options: FindOneOptions<T>,
     batchSize: number
   ): AsyncGenerator<T[], void, void> {
-    const primaryColumns = this.metadata.primaryColumns;
+    const primaryColumns = this.metadata.primaryColumns
 
     if (primaryColumns.length !== 1) {
-      throw new Error("findInBatches only supports entities with a single primary column");
+      throw new Error("findInBatches only supports entities with a single primary column")
     }
 
     const primaryKey = primaryColumns[0].propertyName
 
-    let lastKey: any | undefined = undefined;
-    let entities: T[] = [];
+    let lastPrimaryKeyValue: any | undefined = undefined
+    let entities: T[] = []
   
     do {
-      const where = lastKey
-        ? { ...options.where, [primaryKey]: MoreThan(lastKey) }
-        : options.where;
+      const where = lastPrimaryKeyValue !== undefined
+        ? { ...options.where, [primaryKey]: MoreThan(lastPrimaryKeyValue) }
+        : options.where
       const order = options.order !== undefined && primaryKey in options.order
         ? options.order
         : { ...options.order, [primaryKey]: 'ASC' } as FindOptionsOrder<T>
@@ -34,14 +34,14 @@ export class TypeOrmRepository<T extends ObjectLiteral> extends Repository <T> {
         where,
         order,
         take: batchSize,
-      });
+      })
   
-      if (entities.length === 0) return;
+      if (entities.length === 0) return
   
-      yield entities;
+      yield entities
   
-      lastKey = entities.at(-1)?.[primaryKey];
-    } while (lastKey !== undefined);
+      lastPrimaryKeyValue = entities.at(-1)?.[primaryKey]
+    } while (lastPrimaryKeyValue !== undefined)
   }
 
   findByInBatches (
