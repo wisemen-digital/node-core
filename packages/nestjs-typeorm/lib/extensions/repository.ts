@@ -6,7 +6,6 @@ export class TypeOrmRepository<T extends ObjectLiteral> extends Repository <T> {
     super(entity, createTransactionManagerProxy(manager))
   }
 
-
   async* findInBatches (
     options: FindOneOptions<T>,
     batchSize: number
