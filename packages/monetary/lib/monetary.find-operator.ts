@@ -8,8 +8,8 @@ type MonetaryContainsOptions = {
   currency?: FindOperator<EmbeddedMonetary['currency']> | EmbeddedMonetary['currency']
 }
 
-export function MonetaryContains<C extends Currency>(
+export function MonetaryContains<C extends Currency> (
   value: MonetaryContainsOptions
 ): FindOperator<Monetary<C>> {
-  return JsonContains(value)
+  return JsonContains(value) as FindOperator<Monetary<C>>
 }

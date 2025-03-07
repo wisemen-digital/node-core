@@ -16,41 +16,48 @@ export class MonetaryDto {
   @IsInt()
   precision: number
 
-  static from(monetary: Monetary): MonetaryDto {
+  static from (monetary: Monetary): MonetaryDto {
     return new MonetaryDtoBuilder()
       .withAmount(monetary.amount)
       .withCurrency(monetary.currency)
       .withPrecision(monetary.precision)
       .build()
   }
+
+  parse (): Monetary {
+    return new Monetary(this)
+  }
 }
 
 export class MonetaryDtoBuilder {
   private readonly dto: MonetaryDto
 
-  constructor() {
+  constructor () {
     this.dto = new MonetaryDto()
     this.dto.amount = 0
     this.dto.currency = Currency.EUR
     this.dto.precision = 4
   }
 
-  withAmount(amount: number): this {
+  withAmount (amount: number): this {
     this.dto.amount = amount
+
     return this
   }
 
-  withCurrency(currency: Currency): this {
+  withCurrency (currency: Currency): this {
     this.dto.currency = currency
+
     return this
   }
 
-  withPrecision(precision: number): this {
+  withPrecision (precision: number): this {
     this.dto.precision = precision
+
     return this
   }
 
-  build(): MonetaryDto {
+  build (): MonetaryDto {
     return this.dto
   }
 }

@@ -1,27 +1,27 @@
-import { IsObject, ValidateBy, ValidateNested, ValidatorConstraintInterface } from "class-validator";
-import { plainToInstance, Transform, TransformFnParams, Type } from 'class-transformer'
-import { applyDecorators } from "@nestjs/common";
-import { MonetaryDto } from "./monetary.dto.js";
-import { Currency } from './currency.enum.js'
+import { IsObject, ValidateBy, ValidateNested, ValidatorConstraintInterface } from 'class-validator'
+import { Type } from 'class-transformer'
+import { applyDecorators } from '@nestjs/common'
 import { ValidationArguments } from 'class-validator/types/validation/ValidationArguments.js'
+import { MonetaryDto } from './monetary.dto.js'
+import { Currency } from './currency.enum.js'
 
 export interface IsMonetaryOptions {
-  maxPrecision?: number,
+  maxPrecision?: number
   allowedCurrencies?: Set<Currency>
 }
 
-export function IsMonetary(options?: IsMonetaryOptions): PropertyDecorator {
+export function IsMonetary (options?: IsMonetaryOptions): PropertyDecorator {
   return applyDecorators(
     IsObject(),
     ValidateNested(),
     Type(() => MonetaryDto),
     ValidateBy({
       name: 'IsMonetaryCurrency',
-      validator: new IsMonetaryCurrencyValidator(options?.allowedCurrencies),
+      validator: new IsMonetaryCurrencyValidator(options?.allowedCurrencies)
     }),
     ValidateBy({
       name: 'IsMonetaryPrecision',
-      validator: new IsMonetaryPrecisionValidator(options?.maxPrecision ?? Infinity),
+      validator: new IsMonetaryPrecisionValidator(options?.maxPrecision ?? Infinity)
     })
   )
 }
@@ -47,19 +47,19 @@ class IsMonetaryPrecisionValidator implements ValidatorConstraintInterface {
   ) {}
 
   validate (monetaryDto: object): boolean {
-    if(!Object.hasOwn(monetaryDto,'precision')) {
+    if (!Object.hasOwn(monetaryDto, 'precision')) {
       return false
     }
 
-    if(typeof (monetaryDto as {precision: unknown}).precision !== 'number'){
+    if (typeof (monetaryDto as { precision: unknown }).precision !== 'number') {
       return false
     }
 
-    return (monetaryDto as {precision: number}).precision <= this.maxPrecision
+    return (monetaryDto as { precision: number }).precision <= this.maxPrecision
   }
 
   defaultMessage (validationArguments?: ValidationArguments): string {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     return `Monetary precision ${validationArguments?.value?.precision} must be <= ${this.maxPrecision}`
   }
 }
-

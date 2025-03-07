@@ -185,8 +185,7 @@ export enum Currency {
   XAG = 'XAG'
 }
 
-
-export function CurrencyApiProperty(options?: ApiPropertyOptions): PropertyDecorator {
+export function CurrencyApiProperty (options?: ApiPropertyOptions): PropertyDecorator {
   return ApiProperty({
     ...options,
     enum: Currency,
