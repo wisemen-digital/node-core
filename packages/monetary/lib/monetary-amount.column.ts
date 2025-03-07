@@ -36,9 +36,9 @@ export class MoneyTypeOrmAmountTransformer {
     return new Monetary(amount, this.currency, this.precision)
   }
 
-  to (monetary: Monetary | null): number | null {
-    if (monetary === null) {
-      return null
+  to (monetary: Monetary | null | undefined): number | null | undefined {
+    if (monetary === undefined || monetary === null) {
+      return monetary
     }
 
     if (monetary.currency !== this.currency) {

@@ -48,9 +48,9 @@ export class MoneyTypeOrmTransformer {
     return new Monetary(monetary.amount, monetary.currency, precision)
   }
 
-  to (monetary: Monetary | null): EmbeddedMonetary | null {
-    if (monetary === null) {
-      return null
+  to (monetary: Monetary | null | undefined): EmbeddedMonetary | null | undefined {
+    if (monetary === undefined || monetary === null) {
+      return monetary
     }
 
     const precision = this.getPrecisionFor(monetary.currency)
