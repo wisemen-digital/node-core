@@ -8,6 +8,7 @@ import { Currency } from './currency.enum.js'
 export interface IsMonetaryOptions {
   maxPrecision?: number
   allowedCurrencies?: Set<Currency>
+  minAmount?: number
 }
 
 export function IsMonetary (options?: IsMonetaryOptions): PropertyDecorator {
@@ -22,6 +23,10 @@ export function IsMonetary (options?: IsMonetaryOptions): PropertyDecorator {
     ValidateBy({
       name: 'IsMonetaryPrecision',
       validator: new IsMonetaryPrecisionValidator(options?.maxPrecision ?? Infinity)
+    }),
+    ValidateBy({
+      name: 'IsMonetaryMinAmount',
+      validator: new IsMonetaryMinAmountValidator(options?.minAmount)
     })
   )
 }
@@ -61,5 +66,27 @@ class IsMonetaryPrecisionValidator implements ValidatorConstraintInterface {
   defaultMessage (validationArguments?: ValidationArguments): string {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     return `Monetary precision ${validationArguments?.value?.precision} must be <= ${this.maxPrecision}`
+  }
+}
+class IsMonetaryMinAmountValidator implements ValidatorConstraintInterface {
+  constructor (
+    private lowestAmount?: number
+  ) {}
+
+  validate (monetaryDto: object): boolean {
+    if (this.lowestAmount === undefined) {
+      return true
+    }
+
+    if (!Object.hasOwn(monetaryDto, 'amount')) {
+      return false
+    }
+
+    return (monetaryDto as { amount: number }).amount >= this.lowestAmount
+  }
+
+  defaultMessage (validationArguments?: ValidationArguments): string {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    return `Monetary amount ${validationArguments?.value?.amount} must be >= ${this.lowestAmount}`
   }
 }
