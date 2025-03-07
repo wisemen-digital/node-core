@@ -2,7 +2,7 @@ import dayjs from 'dayjs'
 import UTC from 'dayjs/plugin/utc.js'
 import TZ from 'dayjs/plugin/timezone.js'
 import { SECONDS_PER_HOUR, SECONDS_PER_MINUTE, TimeZone } from './constants.js'
-import { InvalidBounds, InvalidHours, InvalidMinutes, InvalidSeconds, InvalidTimeString } from './time-error.js'
+import { InvalidBounds, InvalidAbsoluteSeconds, InvalidTimeString } from './time-error.js'
 import { PlainTimeObject } from './plain-time-object.type.js'
 import { InclusivityString } from './inclusivity.js'
 import { TimeUnit } from './units.js'
@@ -13,17 +13,13 @@ dayjs.extend(TZ)
 
 export class Time {
   public static STRING_FORMAT = 'hh:mm:ss'
-  public static MIN_HOURS = 0
-  public static MAX_HOURS = 23
-  public static MIN_MINUTES = 0
-  public static MAX_MINUTES = 59
-  public static MIN_SECONDS = 0
-  public static MAX_SECONDS = 59
+  public static MIN_ABSOLUTE_SECONDS = 0
+  public static MAX_ABSOLUTE_SECONDS = 24 * 60 * 60
 
   public static isValidTimeString (timeString?: string | null): boolean {
     if (timeString == null) return false
 
-    return /^([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/.test(timeString)
+    return /^(?:([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]|24:00:00)$/.test(timeString)
   }
 
   /**
@@ -118,9 +114,8 @@ export class Time {
       throw new Error('Invalid arguments')
     }
 
-    this.validateAbsoluteSeconds(absoluteSeconds)
-
     this.absoluteSeconds = absoluteSeconds
+    this.validateAbsoluteSeconds()
   }
 
   public toString (): string {
@@ -174,16 +169,16 @@ export class Time {
     return this.absoluteSeconds === other.absoluteSeconds
   }
 
-  public getHours (absoluteSeconds: number = this.absoluteSeconds): number {
-    return Math.floor(absoluteSeconds / SECONDS_PER_HOUR)
+  public getHours (): number {
+    return Math.floor(this.absoluteSeconds / SECONDS_PER_HOUR)
   }
 
-  public getMinutes (absoluteSeconds: number = this.absoluteSeconds): number {
-    return Math.floor((absoluteSeconds % SECONDS_PER_HOUR) / SECONDS_PER_MINUTE)
+  public getMinutes (): number {
+    return Math.floor((this.absoluteSeconds % SECONDS_PER_HOUR) / SECONDS_PER_MINUTE)
   }
 
-  public getSeconds (absoluteSeconds: number = this.absoluteSeconds): number {
-    return absoluteSeconds % SECONDS_PER_MINUTE
+  public getSeconds (): number {
+    return this.absoluteSeconds % SECONDS_PER_MINUTE
   }
 
   public toPlainObject (): PlainTimeObject {
@@ -207,15 +202,11 @@ export class Time {
   public subtract (amount: number, unit: TimeUnit): Time {
     const seconds = this.absoluteSeconds - amount * this.secondsInUnit(unit)
 
-    this.validateAbsoluteSeconds(seconds)
-
     return new Time(seconds)
   }
 
   public add (amount: number, unit: TimeUnit): Time {
     const seconds = this.absoluteSeconds + amount * this.secondsInUnit(unit)
-
-    this.validateAbsoluteSeconds(seconds)
 
     return new Time(seconds)
   }
@@ -242,34 +233,10 @@ export class Time {
     return hours * SECONDS_PER_HOUR + minutes * SECONDS_PER_MINUTE + seconds
   }
 
-  private validateAbsoluteSeconds (absoluteSeconds: number): void {
-    const hours = this.getHours(absoluteSeconds)
-    const minutes = this.getMinutes(absoluteSeconds)
-    const seconds = this.getSeconds(absoluteSeconds)
-
-    if (absoluteSeconds < 0) {
-      throw new InvalidSeconds(absoluteSeconds)
+  private validateAbsoluteSeconds (): void {
+    if (!(Time.MIN_ABSOLUTE_SECONDS <= this.absoluteSeconds
+      && this.absoluteSeconds <= Time.MAX_ABSOLUTE_SECONDS)) {
+      throw new InvalidAbsoluteSeconds(this.toString())
     }
-    if (!this.isValidHours(hours)) {
-      throw new InvalidHours(hours)
-    }
-    if (!this.isValidMinutes(minutes)) {
-      throw new InvalidMinutes(minutes)
-    }
-    if (!this.isValidSeconds(seconds)) {
-      throw new InvalidSeconds(seconds)
-    }
-  }
-
-  private isValidHours (hours: number): boolean {
-    return Time.MIN_HOURS <= hours && hours <= Time.MAX_HOURS
-  }
-
-  private isValidMinutes (minutes: number): boolean {
-    return Time.MIN_MINUTES <= minutes && minutes <= Time.MAX_MINUTES
-  }
-
-  private isValidSeconds (seconds: number): boolean {
-    return Time.MIN_SECONDS <= seconds && seconds <= Time.MAX_SECONDS
   }
 }
