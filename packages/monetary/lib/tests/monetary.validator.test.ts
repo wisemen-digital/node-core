@@ -23,4 +23,62 @@ describe('Monetary validator tests', () => {
 
     expect(errors).toHaveLength(0)
   })
+
+  describe('IsMonetaryMinAmountValidator', () => {
+    const MIN_AMOUNT = 10
+
+    class MinTest {
+      @IsMonetary({
+        maxPrecision: 4,
+        allowedCurrencies: new Set<Currency>([Currency.EUR]),
+        minAmount: MIN_AMOUNT
+      })
+      foo: MonetaryDto
+    }
+
+    it('has errors if amount is lower than min amount', async () => {
+      const dto = new MinTest()
+
+      dto.foo = new MonetaryDtoBuilder()
+        .withAmount(MIN_AMOUNT - 1)
+        .build()
+
+      const errors = await validate(dto, {
+        whitelist: true,
+        forbidNonWhitelisted: true
+      })
+
+      expect(errors).toHaveLength(1)
+    })
+
+    it('has no errors if amount is equal to min amount', async () => {
+      const dto = new MinTest()
+
+      dto.foo = new MonetaryDtoBuilder()
+        .withAmount(MIN_AMOUNT)
+        .build()
+
+      const errors = await validate(dto, {
+        whitelist: true,
+        forbidNonWhitelisted: true
+      })
+
+      expect(errors).toHaveLength(0)
+    })
+
+    it('has no errors if amount is higher than min amount', async () => {
+      const dto = new MinTest()
+
+      dto.foo = new MonetaryDtoBuilder()
+        .withAmount(MIN_AMOUNT + 1)
+        .build()
+
+      const errors = await validate(dto, {
+        whitelist: true,
+        forbidNonWhitelisted: true
+      })
+
+      expect(errors).toHaveLength(0)
+    })
+  })
 })
