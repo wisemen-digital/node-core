@@ -1,6 +1,6 @@
 {
   "git": {
-    "tagName": "monetary@${version}",
+    "tagName": "one-of@${version}",
     "commitMessage": "Release ${tagName}",
     "tagAnnotation": "Release ${tagName}"
   },
