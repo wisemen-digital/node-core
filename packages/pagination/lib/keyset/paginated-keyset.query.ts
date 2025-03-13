@@ -1,27 +1,21 @@
 import { Type } from 'class-transformer'
-import { IsDateString, IsInt, IsNotEmpty, IsOptional, IsPositive, Max, ValidateNested } from 'class-validator'
+import { IsInt, IsPositive, Max } from 'class-validator'
 import { ApiProperty } from '@nestjs/swagger'
-import { SearchQuery } from '../search.query.js'
+import { IsUndefinable } from '@wisemen/validators'
+import { SearchQuery } from '../../query/search.query.js'
 
-export class PaginatedKeysetQuery {
-  @ApiProperty({ required: true })
+export abstract class PaginatedKeysetQuery {
+  @ApiProperty({ maximum: 100, minimum: 0 })
   @Type(() => Number)
+  @IsUndefinable()
   @Max(100)
   @IsPositive()
   @IsInt()
-  limit: number
+  limit?: number
 
-  @ApiProperty({ required: true })
-  @IsOptional()
-  @IsNotEmpty()
-  @IsDateString()
-  key?: string
+  abstract key?: string | object | null
 }
 
 export abstract class PaginatedKeysetSearchQuery extends SearchQuery {
-  @ApiProperty({ type: PaginatedKeysetQuery })
-  @IsOptional()
-  @Type(() => PaginatedKeysetQuery)
-  @ValidateNested()
-  pagination?: PaginatedKeysetQuery
+  abstract pagination?: PaginatedKeysetQuery
 }
