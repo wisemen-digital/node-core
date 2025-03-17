@@ -65,10 +65,10 @@ describe('Monetary class', () => {
       const p2 = new Monetary(150, Currency.USD, 2)
       const p3 = new Monetary(350, Currency.USD, 5)
 
-      expect(p1.isLower(p1)).toBe(false)
-      expect(p2.isLower(p1)).toBe(true)
-      expect(p3.isLower(p1)).toBe(true)
-      expect(p1.isLower(p2)).toBe(false)
+      expect(p1.isLessThan(p1)).toBe(false)
+      expect(p2.isLessThan(p1)).toBe(true)
+      expect(p3.isLessThan(p1)).toBe(true)
+      expect(p1.isLessThan(p2)).toBe(false)
     })
 
     it('compares monetaries using isLowerOrEqual', () => {
@@ -76,10 +76,10 @@ describe('Monetary class', () => {
       const p2 = new Monetary(150, Currency.USD, 2)
       const p3 = new Monetary(350, Currency.USD, 5)
 
-      expect(p1.isLowerOrEqual(p1)).toBe(true)
-      expect(p2.isLowerOrEqual(p1)).toBe(true)
-      expect(p1.isLowerOrEqual(p2)).toBe(false)
-      expect(p2.isLowerOrEqual(p3)).toBe(false)
+      expect(p1.isLessThanOrEqual(p1)).toBe(true)
+      expect(p2.isLessThanOrEqual(p1)).toBe(true)
+      expect(p1.isLessThanOrEqual(p2)).toBe(false)
+      expect(p2.isLessThanOrEqual(p3)).toBe(false)
     })
 
     it('compares monetaries using isHigher', () => {
@@ -87,10 +87,10 @@ describe('Monetary class', () => {
       const p2 = new Monetary(150, Currency.USD, 2)
       const p3 = new Monetary(350, Currency.USD, 5)
 
-      expect(p1.isHigher(p1)).toBe(false)
-      expect(p2.isHigher(p1)).toBe(false)
-      expect(p2.isHigher(p3)).toBe(true)
-      expect(p1.isHigher(p2)).toBe(true)
+      expect(p1.isMoreThan(p1)).toBe(false)
+      expect(p2.isMoreThan(p1)).toBe(false)
+      expect(p2.isMoreThan(p3)).toBe(true)
+      expect(p1.isMoreThan(p2)).toBe(true)
     })
 
     it('compares monetaries using isHigherOrEqual', () => {
@@ -98,10 +98,10 @@ describe('Monetary class', () => {
       const p2 = new Monetary(150, Currency.USD, 2)
       const p3 = new Monetary(350, Currency.USD, 5)
 
-      expect(p1.isHigherOrEqual(p1)).toBe(true)
-      expect(p2.isHigherOrEqual(p1)).toBe(false)
-      expect(p2.isHigherOrEqual(p3)).toBe(true)
-      expect(p1.isHigherOrEqual(p2)).toBe(true)
+      expect(p1.isMoreThanOrEqual(p1)).toBe(true)
+      expect(p2.isMoreThanOrEqual(p1)).toBe(false)
+      expect(p2.isMoreThanOrEqual(p3)).toBe(true)
+      expect(p1.isMoreThanOrEqual(p2)).toBe(true)
     })
   })
 

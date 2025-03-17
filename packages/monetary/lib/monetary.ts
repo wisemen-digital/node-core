@@ -42,19 +42,19 @@ export class Monetary<C extends Currency = Currency> {
     return this.performOperation(other, (_, left, right) => left === right)
   }
 
-  isLower (other: Monetary<C>): boolean {
+  isLessThan (other: Monetary<C>): boolean {
     return this.performOperation(other, (_, left, right) => left < right)
   }
 
-  isLowerOrEqual (other: Monetary<C>): boolean {
+  isLessThanOrEqual (other: Monetary<C>): boolean {
     return this.performOperation(other, (_, left, right) => left <= right)
   }
 
-  isHigher (other: Monetary<C>): boolean {
+  isMoreThan (other: Monetary<C>): boolean {
     return this.performOperation(other, (_, left, right) => left > right)
   }
 
-  isHigherOrEqual (other: Monetary<C>): boolean {
+  isMoreThanOrEqual (other: Monetary<C>): boolean {
     return this.performOperation(other, (_, left, right) => left >= right)
   }
 
