@@ -34,30 +34,42 @@ export class Monetary<C extends Currency = Currency> {
     return this.amount / 10 ** this.precision
   }
 
-  equals (other: Monetary<C>): boolean {
-    return this.valueOf() === other.valueOf()
+  equal (other: Monetary<C>): boolean {
+    return this.isEqual(other)
+  }
+
+  isEqual (other: Monetary<C>): boolean {
+    return this.performOperation(other, (_, left, right) => left === right)
+  }
+
+  isLower (other: Monetary<C>): boolean {
+    return this.performOperation(other, (_, left, right) => left < right)
+  }
+
+  isLowerOrEqual (other: Monetary<C>): boolean {
+    return this.performOperation(other, (_, left, right) => left <= right)
+  }
+
+  isHigher (other: Monetary<C>): boolean {
+    return this.performOperation(other, (_, left, right) => left > right)
+  }
+
+  isHigherOrEqual (other: Monetary<C>): boolean {
+    return this.performOperation(other, (_, left, right) => left >= right)
   }
 
   /** Creates a new Monetary with the highest precision and sum of both amounts */
   add (other: Monetary<C>): Monetary<C> {
-    assert(this.currency === other.currency, new IllegalMonetaryOperationError())
-
-    const highestPrecision = Math.max(this.precision, other.precision)
-    const thisAmount = this.adjustAmountToPrecision(highestPrecision)
-    const otherAmount = other.adjustAmountToPrecision(highestPrecision)
-
-    return new Monetary(thisAmount + otherAmount, this.currency, highestPrecision)
+    return this.performOperation(other, (precision, left, right) =>
+      new Monetary(left + right, this.currency, precision)
+    )
   }
 
   /** Creates a new Monetary with the highest precision and difference of both amounts */
   subtract (other: Monetary<C>): Monetary<C> {
-    assert(this.currency === other.currency, new IllegalMonetaryOperationError())
-
-    const highestPrecision = Math.max(this.precision, other.precision)
-    const thisAmount = this.adjustAmountToPrecision(highestPrecision)
-    const otherAmount = other.adjustAmountToPrecision(highestPrecision)
-
-    return new Monetary(thisAmount - otherAmount, this.currency, highestPrecision)
+    return this.performOperation(other, (precision, left, right) =>
+      new Monetary(left - right, this.currency, precision)
+    )
   }
 
   /** Multiplies the amount, does not round the amount in the result */
@@ -103,6 +115,19 @@ export class Monetary<C extends Currency = Currency> {
       currency: this.currency,
       precision: this.precision
     }
+  }
+
+  private performOperation<T> (
+    other: Monetary<C>,
+    operation: (precision: number, left: number, right: number) => T
+  ): T {
+    assert(this.currency === other.currency, new IllegalMonetaryOperationError())
+
+    const highestPrecision = Math.max(this.precision, other.precision)
+    const thisAmount = this.adjustAmountToPrecision(highestPrecision)
+    const otherAmount = other.adjustAmountToPrecision(highestPrecision)
+
+    return operation(highestPrecision, thisAmount, otherAmount)
   }
 
   private adjustAmountToPrecision (precision: number): number {
