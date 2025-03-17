@@ -60,7 +60,7 @@ describe('Monetary class', () => {
       expect(p1.isEqual(p3)).toBe(false)
     })
 
-    it('compares monetaries using isLower', () => {
+    it('compares monetaries using isLessThan', () => {
       const p1 = new Monetary(350, Currency.USD, 2)
       const p2 = new Monetary(150, Currency.USD, 2)
       const p3 = new Monetary(350, Currency.USD, 5)
@@ -71,7 +71,7 @@ describe('Monetary class', () => {
       expect(p1.isLessThan(p2)).toBe(false)
     })
 
-    it('compares monetaries using isLowerOrEqual', () => {
+    it('compares monetaries using isLessThanOrEqual', () => {
       const p1 = new Monetary(350, Currency.USD, 2)
       const p2 = new Monetary(150, Currency.USD, 2)
       const p3 = new Monetary(350, Currency.USD, 5)
@@ -82,7 +82,7 @@ describe('Monetary class', () => {
       expect(p2.isLessThanOrEqual(p3)).toBe(false)
     })
 
-    it('compares monetaries using isHigher', () => {
+    it('compares monetaries using isMoreThan', () => {
       const p1 = new Monetary(350, Currency.USD, 2)
       const p2 = new Monetary(150, Currency.USD, 2)
       const p3 = new Monetary(350, Currency.USD, 5)
@@ -93,7 +93,7 @@ describe('Monetary class', () => {
       expect(p1.isMoreThan(p2)).toBe(true)
     })
 
-    it('compares monetaries using isHigherOrEqual', () => {
+    it('compares monetaries using isMoreThanOrEqual', () => {
       const p1 = new Monetary(350, Currency.USD, 2)
       const p2 = new Monetary(150, Currency.USD, 2)
       const p3 = new Monetary(350, Currency.USD, 5)
