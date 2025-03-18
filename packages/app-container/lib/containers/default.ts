@@ -84,6 +84,7 @@ export abstract class ProbedContainer {
     process.on('SIGINT', () => void this.close())
     process.on('SIGUSR2', () => void this.close())
     process.on('SIGHUP', () => void this.close())
+    process.on('exit', () => void this.close())
   }
 
   private enableProbes (): void {
