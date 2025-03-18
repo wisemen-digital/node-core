@@ -2,10 +2,7 @@ import { DynamicModule, Module } from '@nestjs/common'
 import { PgBossClient, PgBossClientConfig } from './pgboss-client.js'
 
 
-@Module({
-  providers: [PgBossClient],
-  exports: [PgBossClient]
-})
+@Module({})
 export class PgBossClientModule {
   forRoot(config?: PgBossClientConfig): DynamicModule {
     return {
