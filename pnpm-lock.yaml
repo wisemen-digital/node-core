@@ -331,8 +331,8 @@ importers:
   packages/planning:
     dependencies:
       '@wisemen/time':
-        specifier: ^0.0.17
-        version: 0.0.17
+        specifier: ^0.0.20
+        version: 0.0.20
       moment:
         specifier: ^2.29.4
         version: 2.30.1
@@ -1852,6 +1852,9 @@ packages:
 
   '@wisemen/time@0.0.17':
     resolution: {integrity: sha512-GasUf0dFGLSGzSCFE+tAR9SGs2lOUfTJk7rOg10jQ/BCqfmqwoLaAkdffalnnbvNwMA0IgdcVgpxKx4uzBJQmg==}
+
+  '@wisemen/time@0.0.20':
+    resolution: {integrity: sha512-6l4FqBS1fI5Ut4diCXmerV3vb+6dp47euEDN9h2bgn+pI8hbreal97HngR5QthP+xCuacmVvYpfzwkF5Ls0C6A==}
 
   '@wisemen/validators@0.0.3':
     resolution: {integrity: sha512-xtFk6AAj+FHYNegDpc0F1g6typ6k7I37uj9WNdqf4NsZlOBVJ707D7Wfy/2CWnFIMm13fpOfHCnTHvFqZtKfOw==}
@@ -7275,6 +7278,11 @@ snapshots:
   '@wisemen/time@0.0.17':
     dependencies:
       class-validator: 0.14.1
+
+  '@wisemen/time@0.0.20':
+    dependencies:
+      class-validator: 0.14.1
+      dayjs: 1.11.13
 
   '@wisemen/validators@0.0.3':
     dependencies:

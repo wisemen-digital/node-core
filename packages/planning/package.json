@@ -16,7 +16,7 @@
     "test": "node --test"
   },
   "dependencies": {
-    "@wisemen/time": "^0.0.17",
+    "@wisemen/time": "^0.0.20",
     "moment": "^2.29.4"
   },
   "devDependencies": {
