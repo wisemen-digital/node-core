@@ -1,6 +1,7 @@
 import { describe, it } from 'node:test'
 import { validate } from 'class-validator'
 import { expect } from 'expect'
+import { plainToInstance } from 'class-transformer'
 import { MonetaryDto, MonetaryDtoBuilder } from '../monetary.dto.js'
 import { IsMonetary } from '../monetary.validator.js'
 import { Currency } from '../currency.enum.js'
@@ -22,6 +23,62 @@ describe('Monetary validator tests', () => {
     })
 
     expect(errors).toHaveLength(0)
+  })
+
+  it('does have error if amount is string', async () => {
+    const dto = plainToInstance(MonetaryDto, {
+      amount: 'test',
+      currency: Currency.USD,
+      precision: 4
+    })
+
+    const errors = await validate(dto, {
+      whitelist: true,
+      forbidNonWhitelisted: true
+    })
+
+    expect(errors).toHaveLength(1)
+  })
+
+  it('does have error if precision is string', async () => {
+    const dto = plainToInstance(MonetaryDto, {
+      amount: 1,
+      currency: Currency.USD,
+      precision: 'test'
+    })
+
+    const errors = await validate(dto, {
+      whitelist: true,
+      forbidNonWhitelisted: true
+    })
+
+    expect(errors).toHaveLength(1)
+  })
+
+  it('does have error if currency is not valid', async () => {
+    const dto = plainToInstance(MonetaryDto, {
+      amount: 1,
+      currency: 'xxx',
+      precision: 4
+    })
+
+    const errors = await validate(dto, {
+      whitelist: true,
+      forbidNonWhitelisted: true
+    })
+
+    expect(errors).toHaveLength(1)
+  })
+
+  it('does have error if object is empty', async () => {
+    const dto = plainToInstance(MonetaryDto, {})
+
+    const errors = await validate(dto, {
+      whitelist: true,
+      forbidNonWhitelisted: true
+    })
+
+    expect(errors).toHaveLength(3)
   })
 
   describe('IsMonetaryMinAmountValidator', () => {
