@@ -1,5 +1,5 @@
 import { describe, it } from 'node:test'
-import { max, validate } from 'class-validator'
+import { validate } from 'class-validator'
 import { expect } from 'expect'
 import { MonetaryDto, MonetaryDtoBuilder } from '../monetary.dto.js'
 import { IsMonetary } from '../monetary.validator.js'
