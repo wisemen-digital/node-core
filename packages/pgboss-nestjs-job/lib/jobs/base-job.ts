@@ -1,8 +1,9 @@
 import { JobInsert } from 'pg-boss'
+import { WiseDate } from '../../../wise-date/dist/index.js'
 
-export interface BaseJobData {
-  [key: string]: unknown
-}
+type Primitive =  string | number | boolean | null
+type Serializable = {[key: string | number | symbol]: Serializable | Serializable[] | Primitive }
+export type BaseJobData = Serializable
 
 type JobOptions = Omit<JobInsert, 'id' | 'name' | 'data' | 'singletonKey'>
 
