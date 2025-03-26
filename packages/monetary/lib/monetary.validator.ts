@@ -1,9 +1,9 @@
 import { IsObject, ValidateBy, ValidateNested, ValidatorConstraintInterface } from 'class-validator'
-import { Type } from 'class-transformer'
 import { applyDecorators } from '@nestjs/common'
 import { ValidationArguments } from 'class-validator/types/validation/ValidationArguments.js'
-import { MonetaryDto } from './monetary.dto.js'
+import { Type } from 'class-transformer'
 import { Currency } from './currency.enum.js'
+import { MonetaryDto } from './monetary.dto.js'
 
 export interface IsMonetaryOptions {
   maxPrecision?: number
@@ -41,7 +41,11 @@ class IsMonetaryCurrencyValidator implements ValidatorConstraintInterface {
     private allowedCurrencies?: Set<Currency>
   ) {}
 
-  validate (monetaryDto: MonetaryDto): boolean {
+  validate (monetaryDto: MonetaryDto | undefined): boolean {
+    if (monetaryDto === undefined) {
+      return false
+    }
+
     return this.allowedCurrencies === undefined
       || this.allowedCurrencies.has(monetaryDto.currency)
   }
@@ -56,16 +60,12 @@ class IsMonetaryPrecisionValidator implements ValidatorConstraintInterface {
     private maxPrecision: number
   ) {}
 
-  validate (monetaryDto: object): boolean {
-    if (!Object.hasOwn(monetaryDto, 'precision')) {
+  validate (monetaryDto: MonetaryDto | undefined): boolean {
+    if (monetaryDto === undefined) {
       return false
     }
 
-    if (typeof (monetaryDto as { precision: unknown }).precision !== 'number') {
-      return false
-    }
-
-    return (monetaryDto as { precision: number }).precision <= this.maxPrecision
+    return monetaryDto.precision <= this.maxPrecision
   }
 
   defaultMessage (validationArguments?: ValidationArguments): string {
@@ -78,16 +78,15 @@ class IsMonetaryMinAmountValidator implements ValidatorConstraintInterface {
     private lowestAmount?: number
   ) {}
 
-  validate (monetaryDto: object): boolean {
+  validate (monetaryDto: MonetaryDto | undefined): boolean {
+    if (monetaryDto === undefined) {
+      return false
+    }
     if (this.lowestAmount === undefined) {
       return true
     }
 
-    if (!Object.hasOwn(monetaryDto, 'amount')) {
-      return false
-    }
-
-    return (monetaryDto as { amount: number }).amount >= this.lowestAmount
+    return monetaryDto.amount >= this.lowestAmount
   }
 
   defaultMessage (validationArguments?: ValidationArguments): string {
@@ -101,16 +100,16 @@ class IsMonetaryMaxAmountValidator implements ValidatorConstraintInterface {
     private highestAmount?: number
   ) {}
 
-  validate (monetaryDto: object): boolean {
+  validate (monetaryDto: MonetaryDto | undefined): boolean {
+    if (monetaryDto === undefined) {
+      return false
+    }
+
     if (this.highestAmount === undefined) {
       return true
     }
 
-    if (!Object.hasOwn(monetaryDto, 'amount')) {
-      return false
-    }
-
-    return (monetaryDto as { amount: number }).amount <= this.highestAmount
+    return monetaryDto.amount <= this.highestAmount
   }
 
   defaultMessage (validationArguments?: ValidationArguments): string {
