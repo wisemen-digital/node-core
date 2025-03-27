@@ -41,8 +41,8 @@ class IsMonetaryCurrencyValidator implements ValidatorConstraintInterface {
     private allowedCurrencies?: Set<Currency>
   ) {}
 
-  validate (monetaryDto: MonetaryDto | undefined): boolean {
-    if (monetaryDto === undefined) {
+  validate (monetaryDto: MonetaryDto | null | undefined): boolean {
+    if (monetaryDto == null) {
       return false
     }
 
@@ -60,8 +60,8 @@ class IsMonetaryPrecisionValidator implements ValidatorConstraintInterface {
     private maxPrecision: number
   ) {}
 
-  validate (monetaryDto: MonetaryDto | undefined): boolean {
-    if (monetaryDto === undefined) {
+  validate (monetaryDto: MonetaryDto | null | undefined): boolean {
+    if (monetaryDto == null) {
       return false
     }
 
@@ -78,8 +78,8 @@ class IsMonetaryMinAmountValidator implements ValidatorConstraintInterface {
     private lowestAmount?: number
   ) {}
 
-  validate (monetaryDto: MonetaryDto | undefined): boolean {
-    if (monetaryDto === undefined) {
+  validate (monetaryDto: MonetaryDto | null | undefined): boolean {
+    if (monetaryDto == null) {
       return false
     }
     if (this.lowestAmount === undefined) {
@@ -100,8 +100,8 @@ class IsMonetaryMaxAmountValidator implements ValidatorConstraintInterface {
     private highestAmount?: number
   ) {}
 
-  validate (monetaryDto: MonetaryDto | undefined): boolean {
-    if (monetaryDto === undefined) {
+  validate (monetaryDto: MonetaryDto | null | undefined): boolean {
+    if (monetaryDto == null) {
       return false
     }
 
