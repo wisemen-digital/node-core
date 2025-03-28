@@ -1,6 +1,6 @@
 {
   "name": "@wisemen/node-doc-processor",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "type": "module",
@@ -23,6 +23,6 @@
   },
   "dependencies": {},
   "peerDependencies": {
-    "@wisemen/pgboss-nestjs-job": "^0.1.5"
+    "@wisemen/pgboss-nestjs-job": "^0.3.2"
   }
 }
