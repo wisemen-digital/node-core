@@ -1,4 +1,4 @@
-import { PgBossClientConfig } from '../client/pgboss-client.module.js'
+import { PgBossClientConfig } from "../client/pgboss-client.js"
 
 export interface PgBossWorkerConfig {
   queueName: string
