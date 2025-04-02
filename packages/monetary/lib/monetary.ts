@@ -136,7 +136,7 @@ export class Monetary<C extends Currency = Currency> {
     const scaleDifference = precision - this.precision
 
     // Decrease in precision is done through a division to increase
-    // of floating point accuracy because we eliminate 1 floating point.
+    // floating point accuracy because we eliminate 1 floating point.
     // Increase of precision is done through multiplication because
     // 10 ** scaleDifference results in an integer
     if (scaleDifference < 0) {
