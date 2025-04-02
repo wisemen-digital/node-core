@@ -1,6 +1,6 @@
 {
   "name": "@wisemen/pgboss-nestjs-job",
-  "version": "0.1.5",
+  "version": "0.3.2",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "type": "module",
@@ -23,6 +23,9 @@
   },
   "dependencies": {
     "colors": "^1.4.0"
+  },
+  "devDependencies": {
+    "release-it": "^18.1.2"
   },
   "peerDependencies": {
     "@nestjs/common": "^11.0.3",

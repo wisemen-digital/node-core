@@ -1,42 +1,77 @@
-import { applyDecorators } from '@nestjs/common'
 import { Column, ColumnOptions } from 'typeorm'
 import { Monetary } from './monetary.js'
+import { Currency } from './currency.enum.js'
+import { PrecisionLossError } from './precision-loss-error.js'
 
-export type MonetaryColumnOptions = Omit<ColumnOptions, 'type' | 'transformer'>
+export type EmbeddedMonetaryOptions = {
+  currencyPrecisions?: Record<Currency, number>
+  defaultPrecision: number
+} & Omit<ColumnOptions, 'type' | 'transformer'>
 
-export function MonetaryColumn <C extends string, P extends number> (
-  currency: C, 
-  precision: P, 
-  options?: MonetaryColumnOptions
-): PropertyDecorator {
-  return applyDecorators(
-    Column({
-      ...options,
-      type: 'int',
-      transformer: new MoneyTypeOrmTransformer(precision, currency)
-    })
-  )
+/** Stores the amount and currency as jsonb */
+export function MonetaryColumn (options: EmbeddedMonetaryOptions): PropertyDecorator {
+  return Column({
+    ...options,
+    type: 'jsonb',
+    transformer: new MoneyTypeOrmTransformer(
+      options.defaultPrecision,
+      options.currencyPrecisions ?? {} as Record<Currency, number>
+    )
+  })
 }
 
-class MoneyTypeOrmTransformer <C extends string, P extends number> {
-  constructor (
-    private readonly precision: P,
-    private readonly currency: C
-  ) {}
-  
-  from (amount: number | null): Monetary<C, P> | null {
-    if (amount === null) {
-      return null
-    }
+export interface EmbeddedMonetary {
+  amount: number
+  currency: Currency
+}
 
-    return new Monetary(amount, this.currency, this.precision)
+export class MoneyTypeOrmTransformer {
+  public constructor (
+    private readonly defaultPrecision: number,
+    private readonly currencyPrecision: Record<Currency, number>
+  ) {
+    if (
+      !Number.isInteger(this.defaultPrecision)
+      || Object.values(currencyPrecision).some(precision => !Number.isInteger(precision))
+    ) {
+      throw new Error('precision must be an integer')
+    }
   }
 
-  to (monetary: Monetary<C, P> | null): number | null {
+  from (monetary: EmbeddedMonetary | null): Monetary | null {
     if (monetary === null) {
       return null
     }
 
-    return monetary.round().amount
+    const precision = this.getPrecisionFor(monetary.currency)
+
+    return new Monetary(monetary.amount, monetary.currency, precision)
+  }
+
+  to (monetary: Monetary | null | undefined): EmbeddedMonetary | null | undefined {
+    if (monetary === undefined || monetary === null) {
+      return monetary
+    }
+
+    const precision = this.getPrecisionFor(monetary.currency)
+
+    if (precision > monetary.precision) {
+      throw new PrecisionLossError()
+    }
+
+    const normalizedMonetary = monetary.toPrecision(precision)
+
+    if (!normalizedMonetary.isRounded()) {
+      throw new Error('Attempting to store a non rounded monetary value!')
+    }
+
+    return {
+      amount: normalizedMonetary.amount,
+      currency: normalizedMonetary.currency
+    }
+  }
+
+  private getPrecisionFor (currency: Currency) {
+    return this.currencyPrecision[currency] ?? this.defaultPrecision
   }
 }

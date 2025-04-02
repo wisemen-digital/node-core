@@ -15,20 +15,8 @@ export class InvalidBounds extends TimeError {
   }
 }
 
-export class InvalidHours extends TimeError {
-  constructor (hours: number) {
-    super(`Invalid hours: ${hours} must be between ${Time.MIN_HOURS} and ${Time.MAX_HOURS}`)
-  }
-}
-
-export class InvalidMinutes extends TimeError {
-  constructor (minutes: number) {
-    super(`Invalid minutes: ${minutes} must be between ${Time.MIN_MINUTES} and ${Time.MAX_MINUTES}`)
-  }
-}
-
-export class InvalidSeconds extends TimeError {
-  constructor (seconds: number) {
-    super(`Invalid seconds: ${seconds} must be between ${Time.MIN_SECONDS} and ${Time.MAX_SECONDS}`)
+export class InvalidAbsoluteSeconds extends TimeError {
+  constructor (time: string) {
+    super(`Invalid time ${time}`)
   }
 }

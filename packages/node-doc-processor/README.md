@@ -42,11 +42,11 @@ export class MyService {
 ### Defining job options
 
 ```ts
-import { BaseJobConfig, PgBossJob } from '@wisemen/pgboss-nestjs-job'
+import { BaseJob, PgBossJob } from '@wisemen/pgboss-nestjs-job'
 import { DOC_PROCESSOR_QUEUE_NAME, GeneratePdfFromUrlData } from '@wisemen/node-doc-processor'
 
 @PgBossJob(DOC_PROCESSOR_QUEUE_NAME)
-export class GeneratePdfFromUrlJob extends BaseJobConfig<GeneratePdfFromUrlData> {
+export class GeneratePdfFromUrlJob extends BaseJob<GeneratePdfFromUrlData> {
   uniqueBy (): string {
     return `${this.data?.url}-${this.data?.s3Path}`
   }

@@ -135,14 +135,14 @@ export class PlanningEventSplitter {
     )
 
     let headTimeslot: Timeslot | null
-    if (openEvent.startTime.equals(overlappingEvent.startTime)) {
+    if (openEvent.startTime.isSame(overlappingEvent.startTime)) {
       headTimeslot = null
     } else {
       headTimeslot = { startTime: openEvent.startTime, endTime: overlapTimeslot.startTime }
     }
 
     let tailTimeslot: Timeslot | null
-    if (openEvent.endTime.equals(overlappingEvent.endTime)) {
+    if (openEvent.endTime.isSame(overlappingEvent.endTime)) {
       tailTimeslot = null
     } else {
       tailTimeslot = { startTime: overlapTimeslot.endTime, endTime: openEvent.endTime }

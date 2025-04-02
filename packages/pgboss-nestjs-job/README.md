@@ -13,7 +13,7 @@ Make sure that the env variable `DATABASE_URI` is defined.
     PgBossWorkerModule.forRoot({
       queueName, // The name of the queue to process
       concurrency, // The number of jobs to process concurrently
-      batchSize, // The number of hobs to fetch
+      batchSize, // The number of jobs to fetch
       fetchRefreshThreshold, // Refresh threshold to fetch jobs
       pollInterval // The interval (in milliseconds) to poll for new jobs
     })
@@ -43,7 +43,7 @@ export interface MyJobData extends BaseJobData {
 
 ```ts
 @PgBossJob('queue-name')
-export class MyJob extends BaseJobConfig<MyJobData> {}
+export class MyJob extends BaseJob<MyJobData> {}
 ```
 
 4. Create a job handler (make sure to provide it)
@@ -51,7 +51,7 @@ export class MyJob extends BaseJobConfig<MyJobData> {}
 ```ts
 @Injectable()
 @PgBossJobHandler(MyJob)
-export class MyJobHandler extends BaseJobHandler<MyJobData> {
+export class MyJobHandler extends JobHandler<MyJob> {
   public async run (data: MyJobData): Promise<void> {
     // Do stuff
   }
