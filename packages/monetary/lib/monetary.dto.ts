@@ -16,7 +16,13 @@ export class MonetaryDto {
   @IsInt()
   precision: number
 
-  static from (monetary: Monetary): MonetaryDto {
+  static from (monetary: undefined): undefined
+  static from (monetary: null): null
+  static from (monetary: Monetary): MonetaryDto
+  static from (monetary: Monetary | null | undefined): MonetaryDto | null | undefined {
+    if (monetary === null) return null
+    if (monetary === undefined) return undefined
+
     return new MonetaryDtoBuilder()
       .withAmount(monetary.amount)
       .withCurrency(monetary.currency)
