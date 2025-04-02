@@ -82,6 +82,8 @@ export class Monetary<C extends Currency = Currency> {
    * @post Does not round, ceil nor floor the resulting amount
    */
   toPrecision (newPrecision: number): Monetary<C> {
+    assert(Number.isInteger(newPrecision))
+
     return new Monetary(this.adjustAmountToPrecision(newPrecision), this.currency, newPrecision)
   }
 
@@ -133,6 +135,16 @@ export class Monetary<C extends Currency = Currency> {
   private adjustAmountToPrecision (precision: number): number {
     const scaleDifference = precision - this.precision
 
-    return this.amount * (10 ** scaleDifference)
+    // Decrease in precision is done through a division to increase
+    // floating point accuracy because we eliminate 1 floating point.
+    // Increase of precision is done through multiplication because
+    // 10 ** scaleDifference results in an integer
+    if (scaleDifference < 0) {
+      return this.amount / (10 ** Math.abs(scaleDifference))
+    } else if (scaleDifference > 0) {
+      return this.amount * (10 ** scaleDifference)
+    } else {
+      return this.amount
+    }
   }
 }
