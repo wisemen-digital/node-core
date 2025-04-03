@@ -20,7 +20,7 @@ export async function validateDto <T extends Dto> (
     error.constraints =  {
       ['No DTO provided']: 'Expected a dto, none was provided'
     }
-    throw new CustomError([new ValidationError()]) 
+    throw new CustomError([error]) 
   }
 
   const dto = plainToInstance(DtoConstructor, data)
