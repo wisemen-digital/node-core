@@ -5,7 +5,7 @@ import { ApiResponse } from './api-response.js'
 import { Dto, validateDto } from './dto.js'
 import { HandleOptions, MiddlewareHandler, RouteOptions } from './types.js'
 import { captureException } from '@sentry/node'
-
+import { parse } from 'qs'
 
 export class DtoRouter {
   readonly router: Router = Router({ mergeParams: true })
@@ -40,7 +40,7 @@ export class DtoRouter {
     const { req, res, dtos } = options
 
     const body = await validateDto(req.body, dtos?.body, dtos?.groups)
-    const query = await validateDto(req.query, dtos?.query, dtos?.groups)
+    const query = await validateDto(parse(req.query as Record<string, string>), dtos?.query, dtos?.groups)
 
     const result = await options.controller({
       req,
