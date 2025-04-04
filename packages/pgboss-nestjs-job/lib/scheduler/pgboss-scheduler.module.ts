@@ -4,7 +4,7 @@ import { PgBossScheduler } from './pgboss-scheduler.service.js'
 
 @Module({
   imports: [
-    PgBossClientModule
+    PgBossClientModule.forRoot()
   ],
   providers: [
     PgBossScheduler

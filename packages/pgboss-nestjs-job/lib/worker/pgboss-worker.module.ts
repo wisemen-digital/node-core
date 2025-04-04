@@ -11,7 +11,7 @@ export class PgBossWorkerModule {
       module: PgBossWorkerModule,
       imports: [
         JobModule,
-        PgBossClientModule
+        PgBossClientModule.forRoot(config.client)
       ],
       providers: [
         {

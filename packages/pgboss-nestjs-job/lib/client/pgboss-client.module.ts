@@ -3,7 +3,7 @@ import { PgBossClient, PgBossClientConfig } from './pgboss-client.js'
 
 @Module({})
 export class PgBossClientModule {
-  forRoot(config?: PgBossClientConfig): DynamicModule {
+  static forRoot(config?: PgBossClientConfig): DynamicModule {
     return {
       module: PgBossClientModule,
       providers: [
