@@ -15,5 +15,6 @@ export * from './is-same-or-before-date-string/is-same-or-before-date-string.val
 export * from './is-time-string/is-time-string.validator.js'
 export * from './is-undefinable/is-undefinable.validator.js'
 export * from './is-valid-time-string/is-valid-time-string.validator.js'
+export * from './is-query-boolean/is-query-boolean.js'
 
 
