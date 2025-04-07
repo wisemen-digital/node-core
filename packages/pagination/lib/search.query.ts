@@ -1,7 +1,18 @@
+import { ApiPropertyOptions, ApiProperty } from "@nestjs/swagger"
+
 export enum SortDirection {
   ASC = 'asc',
   DESC = 'desc'
 }
+
+export function SortDirectionApiProperty (options?: ApiPropertyOptions): PropertyDecorator {
+  return ApiProperty({
+    ...options,
+    enum: SortDirection,
+    enumName: 'SortDirection'
+  })
+}
+
 
 export abstract class SortQuery {
   abstract key: unknown
