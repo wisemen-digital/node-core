@@ -1,6 +1,5 @@
 import { DataSource } from 'typeorm'
 
-
 export async function migrate (source: DataSource): Promise<void> {
   while (true) {
     try {

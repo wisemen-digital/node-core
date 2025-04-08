@@ -23,6 +23,7 @@ class CoordinatesTransformer {
     if (CoordinatesTransformer.instance === undefined) {
       CoordinatesTransformer.instance = new CoordinatesTransformer()
     }
+
     return CoordinatesTransformer.instance
   }
 

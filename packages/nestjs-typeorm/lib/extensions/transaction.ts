@@ -8,7 +8,8 @@ export async function transaction<T> (
   runInTransaction: (entityManager: EntityManager) => Promise<T>
 ): Promise<T> {
   const transactionManager = transactionStorage.getStore()
-  if(transactionManager != null) {
+
+  if (transactionManager != null) {
     return await transactionManager.transaction(runInTransaction)
   }
 
@@ -32,4 +33,3 @@ export function createTransactionManagerProxy (manager: EntityManager): EntityMa
     }
   })
 }
-

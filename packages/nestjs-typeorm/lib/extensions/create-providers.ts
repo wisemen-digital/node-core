@@ -1,9 +1,9 @@
 import { DataSource, getMetadataArgsStorage } from 'typeorm'
-import { TypeOrmRepository } from './repository.js'
 import { getDataSourceToken, getRepositoryToken } from '@nestjs/typeorm'
 import { Provider } from '@nestjs/common'
 import { DataSourceOptions } from 'typeorm/browser'
 import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-class-or-schema.type.js'
+import { TypeOrmRepository } from './repository.js'
 
 export function createTypeOrmProviders (
   entities?: EntityClassOrSchema[],

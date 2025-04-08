@@ -1,7 +1,7 @@
 export {
   InjectRepository,
   InjectEntityManager,
-  InjectDataSource,
+  InjectDataSource
 } from '@nestjs/typeorm'
 
 export * from './extensions/index.js'
