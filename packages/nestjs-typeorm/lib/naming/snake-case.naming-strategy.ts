@@ -13,7 +13,7 @@ export class SnakeNamingStrategy extends DefaultNamingStrategy {
   ): string {
     return (
       snakeCase(embeddedPrefixes.join('_'))
-      + (embeddedPrefixes.length > 0) ? '_' : ''
+      + ((embeddedPrefixes.length > 0) ? '_' : '')
       + (customName ?? snakeCase(propertyName))
     )
   }
