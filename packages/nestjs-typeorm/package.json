@@ -1,6 +1,6 @@
 {
   "name": "@wisemen/nestjs-typeorm",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "type": "module",
@@ -21,7 +21,7 @@
     "@types/node": "^22.10.1",
     "typescript": "^5.7.2",
     "release-it": "^15.11.0",
-     "eslint": "^9.21.0"
+    "eslint": "^9.21.0"
   },
   "author": "Joren Vandeweyer",
   "license": "GPL",
