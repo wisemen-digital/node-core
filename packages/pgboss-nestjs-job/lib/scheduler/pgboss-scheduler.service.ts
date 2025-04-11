@@ -40,7 +40,16 @@ export class PgBossScheduler {
         className,
         classData: job.data
       },
-      singletonKey: job.uniqueBy?.(job.data)
+      priority: job.options?.priority,
+      retryLimit: job.options?.retryLimit,
+      retryDelay: job.options?.retryDelay,
+      retryBackoff: job.options?.retryBackoff,
+      startAfter: job.options?.startAfter,
+      singletonKey: job.options?.singletonKey,
+      singletonSeconds: job.options?.singletonSeconds,
+      expireInSeconds: job.options?.expireInSeconds,
+      keepUntil: job.options?.keepUntil,
+      deadLetter: job.options?.deadLetter,
     }
   }
 
