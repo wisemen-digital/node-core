@@ -16,8 +16,8 @@
     "test": "node --test"
   },
   "dependencies": {
-    "@wisemen/time": "^0.0.17",
-    "class-validator": "^0.14.0",
+    "@wisemen/time": "^0.0.20",
+    "class-validator": "^0.14.1",
     "dayjs": "^1.11.13"
   },
   "devDependencies": {

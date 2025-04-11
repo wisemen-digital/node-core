@@ -17,12 +17,12 @@
   },
   "dependencies": {
     "@wisemen/time": "^0.0.20",
-    "moment": "^2.29.4"
+    "moment": "^2.30.1"
   },
   "devDependencies": {
-    "@types/node": "^20.2.5",
-    "expect": "^29.5.0",
-    "typescript": "^5.0.4"
+    "@types/node": "^22.14.0",
+    "expect": "^29.7.0",
+    "typescript": "^5.8.3"
   },
   "author": "Kobe Kwanten",
   "license": "GPL",
