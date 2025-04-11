@@ -7,6 +7,7 @@ import { PgBossClient } from '../client/pgboss-client.js'
 import { BaseJob } from '../jobs/base-job.js'
 import { PGBOSS_JOB_HANDLER, PGBOSS_QUEUE_NAME } from '../jobs/job.decorator.js'
 import { SerializedJob } from '../jobs/serialized-job.js'
+import { randomUUID } from 'node:crypto'
 
 
 @Injectable()
@@ -45,7 +46,7 @@ export class PgBossScheduler {
       retryDelay: job.options?.retryDelay,
       retryBackoff: job.options?.retryBackoff,
       startAfter: job.options?.startAfter,
-      singletonKey: job.options?.singletonKey,
+      singletonKey: job.options?.singletonKey ?? randomUUID(),
       singletonSeconds: job.options?.singletonSeconds,
       expireInSeconds: job.options?.expireInSeconds,
       keepUntil: job.options?.keepUntil,
