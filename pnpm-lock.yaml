@@ -340,8 +340,8 @@ importers:
   packages/planning:
     dependencies:
       '@wisemen/time':
-        specifier: ^0.0.20
-        version: 0.0.20
+        specifier: ^0.0.21
+        version: 0.0.21
       moment:
         specifier: ^2.30.1
         version: 2.30.1
