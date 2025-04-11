@@ -7,7 +7,7 @@ import { PgBossClient } from '../client/pgboss-client.js'
 import { BaseJob } from '../jobs/base-job.js'
 import { PGBOSS_JOB_HANDLER, PGBOSS_QUEUE_NAME } from '../jobs/job.decorator.js'
 import { SerializedJob } from '../jobs/serialized-job.js'
-import { randomUUID } from 'node:crypto'
+import { randomUUID } from 'crypto'
 
 
 @Injectable()
